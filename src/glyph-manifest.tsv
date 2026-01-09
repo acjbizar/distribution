@@ -1,32 +1,48 @@
-char	codepoint_file	friendly_file
-'a'	character-U0061.svg	character-a.svg
-'b'	character-U0062.svg	character-b.svg
-'C'	character-U0043.svg	character-C.svg
-'d'	character-U0064.svg	character-d.svg
-'e'	character-U0065.svg	character-e.svg
-'f'	character-U0066.svg	character-f.svg
-'g'	character-U0067.svg	character-g.svg
-'h'	character-U0068.svg	character-h.svg
-'I'	character-U0049.svg	character-I.svg
-'J'	character-U004A.svg	character-J.svg
-'k'	character-U006B.svg	character-k.svg
-'l'	character-U006C.svg	character-l.svg
-'m'	character-U006D.svg	character-m.svg
-'n'	character-U006E.svg	character-n.svg
-'o'	character-U006F.svg	character-o.svg
-'p'	character-U0070.svg	character-p.svg
-'q'	character-U0071.svg	character-q.svg
-'r'	character-U0072.svg	character-r.svg
-'S'	character-U0053.svg	character-S.svg
-'t'	character-U0074.svg	character-t.svg
-'u'	character-U0075.svg	character-u.svg
-'v'	character-U0076.svg	character-v.svg
-'w'	character-U0077.svg	character-w.svg
-'x'	character-U0078.svg	character-x.svg
-'y'	character-U0079.svg	character-y.svg
-'z'	character-U007A.svg	character-z.svg
-'4'	character-U0034.svg	character-4.svg
-'2'	character-U0032.svg	character-2.svg
-','	character-U002C.svg	character-comma.svg
-'.'	character-U002E.svg	character-period.svg
-'?'	character-U003F.svg	character-question.svg
+char	codepoint	file_codepoint	file_friendly
+'A'	U0041	character-U0041.svg	character-upper-a.svg
+'b'	U0062	character-U0062.svg	character-lower-b.svg
+'C'	U0043	character-U0043.svg	character-upper-c.svg
+'d'	U0064	character-U0064.svg	character-lower-d.svg
+'E'	U0045	character-U0045.svg	character-upper-e.svg
+'f'	U0066	character-U0066.svg	character-lower-f.svg
+'g'	U0067	character-U0067.svg	character-lower-g.svg
+'h'	U0068	character-U0068.svg	character-lower-h.svg
+'I'	U0049	character-U0049.svg	character-upper-i.svg
+'J'	U004A	character-U004A.svg	character-upper-j.svg
+'k'	U006B	character-U006B.svg	character-lower-k.svg
+'L'	U004C	character-U004C.svg	character-upper-l.svg
+'m'	U006D	character-U006D.svg	character-lower-m.svg
+'n'	U006E	character-U006E.svg	character-lower-n.svg
+'o'	U006F	character-U006F.svg	character-lower-o.svg
+'p'	U0070	character-U0070.svg	character-lower-p.svg
+'q'	U0071	character-U0071.svg	character-lower-q.svg
+'r'	U0072	character-U0072.svg	character-lower-r.svg
+'S'	U0053	character-U0053.svg	character-upper-s.svg
+'t'	U0074	character-U0074.svg	character-lower-t.svg
+'U'	U0055	character-U0055.svg	character-upper-u.svg
+'v'	U0076	character-U0076.svg	character-lower-v.svg
+'w'	U0077	character-U0077.svg	character-lower-w.svg
+'x'	U0078	character-U0078.svg	character-lower-x.svg
+'y'	U0079	character-U0079.svg	character-lower-y.svg
+'Z'	U005A	character-U005A.svg	character-upper-z.svg
+'.'	U002E	character-U002E.svg	character-period.svg
+'„'	U201E	character-U201E.svg	character-quotedblbase.svg
+'”'	U201D	character-U201D.svg	character-quotedblright.svg
+'?'	U003F	character-U003F.svg	character-question.svg
+'0'	U0030	character-U0030.svg	character-digit-0.svg
+'1'	U0031	character-U0031.svg	character-digit-1.svg
+'2'	U0032	character-U0032.svg	character-digit-2.svg
+'3'	U0033	character-U0033.svg	character-digit-3.svg
+'4'	U0034	character-U0034.svg	character-digit-4.svg
+'5'	U0035	character-U0035.svg	character-digit-5.svg
+'6'	U0036	character-U0036.svg	character-digit-6.svg
+'7'	U0037	character-U0037.svg	character-digit-7.svg
+'8'	U0038	character-U0038.svg	character-digit-8.svg
+'9'	U0039	character-U0039.svg	character-digit-9.svg
+'c'	U0063	character-U0063.svg	character-lower-c.svg
+'G'	U0047	character-U0047.svg	character-upper-g.svg
+'H'	U0048	character-U0048.svg	character-upper-h.svg
+'K'	U004B	character-U004B.svg	character-upper-k.svg
+'M'	U004D	character-U004D.svg	character-upper-m.svg
+'N'	U004E	character-U004E.svg	character-upper-n.svg
+'X'	U0058	character-U0058.svg	character-upper-x.svg
