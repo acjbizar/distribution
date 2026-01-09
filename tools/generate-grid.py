@@ -1,98 +1,142 @@
 #!/usr/bin/env python3
-"""
-flower_grid.py — generate a "flower of life" style circle grid as SVG.
+# -*- coding: utf-8 -*-
 
-Usage:
-  python flower_grid.py --width 2000 --height 1200 --radius 36 --out grid.svg
+"""
+generate_grid_svg.py
+
+Renders a hex/Flower-of-Life style circle grid patch:
+- 2 circles wide (2 columns)
+- 3 circles high (3 rows)
+using the standard hex packing:
+  dx = R
+  dy = R*sqrt(3)/2
+  odd rows offset by dx/2
+
+Outputs: src/grid.svg
 """
 
 from __future__ import annotations
 
-import argparse
 import math
+from dataclasses import dataclass
 from pathlib import Path
+from typing import List, Tuple
 
 
-def make_svg(
-    width: float,
-    height: float,
-    r: float,
-    stroke: str,
-    stroke_width: float,
-    opacity: float,
-    background: str,
+def write_text_lf(path: Path, text: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", encoding="utf-8", newline="\n") as f:
+        f.write(text)
+
+
+@dataclass(frozen=True)
+class HexCircleGrid:
+    R: float  # circle radius
+
+    @property
+    def dx(self) -> float:
+        return self.R
+
+    @property
+    def dy(self) -> float:
+        return self.R * math.sqrt(3) / 2.0
+
+    def center(self, col: int, row: int) -> Tuple[float, float]:
+        x = col * self.dx + (self.dx / 2.0 if (row & 1) else 0.0)
+        y = row * self.dy
+        return (x, y)
+
+
+def build_svg(
+    grid: HexCircleGrid,
+    cols: int,
+    rows: int,
+    padding: float,
+    stroke: str = "#777",
+    stroke_width: float = 1.0,
+    stroke_opacity: float = 0.35,
+    show_centers: bool = True,
+    center_radius: float = 1.8,
+    show_border: bool = False,
 ) -> str:
-    dx = r
-    dy = r * math.sqrt(3) / 2.0
+    centers: List[Tuple[float, float]] = []
+    for r in range(rows):
+        for c in range(cols):
+            centers.append(grid.center(c, r))
 
-    # Start a bit outside the canvas so the crop looks like your screenshot edges
-    y = -r
-    row = 0
+    # Compute bounding box that fully contains all circles
+    xs = [x for x, _ in centers]
+    ys = [y for _, y in centers]
+    min_x = min(xs) - grid.R - padding
+    max_x = max(xs) + grid.R + padding
+    min_y = min(ys) - grid.R - padding
+    max_y = max(ys) + grid.R + padding
 
-    centers: list[tuple[float, float]] = []
-    while y <= height + r:
-        x_offset = (row % 2) * (dx / 2.0)
-        x = -r + x_offset
-        while x <= width + r:
-            centers.append((x, y))
-            x += dx
-        y += dy
-        row += 1
+    W = max_x - min_x
+    H = max_y - min_y
 
-    def fnum(v: float) -> str:
-        # compact but stable formatting
+    def f(v: float) -> str:
         return f"{v:.3f}".rstrip("0").rstrip(".")
 
-    svg_parts = [
-        '<?xml version="1.0" encoding="UTF-8"?>',
-        '<svg xmlns="http://www.w3.org/2000/svg" '
-        'xmlns:xlink="http://www.w3.org/1999/xlink" '
-        f'width="{fnum(width)}" height="{fnum(height)}" '
-        f'viewBox="0 0 {fnum(width)} {fnum(height)}">',
-        f'  <rect width="100%" height="100%" fill="{background}"/>',
-        f'  <g fill="none" stroke="{stroke}" stroke-width="{fnum(stroke_width)}" opacity="{fnum(opacity)}">',
-        "    <defs>",
-        f'      <circle id="c" cx="0" cy="0" r="{fnum(r)}" />',
-        "    </defs>",
-    ]
+    # Translate everything so min_x/min_y becomes (0,0)
+    tx = -min_x
+    ty = -min_y
 
-    # Use <use> to keep SVG smaller than emitting thousands of <circle> elements
-    for cx, cy in centers:
-        svg_parts.append(
-            f'    <use xlink:href="#c" href="#c" transform="translate({fnum(cx)} {fnum(cy)})" />'
-        )
+    parts: List[str] = []
+    parts.append('<?xml version="1.0" encoding="UTF-8"?>')
+    parts.append(
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{f(W)}" height="{f(H)}" viewBox="0 0 {f(W)} {f(H)}">'
+    )
 
-    svg_parts += [
-        "  </g>",
-        "</svg>",
-        "",
-    ]
-    return "\n".join(svg_parts)
+    if show_border:
+        parts.append(f'  <rect x="0" y="0" width="{f(W)}" height="{f(H)}" fill="none" stroke="#00f" stroke-width="1"/>')
+
+    # Circle outlines
+    parts.append(
+        f'  <g fill="none" stroke="{stroke}" stroke-width="{f(stroke_width)}" opacity="{f(stroke_opacity)}">'
+    )
+    for (cx, cy) in centers:
+        parts.append(f'    <circle cx="{f(cx + tx)}" cy="{f(cy + ty)}" r="{f(grid.R)}" />')
+    parts.append("  </g>")
+
+    # Center dots (optional)
+    if show_centers:
+        parts.append('  <g fill="#00f" opacity="0.65">')
+        for (cx, cy) in centers:
+            parts.append(f'    <circle cx="{f(cx + tx)}" cy="{f(cy + ty)}" r="{f(center_radius)}" />')
+        parts.append("  </g>")
+
+    parts.append("</svg>")
+    parts.append("")
+    return "\n".join(parts)
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--width", type=float, default=1200.0, help="SVG width in px")
-    ap.add_argument("--height", type=float, default=700.0, help="SVG height in px")
-    ap.add_argument("--radius", type=float, default=36.0, help="Circle radius in px")
-    ap.add_argument("--stroke", type=str, default="#9aa0a6", help="Stroke color (CSS)")
-    ap.add_argument("--stroke-width", type=float, default=1.0, help="Stroke width in px")
-    ap.add_argument("--opacity", type=float, default=0.45, help="Stroke opacity 0..1")
-    ap.add_argument("--background", type=str, default="#ffffff", help="Background color")
-    ap.add_argument("--out", type=Path, default=Path("grid.svg"), help="Output SVG path")
-    args = ap.parse_args()
+    # ---- CONFIG ----
+    R = 30.0          # circle radius (adjust to match your grid)
+    COLS = 2
+    ROWS = 3
+    PADDING = 8.0
 
-    svg = make_svg(
-        width=args.width,
-        height=args.height,
-        r=args.radius,
-        stroke=args.stroke,
-        stroke_width=args.stroke_width,
-        opacity=args.opacity,
-        background=args.background,
+    out_path = Path("src/grid.svg")
+
+    grid = HexCircleGrid(R=R)
+
+    svg = build_svg(
+        grid=grid,
+        cols=COLS,
+        rows=ROWS,
+        padding=PADDING,
+        stroke="#777",
+        stroke_width=1.0,
+        stroke_opacity=0.35,
+        show_centers=True,     # helps you verify the offset pattern
+        center_radius=1.8,
+        show_border=False,
     )
-    args.out.write_text(svg, encoding="utf-8")
-    print(f"Wrote {args.out}  ({args.width}×{args.height}, r={args.radius})")
+
+    write_text_lf(out_path, svg)
+    print(f"Wrote: {out_path.resolve()}")
 
 
 if __name__ == "__main__":
