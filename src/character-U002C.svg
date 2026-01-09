@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
+  <title>glyph ','</title>
+  <g fill="none" stroke="#000" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 127.000 180.000 A 7.000 7.000 0 0 1 113.000 180.000"/>
+    <path d="M 113.000 180.000 A 7.000 7.000 0 0 1 127.000 180.000"/>
+    <path d="M 122.000 184.144 A 16.000 16.000 0 0 0 101.743 208.285"/>
+  </g>
+</svg>

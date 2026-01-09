@@ -1,7 +1,6 @@
 
 # TODO
 
-- [ ] Generate SVGs for alphabet
 - [ ] Generate images
 - [ ] Generate templates
 - [ ] Generate fonts
@@ -10,3 +9,4 @@
 ## Done
 
 - [x] Add grid
+- [x] Generate SVGs for alphabet

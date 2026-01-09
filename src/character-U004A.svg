@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
+  <title>glyph 'J'</title>
+  <g fill="none" stroke="#000" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 120.000 60.000 L 120.000 228.000"/>
+    <path d="M 117.588 213.000 A 18.000 18.000 0 0 0 86.412 231.000"/>
+    <path d="M 127.000 42.000 A 7.000 7.000 0 0 1 113.000 42.000"/>
+    <path d="M 113.000 42.000 A 7.000 7.000 0 0 1 127.000 42.000"/>
+  </g>
+</svg>
