@@ -1,2 +1,4 @@
-# distribution
+
+# Distribution
+
 Distribution type system.
