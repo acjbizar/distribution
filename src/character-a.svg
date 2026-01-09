@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
-  <title>glyph 'a'</title>
-  <g fill="none" stroke="#000" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M 180.000 120.000 A 60.000 60.000 0 0 1 60.000 120.000"/>
-    <path d="M 60.000 120.000 A 60.000 60.000 0 0 1 180.000 120.000"/>
-    <path d="M 180.000 60.000 L 180.000 180.000"/>
-    <path d="M 120.000 60.000 L 180.000 60.000"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+  <title>glyph a</title>
+  <g fill="none" stroke="#000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M 162.43 162.43 A 60.00 60.00 0 1 1 162.43 77.57" />
+  <path d="M 180.00 120.00 L 180.00 180.00" />
+  <path d="M 150.00 120.00 C 165.00 115.00, 175.00 115.00, 180.00 120.00" />
   </g>
 </svg>

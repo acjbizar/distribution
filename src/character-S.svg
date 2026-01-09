@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
-  <title>glyph 'S'</title>
-  <g fill="none" stroke="#000" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M 92.422 72.860 A 36.000 36.000 0 1 0 153.829 108.313"/>
-    <path d="M 86.171 131.687 A 36.000 36.000 0 0 1 153.829 156.313"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+  <title>glyph s</title>
+  <g fill="none" stroke="#000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M 60.00 110.00 C 80.00 80.00, 160.00 80.00, 180.00 110.00" />
+  <path d="M 180.00 110.00 C 160.00 140.00, 80.00 140.00, 60.00 170.00" />
   </g>
 </svg>

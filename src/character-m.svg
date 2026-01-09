@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
-  <title>glyph 'm'</title>
-  <g fill="none" stroke="#000" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M 70.000 180.000 L 70.000 60.000"/>
-    <path d="M 70.000 60.000 A 25.000 25.000 0 0 1 120.000 60.000"/>
-    <path d="M 120.000 60.000 L 120.000 180.000"/>
-    <path d="M 120.000 180.000 L 120.000 60.000"/>
-    <path d="M 120.000 60.000 A 25.000 25.000 0 0 1 170.000 60.000"/>
-    <path d="M 170.000 60.000 L 170.000 180.000"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+  <title>glyph m</title>
+  <g fill="none" stroke="#000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M 50.00 120.00 L 50.00 180.00" />
+  <path d="M 50.00 120.00 C 80.00 90.00, 120.00 90.00, 150.00 120.00" />
+  <path d="M 150.00 120.00 L 150.00 180.00" />
+  <path d="M 150.00 120.00 C 180.00 90.00, 220.00 90.00, 250.00 120.00" />
+  <path d="M 250.00 120.00 L 250.00 180.00" />
   </g>
 </svg>

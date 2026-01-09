@@ -1,10 +1,13 @@
 
 # TODO
 
+- [ ] Improve character shapes
 - [ ] Generate images
 - [ ] Generate templates
 - [ ] Generate fonts
 - [ ] Publish type system on ``detype.nl``
+- [ ] host fonts on ``hetcdn.nl``
+- [ ] Add composer file
 
 ## Done
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
-  <title>glyph 'C'</title>
-  <g fill="none" stroke="#000" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M 162.426 162.426 A 60.000 60.000 0 1 1 162.426 77.574"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+  <title>glyph c</title>
+  <g fill="none" stroke="#000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M 162.43 162.43 A 60.00 60.00 0 1 1 162.43 77.57" />
   </g>
 </svg>

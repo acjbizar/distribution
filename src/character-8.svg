@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
-  <title>glyph .</title>
+  <title>glyph 8</title>
   <g fill="none" stroke="#000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M 125.00 180.00 A 5.00 5.00 0 1 1 125.00 180.00" />
+  <path d="M 150.00 90.00 A 30.00 30.00 0 1 1 150.00 90.00" />
+  <path d="M 150.00 150.00 A 30.00 30.00 0 1 1 150.00 150.00" />
   </g>
 </svg>
