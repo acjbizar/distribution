@@ -99,14 +99,14 @@ def list_glyph_files(svg_dir: Path) -> List[Tuple[int, Path]]:
 
 def main() -> None:
     ap = argparse.ArgumentParser(
-        description="Generate src/sheet.svg by composing src/character-u{codepoint}.svg glyphs found on disk."
+        description="Generate src/sheet.svg by composing src/character-u{codepoint}.svg files found on disk."
     )
     ap.add_argument("--svg-dir", default="src", help="Directory containing character-u*.svg (default: src)")
     ap.add_argument("--out", default="src/sheet.svg", help="Output sheet svg path (default: src/sheet.svg)")
     ap.add_argument("--cols", type=int, default=10, help="Number of columns in sheet (default: 10)")
-    ap.add_argument("--gap-x", type=int, default=30, help="Horizontal gap between glyphs (default: 30)")
-    ap.add_argument("--gap-y", type=int, default=30, help="Vertical gap between glyphs (default: 30)")
-    ap.add_argument("--padding", type=int, default=30, help="Outer padding around sheet (default: 30)")
+    ap.add_argument("--gap-x", type=int, default=0, help="Horizontal gap between glyphs (default: 0)")
+    ap.add_argument("--gap-y", type=int, default=0, help="Vertical gap between glyphs (default: 0)")
+    ap.add_argument("--padding", type=int, default=0, help="Outer padding around sheet (default: 0)")
     ap.add_argument("--bg", default="#fff", help="Background fill (default: #fff). Use 'none' for transparent.")
     ap.add_argument("--labels", action="store_true", help="Draw small labels under each glyph (debug)")
     args = ap.parse_args()
@@ -135,14 +135,14 @@ def main() -> None:
 
     cols = max(1, args.cols)
 
-    # Compute row heights (variable width/height safe)
+    # Grid rows
     rows: List[List[Dict[str, object]]] = []
     for i in range(0, len(glyphs), cols):
         rows.append(glyphs[i : i + cols])
 
+    # Compute row heights + widths
     row_heights: List[int] = []
     row_widths: List[int] = []
-
     for row in rows:
         rh = 0
         rw = 0
@@ -154,8 +154,8 @@ def main() -> None:
         row_heights.append(rh)
         row_widths.append(rw)
 
-    sheet_w = args.padding * 2 + max(row_widths)
-    sheet_h = args.padding * 2 + sum(row_heights) + args.gap_y * (len(rows) - 1)
+    sheet_w = args.padding * 2 + (max(row_widths) if row_widths else 0)
+    sheet_h = args.padding * 2 + sum(row_heights) + args.gap_y * max(0, (len(rows) - 1))
 
     bg = args.bg
     bg_rect = ""
@@ -164,20 +164,14 @@ def main() -> None:
 
     out: List[str] = []
     out.append('<?xml version="1.0" encoding="UTF-8"?>')
-    out.append(
-        f'<svg xmlns="http://www.w3.org/2000/svg" '
-        f'viewBox="0 0 {sheet_w} {sheet_h}" width="{sheet_w}" height="{sheet_h}">'
-    )
+    # ✅ no width/height attributes; only viewBox
+    out.append(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {sheet_w} {sheet_h}">')
     out.append("<desc>Glyph sheet composed from src/character-u{codepoint}.svg files</desc>")
     if bg_rect:
         out.append(bg_rect.rstrip())
 
     if args.labels:
-        out.append(
-            "<style>"
-            ".lbl{font:12px monospace; fill:#333;}"
-            "</style>"
-        )
+        out.append("<style>.lbl{font:12px monospace; fill:#333;}</style>")
 
     cur_y = args.padding
     for row_idx, row in enumerate(rows):
@@ -198,16 +192,15 @@ def main() -> None:
                 out.append(f'<text class="lbl" x="0" y="{h + 16}">{ch} U+{cp:04X}</text>')
 
             out.append("</g>")
+            cur_x += w + args.gap_x  # gap defaults to 0
 
-            cur_x += w + args.gap_x
-
-        cur_y += row_h + args.gap_y
+        cur_y += row_h + args.gap_y  # gap defaults to 0
 
     out.append("</svg>")
     out.append("")
 
     write_text_lf(out_path, "\n".join(out))
-    print(f"✓ Wrote {out_path.as_posix()} ({sheet_w}×{sheet_h}), glyphs: {len(glyphs)}")
+    print(f"✓ Wrote {out_path.as_posix()} (viewBox {sheet_w}×{sheet_h}), glyphs: {len(glyphs)}")
 
 
 if __name__ == "__main__":
