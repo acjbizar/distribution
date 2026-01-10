@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 320" width="240" height="320">
+    <rect x="0" y="0" width="240" height="320" fill="#fff"/>
+
+    <!--
+      Flower-of-life grid parameters used here:
+        R = 40
+        dx = R
+        dy = R*sqrt(3)/2 ≈ 34.641
+        odd rows offset by R/2
+
+      Grid origin chosen so the “main column” sits nicely inside the viewBox:
+        origin_x = 20
+        origin_y = 45.359
+    -->
+
+    <!-- background grid patch -->
+    <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.45">
+        <!-- row 0 -->
+        <circle cx="20" cy="45.359" r="40"/>
+        <circle cx="60" cy="45.359" r="40"/>
+        <circle cx="100" cy="45.359" r="40"/>
+        <circle cx="140" cy="45.359" r="40"/>
+        <circle cx="180" cy="45.359" r="40"/>
+
+        <!-- row 1 (odd => +20 x offset) -->
+        <circle cx="40"  cy="80.000" r="40"/>
+        <circle cx="80"  cy="80.000" r="40"/>
+        <circle cx="120" cy="80.000" r="40"/>
+        <circle cx="160" cy="80.000" r="40"/>
+        <circle cx="200" cy="80.000" r="40"/>
+
+        <!-- row 2 -->
+        <circle cx="20"  cy="114.641" r="40"/>
+        <circle cx="60"  cy="114.641" r="40"/>
+        <circle cx="100" cy="114.641" r="40"/>
+        <circle cx="140" cy="114.641" r="40"/>
+        <circle cx="180" cy="114.641" r="40"/>
+
+        <!-- row 3 (odd => +20) -->
+        <circle cx="40"  cy="149.282" r="40"/>
+        <circle cx="80"  cy="149.282" r="40"/>
+        <circle cx="120" cy="149.282" r="40"/>
+        <circle cx="160" cy="149.282" r="40"/>
+        <circle cx="200" cy="149.282" r="40"/>
+
+        <!-- row 4 -->
+        <circle cx="20"  cy="183.923" r="40"/>
+        <circle cx="60"  cy="183.923" r="40"/>
+        <circle cx="100" cy="183.923" r="40"/>
+        <circle cx="140" cy="183.923" r="40"/>
+        <circle cx="180" cy="183.923" r="40"/>
+
+        <!-- row 5 (odd => +20) -->
+        <circle cx="40"  cy="218.564" r="40"/>
+        <circle cx="80"  cy="218.564" r="40"/>
+        <circle cx="120" cy="218.564" r="40"/>
+        <circle cx="160" cy="218.564" r="40"/>
+        <circle cx="200" cy="218.564" r="40"/>
+
+        <!-- row 6 -->
+        <circle cx="20"  cy="253.205" r="40"/>
+        <circle cx="60"  cy="253.205" r="40"/>
+        <circle cx="100" cy="253.205" r="40"/>
+        <circle cx="140" cy="253.205" r="40"/>
+        <circle cx="180" cy="253.205" r="40"/>
+    </g>
+
+    <!-- circles I would "use" for the epsilon-like glyph (darker) -->
+    <g fill="none" stroke="#666" stroke-width="1.5" opacity="0.9">
+        <!-- main vertical stack: (col=2,row=1),(2,3),(2,5) -->
+        <circle cx="120" cy="80.000"  r="40"/>
+        <circle cx="120" cy="149.282" r="40"/>
+        <circle cx="120" cy="218.564" r="40"/>
+
+        <!-- right neighbor to create the inner hook/loop: (col=3,row=3) -->
+        <circle cx="160" cy="149.282" r="40"/>
+    </g>
+
+    <!-- anchor points (blue dots) -->
+    <g fill="#1e6bff" stroke="none">
+        <!-- A: top terminal (right tangent of top circle) -->
+        <circle cx="160" cy="80.000" r="4"/>
+        <!-- B: upper junction (intersection of top+middle circles, right side) -->
+        <circle cx="140.000" cy="114.641" r="4"/>
+        <!-- C: lower junction (intersection of middle+bottom circles, right side) -->
+        <circle cx="140.000" cy="183.923" r="4"/>
+        <!-- D: bottom terminal (right tangent of bottom circle) -->
+        <circle cx="160" cy="218.564" r="4"/>
+        <!-- E: hook extent (right tangent of the hook circle at (160,149.282)) -->
+        <circle cx="200" cy="149.282" r="4"/>
+    </g>
+
+    <!-- labels for the anchor points -->
+    <g font-family="Arial, sans-serif" font-size="12" fill="#1e6bff">
+        <text x="166" y="76">A</text>
+        <text x="146" y="110">B</text>
+        <text x="146" y="179">C</text>
+        <text x="166" y="214">D</text>
+        <text x="206" y="145">E</text>
+    </g>
+</svg>

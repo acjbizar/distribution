@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 125 175" width="125" height="175">
+    <rect x="0" y="0" width="125" height="175" fill="#fff"/>
+
+    <!-- Background grid patch (orthogonal tangent circles) -->
+    <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.55">
+        <circle cx="-17.5" cy="-25" r="40"/>
+        <circle cx="62.5"  cy="-25" r="40"/>
+        <circle cx="142.5" cy="-25" r="40"/>
+
+        <circle cx="-17.5" cy="55" r="40"/>
+        <circle cx="62.5"  cy="55" r="40"/>
+        <circle cx="142.5" cy="55" r="40"/>
+
+        <circle cx="-17.5" cy="135" r="40"/>
+        <circle cx="62.5"  cy="135" r="40"/>
+        <circle cx="142.5" cy="135" r="40"/>
+
+        <circle cx="-17.5" cy="215" r="40"/>
+        <circle cx="62.5"  cy="215" r="40"/>
+        <circle cx="142.5" cy="215" r="40"/>
+    </g>
+
+    <!-- Central column circles used -->
+    <g fill="none" stroke="#777" stroke-width="1.6" opacity="0.95">
+        <circle cx="62.5" cy="55"  r="40"/>
+        <circle cx="62.5" cy="135" r="40"/>
+    </g>
+
+    <!-- Stroke -->
+    <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" opacity="0.92">
+
+        <!-- Outer -->
+        <path d="
+      M 22.5 55
+      A 40 40 0 0 1 62.5 15
+      A 40 40 0 0 1 102.5 55
+      L 102.5 135
+      A 40 40 0 0 1 62.5 175
+      A 40 40 0 0 1 22.5 135
+    "/>
+
+        <!-- Inner closure as arcs -->
+        <!-- FIXED: G->C now bows the other way by flipping sweep flag -->
+        <path d="M 62.5 95 A 40 40 0 0 0 102.5 55" />
+        <path d="M 62.5 95 A 40 40 0 0 0 22.5 135" />
+
+    </g>
+
+    <!-- Anchors -->
+    <g fill="#1e6bff" stroke="none">
+        <circle cx="22.5"  cy="55" r="4"/>     <!-- A -->
+        <circle cx="62.5"  cy="15" r="4"/>     <!-- B -->
+        <circle cx="102.5" cy="55" r="4"/>     <!-- C -->
+        <circle cx="102.5" cy="135" r="4"/>    <!-- D -->
+        <circle cx="62.5"  cy="175" r="4"/>    <!-- E -->
+        <circle cx="22.5"  cy="135" r="4"/>    <!-- F -->
+        <circle cx="62.5"  cy="95"  r="4"/>    <!-- G -->
+    </g>
+
+    <!-- Labels -->
+    <g font-family="Arial, sans-serif" font-size="12" fill="#1e6bff">
+        <text x="8"  y="59">A</text>
+        <text x="60" y="30">B</text>
+        <text x="106" y="59">C</text>
+        <text x="106" y="139">D</text>
+        <text x="60" y="172">E</text>
+        <text x="8"  y="139">F</text>
+        <text x="66" y="99">G</text>
+    </g>
+</svg>
