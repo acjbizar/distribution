@@ -3,7 +3,6 @@
 
 - [ ] Improve character shapes
 - [ ] Generate images
-- [ ] Generate templates
 - [ ] Generate fonts
 - [ ] Publish type system on ``detype.nl``
 - [ ] host fonts on ``hetcdn.nl``
@@ -13,3 +12,4 @@
 
 - [x] Add grid
 - [x] Generate SVGs for alphabet
+- [x] Generate templates
