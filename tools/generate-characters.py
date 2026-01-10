@@ -1,21 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""
-Tangent-circle glyph generator (orthogonal grid, circles touch, no overlap).
-
-Outputs:
-  src/character-u{codepoint}.svg
-
-Method:
-  - Orthogonal grid of equal circles (spacing = 2R).
-  - Glyph strokes are arcs on these circles + straight lines on tangent lines.
-  - Anchor points are tangent extremes (L/R/T/B) and tangency points between stacked circles.
-
-Run:
-  python tools/generate-characters.py --out-dir src --debug
-"""
-
 from __future__ import annotations
 
 import argparse
@@ -25,37 +10,42 @@ from typing import Callable, Dict, List, Tuple
 
 
 # -----------------------------
-# Characters requested (exactly)
+# Desired sheet rows (exact)
 # -----------------------------
-REQUESTED = (
-    "AbCdEfghIJ"
-    "kLmnopqrStUvwxyZ.„”?"
-    "0123456789"
-    "AcGHKMNX"
-)
+SHEET_ROWS = [
+    "AbCdEfghIJ",
+    "kLmnopqrStUvwxyZ.„”?",
+    "0123456789",
+    "AcGHKMNX",
+]
+REQUESTED = "".join(SHEET_ROWS)
+
 
 # -----------------------------
-# Geometry / SVG config
+# Grid / canvas (tight + correct)
 # -----------------------------
-VIEW_W, VIEW_H = 240, 360
+R = 40.0
+DX = 2.0 * R
+DY = 2.0 * R
 
-R = 40.0                  # circle radius
-DX = 2.0 * R              # grid spacing (cols)
-DY = 2.0 * R              # grid spacing (rows)
+# Make a 3-col wide grid patch fully fit in 0..240:
+# col centers: 40, 120, 200 => circles span 0..240
+# row centers: 40, 120, 200 => circles span 0..240
+X0 = 40.0
+Y0 = 40.0
 
-# Choose grid so it matches the b/a examples we validated:
-# centers: (60 + 80*col, 120 + 80*row)
-X0 = 60.0
-Y0 = 120.0
+VIEW_W = int(3 * DX)  # 240
+VIEW_H = int(3 * DY)  # 240
 
-STROKE = 9.0              # glyph stroke width
+STROKE = 9.0
+
+# Sheet spacing: exactly one radius between glyph boxes
+SHEET_GAP = R
 
 # Debug overlay
 GRID_OPACITY = 0.35
 GRID_STROKE = 1.0
 ANCHOR_R = 3.5
-
-OUT_DIR_DEFAULT = FSPath("src")
 
 
 # -----------------------------
@@ -82,7 +72,7 @@ def fmt(x: float) -> str:
 
 
 # -----------------------------
-# Grid / primitives
+# Geometry
 # -----------------------------
 @dataclass(frozen=True)
 class Circle:
@@ -109,17 +99,16 @@ class Grid:
         cx, cy = self.center(col, row)
         return Circle(cx=cx, cy=cy, r=self.r)
 
-    # tangent lines between cols / rows
     def x_tan(self, col_left: int) -> float:
-        """Vertical tangent line between col_left and col_left+1."""
+        # tangent line between col_left and col_left+1
         return self.x0 + col_left * DX + self.r
 
     def y_tan(self, row_top: int) -> float:
-        """Horizontal tangent line between row_top and row_top+1."""
+        # tangent line between row_top and row_top+1
         return self.y0 + row_top * DY + self.r
 
     def tangency_vertical(self, col: int, row_top: int) -> Tuple[float, float]:
-        """Point where circles at (col,row_top) and (col,row_top+1) touch."""
+        # point where (col,row_top) and (col,row_top+1) touch
         return self.circle(col, row_top).B()
 
 
@@ -144,7 +133,7 @@ class SvgPath:
 
 
 def circle_full(c: Circle, sweep: int = 1) -> str:
-    # 4 quarter arcs: R -> B -> L -> T -> R
+    # R -> B -> L -> T -> R (4 quarter arcs)
     p = SvgPath().M(c.R())
     p.A(c.r, 0, sweep, c.B())
     p.A(c.r, 0, sweep, c.L())
@@ -153,25 +142,40 @@ def circle_full(c: Circle, sweep: int = 1) -> str:
     return p.d()
 
 
-def semicircle_top(c: Circle, start_at: Tuple[float, float], end_at: Tuple[float, float], sweep: int) -> str:
-    # caller ensures start/end are tangent extremes; used as helper when composing paths
-    return SvgPath().M(start_at).A(c.r, 0, sweep, c.T()).A(c.r, 0, sweep, end_at).d()
+def arc_LTB(c: Circle, sweep: int = 1) -> str:
+    """Left->Top->Right (upper half-ish, but using two quarter arcs)"""
+    return SvgPath().M(c.L()).A(c.r, 0, sweep, c.T()).A(c.r, 0, sweep, c.R()).d()
+
+
+def arc_RBL(c: Circle, sweep: int = 1) -> str:
+    """Right->Bottom->Left (lower half-ish)"""
+    return SvgPath().M(c.R()).A(c.r, 0, sweep, c.B()).A(c.r, 0, sweep, c.L()).d()
+
+
+# -----------------------------
+# Metrics (derived from grid)
+# -----------------------------
+def ascender_top(grid: Grid) -> float:
+    # top tangent of row0 circles
+    return grid.circle(0, 0).T()[1]
+
+def xheight_top(grid: Grid) -> float:
+    # top tangent of row1 circles
+    return grid.circle(0, 1).T()[1]
+
+def baseline(grid: Grid) -> float:
+    # bottom tangent of row1 circles
+    return grid.circle(0, 1).B()[1]
 
 
 # -----------------------------
 # Glyph builders
 # -----------------------------
 GlyphFn = Callable[[Grid], Tuple[List[str], List[Tuple[str, Tuple[float, float]]]]]
-# returns (list_of_path_d, debug_anchors)
 
 
-def glyph_a(grid: Grid) -> Tuple[List[str], List[Tuple[str, Tuple[float, float]]]]:
-    """
-    Your validated A/a method:
-      Two stacked circles at col=1 rows 0 and 1
-      Outer: left/top/right arc (upper), stem down, bottom/left arc (lower)
-      Inner closure using tangency point G with correct bow directions (sweep=0)
-    """
+def glyph_a(grid: Grid):
+    # Two stacked circles at col=1 rows 0 and 1
     cu = grid.circle(1, 0)
     cl = grid.circle(1, 1)
 
@@ -181,10 +185,10 @@ def glyph_a(grid: Grid) -> Tuple[List[str], List[Tuple[str, Tuple[float, float]]
     D = cl.R()
     E = cl.B()
     F = cl.L()
-    G = grid.tangency_vertical(1, 0)  # (cu.cx, cu.cy + R)
+    G = grid.tangency_vertical(1, 0)
 
     outer = SvgPath().M(A).A(cu.r, 0, 1, B).A(cu.r, 0, 1, C).L(D).A(cl.r, 0, 1, E).A(cl.r, 0, 1, F).d()
-    inner_GC = SvgPath().M(G).A(cu.r, 0, 0, C).d()  # bow fixed
+    inner_GC = SvgPath().M(G).A(cu.r, 0, 0, C).d()  # correct bow direction
     inner_GF = SvgPath().M(G).A(cl.r, 0, 0, F).d()
 
     anchors = [("A", A), ("B", B), ("C", C), ("D", D), ("E", E), ("F", F), ("G", G)]
@@ -192,138 +196,185 @@ def glyph_a(grid: Grid) -> Tuple[List[str], List[Tuple[str, Tuple[float, float]]
 
 
 def glyph_A(grid: Grid):
-    # In your sheet A looks consistent with the same construction language; start with same.
     return glyph_a(grid)
 
 
-def glyph_b(grid: Grid) -> Tuple[List[str], List[Tuple[str, Tuple[float, float]]]]:
-    """
-    Your validated b:
-      Bowl: full circle at col=1,row=1
-      Stem: vertical line on the LEFT tangent line (between col0 and col1),
-            from top-tangent of the row0 circle down to the bowl LEFT tangent (not below).
-    """
+def glyph_b(grid: Grid):
+    # Validated: bowl full circle at (col=1,row=1); stem stops at bowl's left tangent
     bowl = grid.circle(1, 1)
-
-    x_stem = grid.x_tan(0)                 # between col0 and col1 -> 100
-    y_top = grid.circle(0, 0).T()[1]       # top tangent of row0 -> 80
-    y_join = bowl.L()[1]                   # bowl left tangent y -> bowl.cy
+    x_stem = grid.x_tan(0)            # between col0 and col1
+    y_top = ascender_top(grid)        # row0 top tangent
+    y_join = bowl.L()[1]              # bowl left tangent y (bowl.cy)
 
     stem = SvgPath().M((x_stem, y_top)).L((x_stem, y_join)).d()
     bowl_path = circle_full(bowl)
 
-    anchors = [
-        ("stemTop", (x_stem, y_top)),
-        ("join", (x_stem, y_join)),
-        ("bowlL", bowl.L()),
-        ("bowlT", bowl.T()),
-        ("bowlR", bowl.R()),
-        ("bowlB", bowl.B()),
-    ]
+    anchors = [("stemTop", (x_stem, y_top)), ("join", (x_stem, y_join))]
     return [stem, bowl_path], anchors
 
 
 def glyph_c(grid: Grid):
-    # One-circle C-like (open on right): draw T -> L -> B
     c = grid.circle(1, 1)
+    # Open on the right: T -> L -> B (left side curve)
     path = SvgPath().M(c.T()).A(c.r, 0, 1, c.L()).A(c.r, 0, 1, c.B()).d()
     return [path], []
 
 
 def glyph_C(grid: Grid):
-    # Tall C: two circles stacked (col=1 rows 0 and 1), open on right
-    cu = grid.circle(1, 0)
-    cl = grid.circle(1, 1)
-    # upper: R -> T -> L
-    upper = SvgPath().M(cu.R()).A(cu.r, 0, 1, cu.T()).A(cu.r, 0, 1, cu.L()).d()
-    # left spine: cu.L -> cl.L
-    spine = SvgPath().M(cu.L()).L(cl.L()).d()
-    # lower: L -> B -> R
-    lower = SvgPath().M(cl.L()).A(cl.r, 0, 1, cl.B()).A(cl.r, 0, 1, cl.R()).d()
-    return [upper, spine, lower], []
-
-
-def glyph_d(grid: Grid):
-    # Mirror of b (first pass): bowl at (1,1), stem on RIGHT tangent line (between col1 and col2),
-    # from row0 top tangent down to bowl RIGHT tangent.
-    bowl = grid.circle(1, 1)
-    x_stem = grid.x_tan(1)                 # between col1 and col2 -> 180
-    y_top = grid.circle(2, 0).T()[1]       # top tangent of row0 -> 80
-    y_join = bowl.R()[1]                   # bowl right tangent y -> bowl.cy
-    stem = SvgPath().M((x_stem, y_top)).L((x_stem, y_join)).d()
-    bowl_path = circle_full(bowl)
-    return [stem, bowl_path], []
-
-
-def glyph_E(grid: Grid):
     """
-    E in your sample reads like a backward '3'/epsilon.
-    Grid-faithful first pass:
-      - Two stacked circles at col=1 rows 0 and 1
-      - Draw 3/4 arc around left side of upper into the middle tangency,
-        then 3/4 arc around left side of lower out to lower-right endpoint
-      - Add a short middle tick from the tangency toward the right (like the notch).
+    Continuous C:
+      Two stacked circles (col=1, rows 0 and 1)
+      Start at upper R, go around upper top+left to tangency G,
+      then continue around lower left+bottom to lower R.
     """
     cu = grid.circle(1, 0)
     cl = grid.circle(1, 1)
     G = grid.tangency_vertical(1, 0)
 
-    # upper: start at cu.R, go around top+left to G (bottom of upper)
+    # upper: R -> T -> L -> G
+    p = SvgPath().M(cu.R()).A(cu.r, 0, 1, cu.T()).A(cu.r, 0, 1, cu.L()).A(cu.r, 0, 1, G)
+    # lower: G -> L -> B -> R
+    p.A(cl.r, 0, 1, cl.L()).A(cl.r, 0, 1, cl.B()).A(cl.r, 0, 1, cl.R())
+    return [p.d()], [("G", G)]
+
+
+def glyph_G(grid: Grid):
+    """
+    G = C + bar
+    Bar at midline of lower circle from right tangent line inward.
+    """
+    paths, anchors = glyph_C(grid)
+    cl = grid.circle(1, 1)
+    y = cl.cy
+    xR = grid.x_tan(1)     # right tangent line between col1 and col2
+    xIn = cl.cx            # inward to center (can tweak later)
+    bar = SvgPath().M((xR, y)).L((xIn, y)).d()
+    return paths + [bar], anchors
+
+
+def glyph_d(grid: Grid):
+    # mirror-ish first pass: bowl + stem on right tangent line
+    bowl = grid.circle(1, 1)
+    x_stem = grid.x_tan(1)
+    y_top = ascender_top(grid)
+    y_join = bowl.R()[1]
+    stem = SvgPath().M((x_stem, y_top)).L((x_stem, y_join)).d()
+    return [stem, circle_full(bowl)], []
+
+
+def glyph_E(grid: Grid):
+    # epsilon-ish E: upper curve + lower curve + mid tick
+    cu = grid.circle(1, 0)
+    cl = grid.circle(1, 1)
+    G = grid.tangency_vertical(1, 0)
+
     upper = SvgPath().M(cu.R()).A(cu.r, 0, 1, cu.T()).A(cu.r, 0, 1, cu.L()).A(cu.r, 0, 1, G).d()
-    # lower: from G go around left+bottom to cl.R
     lower = SvgPath().M(G).A(cl.r, 0, 1, cl.L()).A(cl.r, 0, 1, cl.B()).A(cl.r, 0, 1, cl.R()).d()
 
-    # middle notch/tick (short, grid-locked: from G toward the right tangent line)
-    tick_end = (grid.x_tan(1), G[1])  # go to the right tangent line
-    tick = SvgPath().M(G).L(tick_end).d()
-
+    tick = SvgPath().M(G).L((grid.x_tan(1), G[1])).d()
     return [upper, lower, tick], [("G", G)]
 
 
 def glyph_f(grid: Grid):
-    # First pass: tall stem on left tangent line + a mid arm to the right.
     x = grid.x_tan(0)
-    y_top = grid.circle(0, 0).T()[1]
-    y_bot = grid.circle(0, 2).T()[1]  # extends lower
+    y_top = ascender_top(grid)
+    y_bot = baseline(grid)
     stem = SvgPath().M((x, y_top)).L((x, y_bot)).d()
-
     y_arm = grid.circle(1, 1).cy
     arm = SvgPath().M((x, y_arm)).L((grid.x_tan(1), y_arm)).d()
     return [stem, arm], []
 
 
 def glyph_g(grid: Grid):
-    # In your sample g resembles a stacked double-loop (like an 8), grid-faithful first pass:
     cu = grid.circle(1, 0)
     cl = grid.circle(1, 1)
     return [circle_full(cu), circle_full(cl)], []
 
 
 def glyph_h(grid: Grid):
-    # stem on left tangent line + arch (half circle) to the right, ending at the right tangent line
-    x_stem = grid.x_tan(0)
-    y_top = grid.circle(0, 0).T()[1]
-    y_base = grid.circle(1, 1).cy
-    stem = SvgPath().M((x_stem, y_top)).L((x_stem, y_base)).d()
+    """
+    h: ascender stem + arch + right leg
+    """
+    xL = grid.x_tan(0)
+    y_top = ascender_top(grid)
+    y_base = baseline(grid)
 
-    arch_c = grid.circle(1, 1)  # bowl circle for the arch
-    # arch: from left tangent (matches stem) -> top -> right tangent
-    arch = SvgPath().M(arch_c.L()).A(arch_c.r, 0, 1, arch_c.T()).A(arch_c.r, 0, 1, arch_c.R()).d()
-    # right downstroke stops at right tangent (same as arch end)
-    return [stem, arch], []
+    stem = SvgPath().M((xL, y_top)).L((xL, y_base)).d()
+
+    c = grid.circle(1, 1)
+    arch = arc_LTB(c, sweep=1)  # L->T->R
+    right_leg = SvgPath().M(c.R()).L((c.R()[0], y_base)).d()
+    return [stem, arch, right_leg], []
+
+
+def glyph_n(grid: Grid):
+    """
+    n: x-height stem + arch + right leg
+    """
+    xL = grid.x_tan(0)
+    y_top = xheight_top(grid)
+    y_base = baseline(grid)
+
+    stem = SvgPath().M((xL, y_top)).L((xL, y_base)).d()
+
+    c = grid.circle(1, 1)
+    arch = arc_LTB(c, sweep=1)
+    right_leg = SvgPath().M(c.R()).L((c.R()[0], y_base)).d()
+    return [stem, arch, right_leg], []
+
+
+def glyph_m(grid: Grid):
+    """
+    m: x-height stem + two arches + two right legs
+    Uses circles at col=1,row=1 and col=2,row=1
+    """
+    xL = grid.x_tan(0)
+    y_top = xheight_top(grid)
+    y_base = baseline(grid)
+
+    stem = SvgPath().M((xL, y_top)).L((xL, y_base)).d()
+
+    c1 = grid.circle(1, 1)
+    c2 = grid.circle(2, 1)
+
+    arch1 = arc_LTB(c1, sweep=1)
+    leg1 = SvgPath().M(c1.R()).L((c1.R()[0], y_base)).d()
+
+    arch2 = arc_LTB(c2, sweep=1)
+    leg2 = SvgPath().M(c2.R()).L((c2.R()[0], y_base)).d()
+
+    return [stem, arch1, leg1, arch2, leg2], []
+
+
+def glyph_r(grid: Grid):
+    """
+    r: x-height stem + small shoulder (quarter-ish) + short right leg (optional)
+    We'll do stem + shoulder arc from L->T, then a small down tick.
+    """
+    xL = grid.x_tan(0)
+    y_top = xheight_top(grid)
+    y_base = baseline(grid)
+
+    stem = SvgPath().M((xL, y_top)).L((xL, y_base)).d()
+
+    c = grid.circle(1, 1)
+    shoulder = SvgPath().M(c.L()).A(c.r, 0, 1, c.T()).d()
+    tick = SvgPath().M(c.T()).L((c.T()[0], c.cy)).d()
+    return [stem, shoulder, tick], []
+
+
+def glyph_o(grid: Grid):
+    return [circle_full(grid.circle(1, 1))], []
 
 
 def glyph_I(grid: Grid):
-    x = grid.x_tan(0)  # use a tangent line for consistent thin stem placement
-    y_top = grid.circle(0, 0).T()[1]
-    y_bot = grid.circle(0, 2).T()[1]
-    return [SvgPath().M((x, y_top)).L((x, y_bot)).d()], []
+    x = grid.x_tan(0)
+    return [SvgPath().M((x, ascender_top(grid))).L((x, baseline(grid))).d()], []
 
 
 def glyph_J(grid: Grid):
-    # stem + bottom hook on a circle
     x = grid.x_tan(1)
-    y_top = grid.circle(2, 0).T()[1]
+    y_top = ascender_top(grid)
     c = grid.circle(1, 1)
     stem = SvgPath().M((x, y_top)).L((x, c.B()[1])).d()
     hook = SvgPath().M((x, c.B()[1])).A(c.r, 0, 1, c.L()).d()
@@ -331,61 +382,29 @@ def glyph_J(grid: Grid):
 
 
 def glyph_k(grid: Grid):
-    # stem + two diagonals
     x = grid.x_tan(0)
-    y_top = grid.circle(0, 0).T()[1]
+    y_top = xheight_top(grid)
+    y_base = baseline(grid)
     y_mid = grid.circle(1, 1).cy
-    y_bot = grid.circle(0, 2).T()[1]
-    stem = SvgPath().M((x, y_top)).L((x, y_bot)).d()
+
+    stem = SvgPath().M((x, y_top)).L((x, y_base)).d()
     arm1 = SvgPath().M((x, y_mid)).L((grid.x_tan(1), grid.circle(1, 0).cy)).d()
     arm2 = SvgPath().M((x, y_mid)).L((grid.x_tan(1), grid.circle(1, 2).cy)).d()
     return [stem, arm1, arm2], []
 
 
 def glyph_L(grid: Grid):
-    # stem + base
     x = grid.x_tan(0)
-    y_top = grid.circle(0, 0).T()[1]
-    y_bot = grid.circle(0, 2).T()[1]
-    stem = SvgPath().M((x, y_top)).L((x, y_bot)).d()
-    base = SvgPath().M((x, y_bot)).L((grid.x_tan(1), y_bot)).d()
+    y_top = ascender_top(grid)
+    y_base = baseline(grid)
+    stem = SvgPath().M((x, y_top)).L((x, y_base)).d()
+    base = SvgPath().M((x, y_base)).L((grid.x_tan(1), y_base)).d()
     return [stem, base], []
 
 
-def glyph_m(grid: Grid):
-    # stem + two arches
-    x = grid.x_tan(0)
-    y_top = grid.circle(0, 1).T()[1]
-    y_base = grid.circle(0, 1).cy
-    stem = SvgPath().M((x, y_top)).L((x, y_base)).d()
-
-    c1 = grid.circle(1, 1)
-    c2 = grid.circle(2, 1)
-    arch1 = SvgPath().M(c1.L()).A(c1.r, 0, 1, c1.T()).A(c1.r, 0, 1, c1.R()).d()
-    arch2 = SvgPath().M(c2.L()).A(c2.r, 0, 1, c2.T()).A(c2.r, 0, 1, c2.R()).d()
-    return [stem, arch1, arch2], []
-
-
-def glyph_n(grid: Grid):
-    # stem + one arch
-    x = grid.x_tan(0)
-    y_top = grid.circle(0, 1).T()[1]
-    y_base = grid.circle(0, 1).cy
-    stem = SvgPath().M((x, y_top)).L((x, y_base)).d()
-
-    c = grid.circle(1, 1)
-    arch = SvgPath().M(c.L()).A(c.r, 0, 1, c.T()).A(c.r, 0, 1, c.R()).d()
-    return [stem, arch], []
-
-
-def glyph_o(grid: Grid):
-    return [circle_full(grid.circle(1, 1))], []
-
-
 def glyph_p(grid: Grid):
-    # stem down + bowl on top (first pass)
     x = grid.x_tan(0)
-    y_top = grid.circle(0, 0).T()[1]
+    y_top = xheight_top(grid)
     y_bot = grid.circle(0, 2).B()[1]
     stem = SvgPath().M((x, y_top)).L((x, y_bot)).d()
     bowl = circle_full(grid.circle(1, 1))
@@ -393,25 +412,12 @@ def glyph_p(grid: Grid):
 
 
 def glyph_q(grid: Grid):
-    # bowl + diagonal tail
     bowl = circle_full(grid.circle(1, 1))
     tail = SvgPath().M(grid.circle(1, 1).B()).L((grid.x_tan(1), grid.circle(2, 2).cy)).d()
     return [bowl, tail], []
 
 
-def glyph_r(grid: Grid):
-    # stem + small shoulder
-    x = grid.x_tan(0)
-    y_top = grid.circle(0, 1).T()[1]
-    y_base = grid.circle(0, 1).cy
-    stem = SvgPath().M((x, y_top)).L((x, y_base)).d()
-    c = grid.circle(1, 1)
-    shoulder = SvgPath().M(c.L()).A(c.r, 0, 1, c.T()).d()
-    return [stem, shoulder], []
-
-
 def glyph_S(grid: Grid):
-    # two opposing arcs (first pass)
     cu = grid.circle(1, 0)
     cl = grid.circle(1, 1)
     top = SvgPath().M(cu.R()).A(cu.r, 0, 0, cu.L()).d()
@@ -421,24 +427,25 @@ def glyph_S(grid: Grid):
 
 def glyph_t(grid: Grid):
     x = grid.x_tan(0)
-    y_top = grid.circle(0, 0).T()[1]
-    y_bot = grid.circle(0, 2).T()[1]
-    stem = SvgPath().M((x, y_top)).L((x, y_bot)).d()
+    y_top = ascender_top(grid)
+    y_base = baseline(grid)
+    stem = SvgPath().M((x, y_top)).L((x, y_base)).d()
     y_bar = grid.circle(1, 1).cy
     bar = SvgPath().M((grid.x_tan(0), y_bar)).L((grid.x_tan(1), y_bar)).d()
     return [stem, bar], []
 
 
 def glyph_U(grid: Grid):
-    # two stems + bottom semicircle
     xL = grid.x_tan(0)
     xR = grid.x_tan(1)
-    y_top = grid.circle(0, 0).T()[1]
+    y_top = xheight_top(grid)
+    y_base = baseline(grid)
+
     c = grid.circle(1, 1)
-    y_join = c.T()[1]  # stems stop at top of bowl
-    stemL = SvgPath().M((xL, y_top)).L((xL, y_join)).d()
-    stemR = SvgPath().M((xR, y_top)).L((xR, y_join)).d()
-    bowl = SvgPath().M(c.R()).A(c.r, 0, 1, c.B()).A(c.r, 0, 1, c.L()).d()
+    # stems stop at c.T (top of bowl)
+    stemL = SvgPath().M((xL, y_top)).L((xL, c.T()[1])).d()
+    stemR = SvgPath().M((xR, y_top)).L((xR, c.T()[1])).d()
+    bowl = arc_RBL(c, sweep=1)  # R->B->L
     return [stemL, stemR, bowl], []
 
 
@@ -447,32 +454,59 @@ def glyph_u(grid: Grid):
 
 
 def glyph_v(grid: Grid):
-    topL = (grid.x_tan(0), grid.circle(0, 1).T()[1])
-    topR = (grid.x_tan(1), grid.circle(0, 1).T()[1])
-    bottom = (grid.circle(1, 1).cx, grid.circle(1, 1).B()[1])
+    # leaving as simple first pass
+    topL = (grid.x_tan(0), xheight_top(grid))
+    topR = (grid.x_tan(1), xheight_top(grid))
+    bottom = (grid.circle(1, 1).cx, baseline(grid))
     return [SvgPath().M(topL).L(bottom).L(topR).d()], []
 
 
 def glyph_w(grid: Grid):
-    t0 = (grid.x_tan(0), grid.circle(0, 1).T()[1])
-    t1 = (grid.circle(1, 1).cx, grid.circle(1, 1).T()[1])
-    t2 = (grid.x_tan(1), grid.circle(0, 1).T()[1])
-    b0 = (grid.circle(0, 1).cx, grid.circle(0, 1).B()[1])
-    b1 = (grid.circle(2, 1).cx, grid.circle(2, 1).B()[1])
-    return [SvgPath().M(t0).L(b0).L(t1).L(b1).L(t2).d()], []
+    """
+    w must be rounded: 3 legs + 2 bottom arcs (no zig-zag).
+    Use bottom halves of circles at col=1,row=1 and col=2,row=1.
+    """
+    y_top = xheight_top(grid)
+    y_base = baseline(grid)
+
+    x0 = grid.x_tan(0)   # left leg
+    x1 = grid.x_tan(1)   # middle leg (also col1/col2 tangent)
+    x2 = grid.x_tan(2)   # right leg (between col2 and col3) - but we only have 0..2 cols
+    # In our 3-col patch, the rightmost vertical we can use is the RIGHT tangent of col2 circle:
+    c2 = grid.circle(2, 1)
+    x2 = c2.R()[0]       # = 240, still inside viewBox
+
+    # legs
+    leg0 = SvgPath().M((x0, y_top)).L((x0, y_base)).d()
+    leg1 = SvgPath().M((x1, y_top)).L((x1, y_base)).d()
+    leg2 = SvgPath().M((x2, y_top)).L((x2, y_base)).d()
+
+    # bottom arcs (two bowls)
+    c1 = grid.circle(1, 1)  # spans x0..x1
+    c2 = grid.circle(2, 1)  # spans x1..x2
+
+    bowl1 = arc_RBL(c1, sweep=1)  # R->B->L (connects x1->bottom->x0)
+    bowl2 = arc_RBL(c2, sweep=1)  # R->B->L (connects x2->bottom->x1)
+
+    # We want a continuous w: draw bowls left-to-right:
+    # easiest: reverse bowl1 to L->B->R by using sweep=0 from L
+    bowl1_lr = SvgPath().M(c1.L()).A(c1.r, 0, 0, c1.B()).A(c1.r, 0, 0, c1.R()).d()
+    bowl2_lr = SvgPath().M(c2.L()).A(c2.r, 0, 0, c2.B()).A(c2.r, 0, 0, c2.R()).d()
+
+    return [leg0, bowl1_lr, leg1, bowl2_lr, leg2], []
 
 
 def glyph_x(grid: Grid):
-    a1 = (grid.x_tan(0), grid.circle(0, 1).T()[1])
-    a2 = (grid.x_tan(1), grid.circle(2, 1).B()[1])
-    b1 = (grid.x_tan(1), grid.circle(0, 1).T()[1])
-    b2 = (grid.x_tan(0), grid.circle(2, 1).B()[1])
+    a1 = (grid.x_tan(0), xheight_top(grid))
+    a2 = (grid.x_tan(1), baseline(grid))
+    b1 = (grid.x_tan(1), xheight_top(grid))
+    b2 = (grid.x_tan(0), baseline(grid))
     return [SvgPath().M(a1).L(a2).d(), SvgPath().M(b1).L(b2).d()], []
 
 
 def glyph_y(grid: Grid):
-    topL = (grid.x_tan(0), grid.circle(0, 1).T()[1])
-    topR = (grid.x_tan(1), grid.circle(0, 1).T()[1])
+    topL = (grid.x_tan(0), xheight_top(grid))
+    topR = (grid.x_tan(1), xheight_top(grid))
     mid = (grid.circle(1, 1).cx, grid.circle(1, 1).cy)
     tail = (mid[0], grid.circle(1, 2).cy)
     return [SvgPath().M(topL).L(mid).L(topR).d(), SvgPath().M(mid).L(tail).d()], []
@@ -481,8 +515,8 @@ def glyph_y(grid: Grid):
 def glyph_Z(grid: Grid):
     xL = grid.x_tan(0)
     xR = grid.x_tan(1)
-    yT = grid.circle(1, 0).T()[1]
-    yB = grid.circle(1, 1).B()[1]
+    yT = xheight_top(grid)
+    yB = baseline(grid)
     top = SvgPath().M((xL, yT)).L((xR, yT)).d()
     diag = SvgPath().M((xR, yT)).L((xL, yB)).d()
     bot = SvgPath().M((xL, yB)).L((xR, yB)).d()
@@ -497,7 +531,6 @@ def glyph_dot(grid: Grid):
 
 
 def glyph_quote_low(grid: Grid):
-    # „ two dots below
     c1 = grid.circle(1, 2)
     c2 = grid.circle(2, 2)
     rr = grid.r * 0.16
@@ -508,7 +541,6 @@ def glyph_quote_low(grid: Grid):
 
 
 def glyph_quote_high(grid: Grid):
-    # ” two dots above
     c1 = grid.circle(1, 0)
     c2 = grid.circle(2, 0)
     rr = grid.r * 0.16
@@ -519,7 +551,6 @@ def glyph_quote_high(grid: Grid):
 
 
 def glyph_qmark(grid: Grid):
-    # hook + stem + dot (first pass)
     c = grid.circle(1, 0)
     hook = SvgPath().M(c.T()).A(c.r, 0, 1, c.R()).A(c.r, 0, 1, c.B()).d()
     stem = SvgPath().M(c.B()).L((c.B()[0], grid.circle(1, 1).cy)).d()
@@ -527,18 +558,16 @@ def glyph_qmark(grid: Grid):
     return [hook, stem, dot], []
 
 
-# Digits (grid-faithful first pass)
+# Digits (still first-pass but grid-correct)
 def digit_0(grid: Grid): return glyph_o(grid)
 def digit_1(grid: Grid):
     x = grid.x_tan(1)
-    yT = grid.circle(2, 0).T()[1]
-    yB = grid.circle(2, 2).T()[1]
-    return [SvgPath().M((x, yT)).L((x, yB)).d()], []
+    return [SvgPath().M((x, xheight_top(grid))).L((x, baseline(grid))).d()], []
 def digit_2(grid: Grid):
     c = grid.circle(1, 1)
     top = SvgPath().M(c.L()).A(c.r, 0, 1, c.T()).A(c.r, 0, 1, c.R()).d()
-    diag = SvgPath().M(c.R()).L((grid.x_tan(0), grid.circle(2, 1).B()[1])).d()
-    base = SvgPath().M((grid.x_tan(0), grid.circle(2, 1).B()[1])).L((grid.x_tan(1), grid.circle(2, 1).B()[1])).d()
+    diag = SvgPath().M(c.R()).L((grid.x_tan(0), baseline(grid))).d()
+    base = SvgPath().M((grid.x_tan(0), baseline(grid))).L((grid.x_tan(1), baseline(grid))).d()
     return [top, diag, base], []
 def digit_3(grid: Grid):
     cu = grid.circle(1, 0)
@@ -549,9 +578,9 @@ def digit_3(grid: Grid):
 def digit_4(grid: Grid):
     xL = grid.x_tan(0)
     xR = grid.x_tan(1)
-    yT = grid.circle(1, 0).T()[1]
+    yT = xheight_top(grid)
     yM = grid.circle(1, 1).cy
-    yB = grid.circle(1, 2).T()[1]
+    yB = baseline(grid)
     diag = SvgPath().M((xR, yT)).L((xL, yM)).d()
     bar = SvgPath().M((xL, yM)).L((xR, yM)).d()
     stem = SvgPath().M((xR, yT)).L((xR, yB)).d()
@@ -559,7 +588,7 @@ def digit_4(grid: Grid):
 def digit_5(grid: Grid):
     xL = grid.x_tan(0)
     xR = grid.x_tan(1)
-    yT = grid.circle(1, 0).T()[1]
+    yT = xheight_top(grid)
     yM = grid.circle(1, 1).cy
     top = SvgPath().M((xR, yT)).L((xL, yT)).L((xL, yM)).d()
     bowl = SvgPath().M(grid.circle(1, 1).L()).A(grid.circle(1, 1).r, 0, 0, grid.circle(1, 1).R()).d()
@@ -572,8 +601,8 @@ def digit_6(grid: Grid):
 def digit_7(grid: Grid):
     xL = grid.x_tan(0)
     xR = grid.x_tan(1)
-    yT = grid.circle(1, 0).T()[1]
-    p = SvgPath().M((xL, yT)).L((xR, yT)).L((xL, grid.circle(2, 1).B()[1])).d()
+    yT = xheight_top(grid)
+    p = SvgPath().M((xL, yT)).L((xR, yT)).L((xL, baseline(grid))).d()
     return [p], []
 def digit_8(grid: Grid):
     return [circle_full(grid.circle(1, 0)), circle_full(grid.circle(1, 1))], []
@@ -585,25 +614,22 @@ def digit_9(grid: Grid):
 
 
 # -----------------------------
-# Map requested glyphs
+# Builder map (only what you need)
 # -----------------------------
 BUILDERS: Dict[str, GlyphFn] = {
-    # Top row set
-    "a": glyph_a,
     "A": glyph_A,
+    "a": glyph_a,
     "b": glyph_b,
     "C": glyph_C,
     "c": glyph_c,
     "d": glyph_d,
     "E": glyph_E,
-    "e": glyph_E,   # first pass (your sheet shows E, not sure about lowercase e in this design)
+    "e": glyph_E,  # (we'll refine later if needed)
     "f": glyph_f,
     "g": glyph_g,
     "h": glyph_h,
     "I": glyph_I,
     "J": glyph_J,
-
-    # Second/third row set (first-pass, grid-faithful)
     "k": glyph_k,
     "L": glyph_L,
     "m": glyph_m,
@@ -621,14 +647,10 @@ BUILDERS: Dict[str, GlyphFn] = {
     "x": glyph_x,
     "y": glyph_y,
     "Z": glyph_Z,
-
-    # punctuation
     ".": glyph_dot,
     "„": glyph_quote_low,
     "”": glyph_quote_high,
     "?": glyph_qmark,
-
-    # digits
     "0": digit_0,
     "1": digit_1,
     "2": digit_2,
@@ -639,10 +661,8 @@ BUILDERS: Dict[str, GlyphFn] = {
     "7": digit_7,
     "8": digit_8,
     "9": digit_9,
-
-    # extra uppercase set you listed
-    "G": glyph_g,     # placeholder-ish but same language
-    "H": glyph_h,
+    "G": glyph_G,
+    "H": glyph_h,  # placeholder
     "K": glyph_k,
     "M": glyph_m,
     "N": glyph_n,
@@ -651,18 +671,18 @@ BUILDERS: Dict[str, GlyphFn] = {
 
 
 # -----------------------------
-# SVG document
+# SVG rendering
 # -----------------------------
-def svg_doc(paths_d: List[str], debug: bool, anchors: List[Tuple[str, Tuple[float, float]]], grid: Grid) -> str:
+def svg_glyph_doc(paths_d: List[str], debug: bool, anchors: List[Tuple[str, Tuple[float, float]]], grid: Grid) -> str:
     out: List[str] = []
     out.append('<?xml version="1.0" encoding="UTF-8"?>')
     out.append(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {VIEW_W} {VIEW_H}" width="{VIEW_W}" height="{VIEW_H}">')
     out.append('<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>')
 
     if debug:
+        # exact grid used by glyph math: 3x3 circles touching
         out.append(f'<g fill="none" stroke="#bdbdbd" stroke-width="{fmt(GRID_STROKE)}" opacity="{fmt(GRID_OPACITY)}">')
-        # draw a patch of the orthogonal tangent grid
-        for row in range(0, 4):
+        for row in range(0, 3):
             for col in range(0, 3):
                 c = grid.circle(col, row)
                 out.append(f'<circle cx="{fmt(c.cx)}" cy="{fmt(c.cy)}" r="{fmt(c.r)}" />')
@@ -687,13 +707,49 @@ def svg_doc(paths_d: List[str], debug: bool, anchors: List[Tuple[str, Tuple[floa
     return "\n".join(out)
 
 
+def svg_sheet_doc(rows: List[str], glyph_paths: Dict[str, List[str]]) -> str:
+    cell_w = float(VIEW_W)
+    cell_h = float(VIEW_H)
+
+    max_cols = max(len(r) for r in rows)
+    sheet_w = max_cols * cell_w + (max_cols - 1) * SHEET_GAP
+    sheet_h = len(rows) * cell_h + (len(rows) - 1) * SHEET_GAP
+
+    out: List[str] = []
+    out.append('<?xml version="1.0" encoding="UTF-8"?>')
+    out.append(f'<svg xmlns="http://www.w3.org/2000/svg" width="{fmt(sheet_w)}" height="{fmt(sheet_h)}" viewBox="0 0 {fmt(sheet_w)} {fmt(sheet_h)}">')
+    out.append(f'<rect x="0" y="0" width="{fmt(sheet_w)}" height="{fmt(sheet_h)}" fill="#fff"/>')
+
+    out.append(
+        f'<g fill="none" stroke="#000" stroke-width="{fmt(STROKE)}" '
+        f'stroke-linecap="round" stroke-linejoin="round">'
+    )
+
+    y = 0.0
+    for row in rows:
+        x = 0.0
+        for ch in row:
+            parts = glyph_paths.get(ch)
+            if parts:
+                out.append(f'<g transform="translate({fmt(x)} {fmt(y)})">')
+                out.extend(parts)
+                out.append('</g>')
+            x += cell_w + SHEET_GAP
+        y += cell_h + SHEET_GAP
+
+    out.append('</g>')
+    out.append('</svg>')
+    out.append('')
+    return "\n".join(out)
+
+
 # -----------------------------
 # Main
 # -----------------------------
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--out-dir", default=str(OUT_DIR_DEFAULT), help="Output directory (default: src)")
-    ap.add_argument("--debug", action="store_true", help="Include grid overlay (recommended while refining)")
+    ap.add_argument("--out-dir", default="src", help="Output directory for glyphs + sheet.svg (default: src)")
+    ap.add_argument("--debug", action="store_true", help="Include grid overlay in each glyph SVG")
     args = ap.parse_args()
 
     out_dir = FSPath(args.out_dir)
@@ -701,8 +757,9 @@ def main() -> None:
 
     chars = uniq(REQUESTED)
     missing: List[str] = []
-    written = 0
+    glyph_paths_for_sheet: Dict[str, List[str]] = {}
 
+    written = 0
     for ch in chars:
         fn = BUILDERS.get(ch)
         if fn is None:
@@ -710,13 +767,21 @@ def main() -> None:
             continue
 
         paths_d, anchors = fn(grid)
-        doc = svg_doc(paths_d, debug=args.debug, anchors=anchors, grid=grid)
 
-        # required pattern: src/character-u{codepoint}
+        # write glyph file
+        doc = svg_glyph_doc(paths_d, debug=args.debug, anchors=anchors, grid=grid)
         out_name = f"character-u{ord(ch):04x}.svg"
         write_text_lf(out_dir / out_name, doc)
         written += 1
         print(f"✓ {ch} -> {out_name}")
+
+        # for sheet (no debug overlay)
+        glyph_paths_for_sheet[ch] = [f'<path d="{d}" />' for d in paths_d]
+
+    # write sheet into SAME dir
+    sheet_svg = svg_sheet_doc(SHEET_ROWS, glyph_paths_for_sheet)
+    write_text_lf(out_dir / "sheet.svg", sheet_svg)
+    print(f"\n✓ sheet -> {(out_dir / 'sheet.svg').resolve()}")
 
     print(f"\nDone. Wrote {written} glyph(s) into {out_dir.resolve()}")
     if missing:

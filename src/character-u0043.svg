@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 360" width="240" height="360">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="60" cy="120" r="40" />
-<circle cx="140" cy="120" r="40" />
-<circle cx="220" cy="120" r="40" />
-<circle cx="60" cy="200" r="40" />
-<circle cx="140" cy="200" r="40" />
-<circle cx="220" cy="200" r="40" />
-<circle cx="60" cy="280" r="40" />
-<circle cx="140" cy="280" r="40" />
-<circle cx="220" cy="280" r="40" />
-<circle cx="60" cy="360" r="40" />
-<circle cx="140" cy="360" r="40" />
-<circle cx="220" cy="360" r="40" />
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 180 120 A 40 40 0 0 1 140 80 A 40 40 0 0 1 100 120" />
-<path d="M 100 120 L 100 200" />
-<path d="M 100 200 A 40 40 0 0 1 140 240 A 40 40 0 0 1 180 200" />
+<path d="M 160 40 A 40 40 0 0 1 120 0 A 40 40 0 0 1 80 40 A 40 40 0 0 1 120 80 A 40 40 0 0 1 80 120 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 120" />
+</g>
+<g fill="#1e6bff" stroke="none">
+<circle cx="120" cy="80" r="3.5" />
 </g>
 </svg>
