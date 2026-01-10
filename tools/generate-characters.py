@@ -7,7 +7,7 @@ import argparse
 from dataclasses import dataclass
 from pathlib import Path as FSPath
 from typing import Callable, Dict, List, Tuple
-
+import math
 
 # -----------------------------
 # Character set (exact)
@@ -669,21 +669,20 @@ def glyph_qmark(grid: Grid):
 # Digits (match reference sheet; 8 stays as-is)
 
 def digit_0(grid: Grid):
-    # 0 = capsule: top half-circle + right stem + bottom half-circle + left stem
+    # 0 = capsule (correct bottom direction)
     cu = grid.circle(1, BASE_ROW)
     cl = grid.circle(1, BASE_ROW + 1)
 
     p = SvgPath().M(cu.L())
-    # top: L -> T -> R (via top)
+    # top half: L -> T -> R
     p.A(cu.r, 0, 1, cu.T()).A(cu.r, 0, 1, cu.R())
-    # right side down
+    # right side
     p.L(cl.R())
-    # bottom: R -> B -> L (via bottom)
-    p.A(cl.r, 0, 0, cl.B()).A(cl.r, 0, 0, cl.L())
-    # left side up
+    # bottom half: R -> B -> L (FIXED: sweep=1 in this direction)
+    p.A(cl.r, 0, 1, cl.B()).A(cl.r, 0, 1, cl.L())
+    # left side
     p.L(cu.L())
     return [p.d()], []
-
 
 def digit_1(grid: Grid):
     # 1 = small top hook + centered stem
@@ -698,23 +697,40 @@ def digit_1(grid: Grid):
 
 
 def digit_2(grid: Grid):
-    # 2 = top cap + right drop + bottom bowl + baseline bar
+    # 2 = upper 3/4 arc + lower 3/4 arc + short base, with a small gap at the middle
     cu = grid.circle(1, BASE_ROW)
     cl = grid.circle(1, BASE_ROW + 1)
-    y_base = baseline(grid)
+
+    def pt(c: Circle, deg: float):
+        a = math.radians(deg)
+        return (c.cx + c.r * math.cos(a), c.cy + c.r * math.sin(a))
+
+    # create a little gap around the tangency by not using exact cu.B / cl.T
+    end_top = pt(cu, 82)      # near bottom-right (but not the exact bottom)
+    start_bot = pt(cl, 258)   # near top-left (but not the exact top)
+
+    top = (
+        SvgPath()
+        .M(cu.L())
+        .A(cu.r, 0, 1, cu.T())
+        .A(cu.r, 0, 1, cu.R())
+        .A(cu.r, 0, 1, end_top)
+        .d()
+    )
+
+    base_y = baseline(grid)
     xR = grid.x_tan(1)
 
-    p = SvgPath().M(cu.L())
-    # top cap: L -> T -> R
-    p.A(cu.r, 0, 1, cu.T()).A(cu.r, 0, 1, cu.R())
-    # right drop to lower circle right
-    p.L(cl.R())
-    # lower bowl: R -> B -> L (via bottom)
-    p.A(cl.r, 0, 0, cl.B()).A(cl.r, 0, 0, cl.L())
-    # go to baseline and run bar to the right
-    p.L((cl.L()[0], y_base)).L((xR, y_base))
-    return [p.d()], []
+    bottom = (
+        SvgPath()
+        .M(start_bot)
+        .A(cl.r, 0, 0, cl.L())
+        .A(cl.r, 0, 0, cl.B())
+        .L((xR, base_y))
+        .d()
+    )
 
+    return [top, bottom], []
 
 def digit_3(grid: Grid):
     # 3 = two right-facing arcs + small middle bar
@@ -734,7 +750,7 @@ def digit_3(grid: Grid):
 
 
 def digit_4(grid: Grid):
-    # 4 = left short stem + curved cross (bottom half of lower circle) + full right stem
+    # 4 = left stem + correct bowl (bend direction fixed) + right stem
     cl = grid.circle(1, BASE_ROW + 1)
 
     xL = grid.x_tan(0)
@@ -743,49 +759,71 @@ def digit_4(grid: Grid):
     y_base = baseline(grid)
 
     stemL = SvgPath().M((xL, y_top)).L(cl.L()).d()
-    curve = SvgPath().M(cl.L()).A(cl.r, 0, 1, cl.B()).A(cl.r, 0, 1, cl.R()).d()
+
+    # FIX: bowl should bend like your reference (use sweep=0 here)
+    bowl = (
+        SvgPath()
+        .M(cl.L())
+        .A(cl.r, 0, 0, cl.B())
+        .A(cl.r, 0, 0, cl.R())
+        .d()
+    )
+
     stemR = SvgPath().M((xR, y_top)).L((xR, y_base)).d()
 
-    return [stemL, curve, stemR], []
-
+    return [stemL, bowl, stemR], []
 
 def digit_5(grid: Grid):
-    # 5 = flat top-right + left curve down + right curve down + flat bottom-left
+    # 5 = top bar + upper-left C + lower-left C + short bottom bar (like the reference)
     cu = grid.circle(1, BASE_ROW)
     cl = grid.circle(1, BASE_ROW + 1)
 
-    xR = grid.x_tan(1)
     xL = grid.x_tan(0)
-
-    # top flat (right side)
-    top_y = cu.T()[1]
-    bot_y = cl.B()[1]
-
-    p = SvgPath().M((xR, top_y)).L(cu.T())
-    # upper-left curve: T -> L -> G (use bottom of upper circle)
-    p.A(cu.r, 0, 1, cu.L()).A(cu.r, 0, 1, cu.B())
-    # lower-right curve: T(of lower) -> R -> B (start at tangency point)
-    p.A(cl.r, 0, 1, cl.R()).A(cl.r, 0, 1, cl.B())
-    # bottom flat (left side)
-    p.L((xL, bot_y))
-    return [p.d()], []
-
-
-def digit_6(grid: Grid):
-    # 6 = top C + left stem down into a full bottom loop
-    cu = grid.circle(1, BASE_ROW)
-    cl = grid.circle(1, BASE_ROW + 1)
-
+    xR = grid.x_tan(1)
     y_top = cu.T()[1]
     y_base = baseline(grid)
+
+    top_bar = SvgPath().M(cu.T()).L((xR, y_top)).d()
+
+    upper_c = (
+        SvgPath()
+        .M(cu.T())
+        .A(cu.r, 0, 0, cu.L())
+        .A(cu.r, 0, 0, cu.B())
+        .d()
+    )
+
+    lower_c = (
+        SvgPath()
+        .M(cl.T())
+        .A(cl.r, 0, 0, cl.L())
+        .A(cl.r, 0, 0, cl.B())
+        .d()
+    )
+
+    bottom_bar = SvgPath().M((xL, y_base)).L(cl.B()).d()
+
+    return [top_bar, upper_c, lower_c, bottom_bar], []
+
+def digit_6(grid: Grid):
+    # 6 = b-like: left stem into full bottom loop + top bar to the right
+    cu = grid.circle(1, BASE_ROW)
+    cl = grid.circle(1, BASE_ROW + 1)
+
     xL = grid.x_tan(0)
+    xR = grid.x_tan(1)
+    y_top = cu.T()[1]
 
-    top_c = SvgPath().M(cu.R()).A(cu.r, 0, 1, cu.T()).A(cu.r, 0, 1, cu.L()).d()
-    stem = SvgPath().M(cu.L()).L(cl.L()).d()
-    loop = circle_full(cl)  # bottom loop
+    # left stem stops where it touches the loop (at cl.L)
+    stem = SvgPath().M((xL, y_top)).L(cl.L()).d()
 
-    return [top_c, stem, loop], []
+    # top bar: small rounded corner then flat to the right (like reference)
+    corner = SvgPath().M(cu.L()).A(cu.r, 0, 1, cu.T()).d()
+    bar = SvgPath().M(cu.T()).L((xR, y_top)).d()
 
+    loop = circle_full(cl)
+
+    return [stem, corner, bar, loop], []
 
 def digit_7(grid: Grid):
     # 7 = flat top + rounded top-right corner + right stem

@@ -17,6 +17,6 @@
 <circle cx="200" cy="280" r="40" />
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120 L 160 200 A 40 40 0 0 0 120 240 A 40 40 0 0 0 80 200 L 80 120" />
+<path d="M 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120 L 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200 L 80 120" />
 </g>
 </svg>
