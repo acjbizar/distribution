@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5510 1430" width="5510" height="1430">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5590 1430" width="5590" height="1430">
 <desc>Glyph sheet composed from character-uXXXX.svg glyphs</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <style>.lbl{font:12px monospace; fill:#333;}</style>
@@ -158,7 +158,8 @@
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
 <path d="M 80 80 L 80 240" />
-<path d="M 80 200 L 160 200" />
+<path d="M 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120" />
+<path d="M 80 200 A 40 40 0 0 1 120 160 L 120 200" />
 </g>
 <text class="lbl" x="0" y="336">f U+0066</text>
 </g>
@@ -249,8 +250,8 @@
 <circle cx="200" cy="280" r="40" />
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 160 80 L 160 240" />
-<path d="M 160 240 A 40 40 0 0 1 80 200" />
+<path d="M 160 80 L 160 200" />
+<path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200" />
 </g>
 <text class="lbl" x="0" y="336">J U+004A</text>
 </g>
@@ -551,15 +552,19 @@
 <circle cx="40" cy="40" r="40" />
 <circle cx="120" cy="40" r="40" />
 <circle cx="200" cy="40" r="40" />
+<circle cx="280" cy="40" r="40" />
 <circle cx="40" cy="120" r="40" />
 <circle cx="120" cy="120" r="40" />
 <circle cx="200" cy="120" r="40" />
+<circle cx="280" cy="120" r="40" />
 <circle cx="40" cy="200" r="40" />
 <circle cx="120" cy="200" r="40" />
 <circle cx="200" cy="200" r="40" />
+<circle cx="280" cy="200" r="40" />
 <circle cx="40" cy="280" r="40" />
 <circle cx="120" cy="280" r="40" />
 <circle cx="200" cy="280" r="40" />
+<circle cx="280" cy="280" r="40" />
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
 <path d="M 80 160 L 80 240" />
@@ -570,7 +575,7 @@
 </g>
 <text class="lbl" x="0" y="336">w U+0077</text>
 </g>
-<g transform="translate(3620 380)">
+<g transform="translate(3700 380)">
 <desc>glyph: x U+0078</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
@@ -593,7 +598,7 @@
 </g>
 <text class="lbl" x="0" y="336">x U+0078</text>
 </g>
-<g transform="translate(3890 380)">
+<g transform="translate(3970 380)">
 <desc>glyph: y U+0079</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
@@ -616,7 +621,7 @@
 </g>
 <text class="lbl" x="0" y="336">y U+0079</text>
 </g>
-<g transform="translate(4160 380)">
+<g transform="translate(4240 380)">
 <desc>glyph: Z U+005A</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
@@ -640,7 +645,7 @@
 </g>
 <text class="lbl" x="0" y="336">Z U+005A</text>
 </g>
-<g transform="translate(4430 380)">
+<g transform="translate(4510 380)">
 <desc>glyph: . U+002E</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
@@ -662,7 +667,7 @@
 </g>
 <text class="lbl" x="0" y="336">. U+002E</text>
 </g>
-<g transform="translate(4700 380)">
+<g transform="translate(4780 380)">
 <desc>glyph: „ U+201E</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
@@ -685,7 +690,7 @@
 </g>
 <text class="lbl" x="0" y="336">„ U+201E</text>
 </g>
-<g transform="translate(4970 380)">
+<g transform="translate(5050 380)">
 <desc>glyph: ” U+201D</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
@@ -708,7 +713,7 @@
 </g>
 <text class="lbl" x="0" y="336">” U+201D</text>
 </g>
-<g transform="translate(5240 380)">
+<g transform="translate(5320 380)">
 <desc>glyph: ? U+003F</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">

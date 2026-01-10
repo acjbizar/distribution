@@ -317,13 +317,39 @@ def glyph_d(grid: Grid):
     return [stem, circle_full(bowl)], []
 
 def glyph_f(grid: Grid):
+    # Match reference:
+    # - left stem (ascender -> baseline)
+    # - top half-arch on upper circle (L->T->R)
+    # - mid hook: lower circle quarter-arch (L->T) then short vertical down to center
+
     x = grid.x_tan(0)
     y_top = ascender_top(grid)
     y_base = baseline(grid)
+
+    cu = grid.circle(1, BASE_ROW)         # upper circle
+    cl = grid.circle(1, BASE_ROW + 1)     # lower circle
+
     stem = SvgPath().M((x, y_top)).L((x, y_base)).d()
-    y_arm = grid.circle(1, BASE_ROW + 1).cy
-    arm = SvgPath().M((x, y_arm)).L((grid.x_tan(1), y_arm)).d()
-    return [stem, arm], []
+
+    # top arch: starts at cu.L which lies exactly on the stem x
+    top_arch = (
+        SvgPath()
+        .M(cu.L())
+        .A(cu.r, 0, 1, cu.T())
+        .A(cu.r, 0, 1, cu.R())
+        .d()
+    )
+
+    # mid hook: from cl.L (on the stem) up to cl.T, then down a bit (to center)
+    mid_hook = (
+        SvgPath()
+        .M(cl.L())
+        .A(cl.r, 0, 1, cl.T())
+        .L((cl.cx, cl.cy))
+        .d()
+    )
+
+    return [stem, top_arch, mid_hook], []
 
 def glyph_g(grid: Grid):
     cu = grid.circle(1, BASE_ROW)
@@ -347,9 +373,15 @@ def glyph_I(grid: Grid):
 def glyph_J(grid: Grid):
     x = grid.x_tan(1)
     y_top = ascender_top(grid)
+
     c = grid.circle(1, BASE_ROW + 1)
-    stem = SvgPath().M((x, y_top)).L((x, c.B()[1])).d()
-    hook = SvgPath().M((x, c.B()[1])).A(c.r, 0, 1, c.L()).d()
+
+    # stem drops to the circle's RIGHT point so the hook arc starts on-circle
+    stem = SvgPath().M((x, y_top)).L(c.R()).d()
+
+    # hook: right -> bottom -> left
+    hook = SvgPath().M(c.R()).A(c.r, 0, 1, c.B()).A(c.r, 0, 1, c.L()).d()
+
     return [stem, hook], []
 
 def glyph_L(grid: Grid):
@@ -450,19 +482,23 @@ def glyph_v(grid: Grid):
     return [SvgPath().M(topL).L(bottom).L(topR).d()], []
 
 def glyph_w(grid: Grid):
-    # rounded-ish w within 3 cols (no sheet here; this is a placeholder)
+    # Wide w (4 cols): 3 stems + 2 bottom bowls between them
     y_top = xheight_top(grid)
     y_base = baseline(grid)
+
     x0 = grid.x_tan(0)
     x1 = grid.x_tan(1)
-    c1 = grid.circle(1, BASE_ROW + 1)
-    c2 = grid.circle(2, BASE_ROW + 1)
-    x2 = c2.R()[0]
+    x2 = grid.x_tan(2)
+
+    # bowls sit on row BASE_ROW+1 (same as n/m)
+    c1 = grid.circle(1, BASE_ROW + 1)  # between x0..x1
+    c2 = grid.circle(2, BASE_ROW + 1)  # between x1..x2
 
     leg0 = SvgPath().M((x0, y_top)).L((x0, y_base)).d()
     leg1 = SvgPath().M((x1, y_top)).L((x1, y_base)).d()
     leg2 = SvgPath().M((x2, y_top)).L((x2, y_base)).d()
 
+    # bottom bowls: left->bottom->right (use sweep=0 like your placeholder)
     bowl1 = SvgPath().M(c1.L()).A(c1.r, 0, 0, c1.B()).A(c1.r, 0, 0, c1.R()).d()
     bowl2 = SvgPath().M(c2.L()).A(c2.r, 0, 0, c2.B()).A(c2.r, 0, 0, c2.R()).d()
 
@@ -685,11 +721,10 @@ BUILDERS: Dict[str, GlyphFn] = {
 # SVG rendering (variable width)
 # -----------------------------
 def glyph_view_width(ch: str) -> int:
-    return VIEW_W_WIDE if ch in ("m", "M") else VIEW_W_DEFAULT
+    return VIEW_W_WIDE if ch in ("m", "M", "w") else VIEW_W_DEFAULT
 
 def glyph_grid_cols(ch: str) -> int:
-    return GRID_COLS_WIDE if ch in ("m", "M") else GRID_COLS_DEFAULT
-
+    return GRID_COLS_WIDE if ch in ("m", "M", "w") else GRID_COLS_DEFAULT
 
 def svg_glyph_doc(
     glyph_name: str,
