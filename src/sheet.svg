@@ -1,9 +1,284 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5590 1430" width="5590" height="1430">
-<desc>Glyph sheet composed from character-uXXXX.svg glyphs</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2810 1780">
+<desc>Glyph sheet composed from src/character-u{codepoint}.svg files</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <style>.lbl{font:12px monospace; fill:#333;}</style>
 <g transform="translate(30 30)">
+<desc>glyph: . U+002E</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 207.2 280 A 7.2 7.2 0 0 1 200 287.2 A 7.2 7.2 0 0 1 192.8 280 A 7.2 7.2 0 0 1 200 272.8 A 7.2 7.2 0 0 1 207.2 280" />
+</g>
+<text class="lbl" x="0" y="336">. U+002E</text>
+</g>
+<g transform="translate(300 30)">
+<desc>glyph: 0 U+0030</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
+</g>
+<text class="lbl" x="0" y="336">0 U+0030</text>
+</g>
+<g transform="translate(570 30)">
+<desc>glyph: 1 U+0031</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 160 160 L 160 240" />
+</g>
+<text class="lbl" x="0" y="336">1 U+0031</text>
+</g>
+<g transform="translate(840 30)">
+<desc>glyph: 2 U+0032</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
+<path d="M 160 200 L 80 240" />
+<path d="M 80 240 L 160 240" />
+</g>
+<text class="lbl" x="0" y="336">2 U+0032</text>
+</g>
+<g transform="translate(1110 30)">
+<desc>glyph: 3 U+0033</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 120 80 A 40 40 0 0 1 160 120 A 40 40 0 0 1 120 160" />
+<path d="M 120 160 A 40 40 0 0 1 160 200 A 40 40 0 0 1 120 240" />
+</g>
+<text class="lbl" x="0" y="336">3 U+0033</text>
+</g>
+<g transform="translate(1380 30)">
+<desc>glyph: 4 U+0034</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 160 160 L 80 200" />
+<path d="M 80 200 L 160 200" />
+<path d="M 160 160 L 160 240" />
+</g>
+<text class="lbl" x="0" y="336">4 U+0034</text>
+</g>
+<g transform="translate(1650 30)">
+<desc>glyph: 5 U+0035</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 160 160 L 80 160 L 80 200" />
+<path d="M 80 200 A 40 40 0 0 0 160 200" />
+</g>
+<text class="lbl" x="0" y="336">5 U+0035</text>
+</g>
+<g transform="translate(1920 30)">
+<desc>glyph: 6 U+0036</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
+<path d="M 120 160 L 80 120" />
+</g>
+<text class="lbl" x="0" y="336">6 U+0036</text>
+</g>
+<g transform="translate(2190 30)">
+<desc>glyph: 7 U+0037</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 80 160 L 160 160 L 80 240" />
+</g>
+<text class="lbl" x="0" y="336">7 U+0037</text>
+</g>
+<g transform="translate(2460 30)">
+<desc>glyph: 8 U+0038</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 160 120 A 40 40 0 0 1 120 160 A 40 40 0 0 1 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120" />
+<path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
+</g>
+<text class="lbl" x="0" y="336">8 U+0038</text>
+</g>
+<g transform="translate(30 380)">
+<desc>glyph: 9 U+0039</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 160 120 A 40 40 0 0 1 120 160 A 40 40 0 0 1 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120" />
+<path d="M 120 160 L 160 200" />
+</g>
+<text class="lbl" x="0" y="336">9 U+0039</text>
+</g>
+<g transform="translate(300 380)">
+<desc>glyph: ? U+003F</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 120 80 A 40 40 0 0 1 160 120 A 40 40 0 0 1 120 160" />
+<path d="M 120 160 L 120 200" />
+<path d="['M 207.2 280 A 7.2 7.2 0 0 1 200 287.2 A 7.2 7.2 0 0 1 192.8 280 A 7.2 7.2 0 0 1 200 272.8 A 7.2 7.2 0 0 1 207.2 280']" />
+</g>
+<text class="lbl" x="0" y="336">? U+003F</text>
+</g>
+<g transform="translate(570 380)">
 <desc>glyph: A U+0041</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
@@ -36,34 +311,7 @@
 </g>
 <text class="lbl" x="0" y="336">A U+0041</text>
 </g>
-<g transform="translate(300 30)">
-<desc>glyph: b U+0062</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 80 L 80 200" />
-<path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
-</g>
-<g fill="#1e6bff" stroke="none">
-<circle cx="80" cy="80" r="3.5" />
-<circle cx="80" cy="200" r="3.5" />
-</g>
-<text class="lbl" x="0" y="336">b U+0062</text>
-</g>
-<g transform="translate(570 30)">
+<g transform="translate(840 380)">
 <desc>glyph: C U+0043</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
@@ -91,30 +339,7 @@
 </g>
 <text class="lbl" x="0" y="336">C U+0043</text>
 </g>
-<g transform="translate(840 30)">
-<desc>glyph: d U+0064</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 160 80 L 160 200" />
-<path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
-</g>
-<text class="lbl" x="0" y="336">d U+0064</text>
-</g>
-<g transform="translate(1110 30)">
+<g transform="translate(1110 380)">
 <desc>glyph: E U+0045</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
@@ -139,889 +364,7 @@
 </g>
 <text class="lbl" x="0" y="336">E U+0045</text>
 </g>
-<g transform="translate(1380 30)">
-<desc>glyph: f U+0066</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 80 L 80 240" />
-<path d="M 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120" />
-<path d="M 80 200 A 40 40 0 0 1 120 160 L 120 200" />
-</g>
-<text class="lbl" x="0" y="336">f U+0066</text>
-</g>
-<g transform="translate(1650 30)">
-<desc>glyph: g U+0067</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 160 120 A 40 40 0 0 1 120 160 A 40 40 0 0 1 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120" />
-<path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
-</g>
-<text class="lbl" x="0" y="336">g U+0067</text>
-</g>
-<g transform="translate(1920 30)">
-<desc>glyph: h U+0068</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 80 L 80 240" />
-<path d="M 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
-<path d="M 160 200 L 160 240" />
-</g>
-<text class="lbl" x="0" y="336">h U+0068</text>
-</g>
-<g transform="translate(2190 30)">
-<desc>glyph: I U+0049</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 80 L 80 240" />
-</g>
-<text class="lbl" x="0" y="336">I U+0049</text>
-</g>
-<g transform="translate(2460 30)">
-<desc>glyph: J U+004A</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 160 80 L 160 200" />
-<path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200" />
-</g>
-<text class="lbl" x="0" y="336">J U+004A</text>
-</g>
-<g transform="translate(30 380)">
-<desc>glyph: k U+006B</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 80 L 80 240" />
-<path d="M 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
-<path d="M 120 160 A 40 40 0 0 0 160 120" />
-<path d="M 160 200 L 160 240" />
-</g>
-<g fill="#1e6bff" stroke="none">
-<circle cx="120" cy="160" r="3.5" />
-<circle cx="160" cy="200" r="3.5" />
-<circle cx="160" cy="240" r="3.5" />
-</g>
-<text class="lbl" x="0" y="336">k U+006B</text>
-</g>
-<g transform="translate(300 380)">
-<desc>glyph: L U+004C</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 80 L 80 240" />
-<path d="M 80 240 L 160 240" />
-</g>
-<text class="lbl" x="0" y="336">L U+004C</text>
-</g>
-<g transform="translate(570 380)">
-<desc>glyph: m U+006D</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="280" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="280" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="280" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-<circle cx="280" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 160 L 80 240" />
-<path d="M 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
-<path d="M 160 200 L 160 240" />
-<path d="M 160 200 A 40 40 0 0 1 200 160 A 40 40 0 0 1 240 200" />
-<path d="M 240 200 L 240 240" />
-</g>
-<text class="lbl" x="0" y="336">m U+006D</text>
-</g>
-<g transform="translate(920 380)">
-<desc>glyph: n U+006E</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 160 L 80 240" />
-<path d="M 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
-<path d="M 160 200 L 160 240" />
-</g>
-<text class="lbl" x="0" y="336">n U+006E</text>
-</g>
-<g transform="translate(1190 380)">
-<desc>glyph: o U+006F</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
-</g>
-<text class="lbl" x="0" y="336">o U+006F</text>
-</g>
-<g transform="translate(1460 380)">
-<desc>glyph: p U+0070</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 160 L 80 320" />
-<path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
-</g>
-<text class="lbl" x="0" y="336">p U+0070</text>
-</g>
-<g transform="translate(1730 380)">
-<desc>glyph: q U+0071</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
-<path d="M 120 240 L 160 280" />
-</g>
-<text class="lbl" x="0" y="336">q U+0071</text>
-</g>
-<g transform="translate(2000 380)">
-<desc>glyph: r U+0072</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 160 L 80 240" />
-<path d="M 80 200 A 40 40 0 0 1 120 160" />
-</g>
-<text class="lbl" x="0" y="336">r U+0072</text>
-</g>
-<g transform="translate(2270 380)">
-<desc>glyph: S U+0053</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 160 120 A 40 40 0 0 0 80 120" />
-<path d="M 80 200 A 40 40 0 0 0 160 200" />
-</g>
-<text class="lbl" x="0" y="336">S U+0053</text>
-</g>
-<g transform="translate(2540 380)">
-<desc>glyph: t U+0074</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 80 L 80 240" />
-<path d="M 80 200 L 160 200" />
-</g>
-<text class="lbl" x="0" y="336">t U+0074</text>
-</g>
-<g transform="translate(2810 380)">
-<desc>glyph: U U+0055</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 160 L 80 160" />
-<path d="M 160 160 L 160 160" />
-<path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200" />
-</g>
-<text class="lbl" x="0" y="336">U U+0055</text>
-</g>
-<g transform="translate(3080 380)">
-<desc>glyph: v U+0076</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 160 L 120 240 L 160 160" />
-</g>
-<text class="lbl" x="0" y="336">v U+0076</text>
-</g>
-<g transform="translate(3350 380)">
-<desc>glyph: w U+0077</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="280" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="280" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="280" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-<circle cx="280" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 160 L 80 240" />
-<path d="M 80 200 A 40 40 0 0 0 120 240 A 40 40 0 0 0 160 200" />
-<path d="M 160 160 L 160 240" />
-<path d="M 160 200 A 40 40 0 0 0 200 240 A 40 40 0 0 0 240 200" />
-<path d="M 240 160 L 240 240" />
-</g>
-<text class="lbl" x="0" y="336">w U+0077</text>
-</g>
-<g transform="translate(3700 380)">
-<desc>glyph: x U+0078</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 160 L 160 240" />
-<path d="M 160 160 L 80 240" />
-</g>
-<text class="lbl" x="0" y="336">x U+0078</text>
-</g>
-<g transform="translate(3970 380)">
-<desc>glyph: y U+0079</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 160 L 120 200 L 160 160" />
-<path d="M 120 200 L 120 280" />
-</g>
-<text class="lbl" x="0" y="336">y U+0079</text>
-</g>
-<g transform="translate(4240 380)">
-<desc>glyph: Z U+005A</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 160 L 160 160" />
-<path d="M 160 160 L 80 240" />
-<path d="M 80 240 L 160 240" />
-</g>
-<text class="lbl" x="0" y="336">Z U+005A</text>
-</g>
-<g transform="translate(4510 380)">
-<desc>glyph: . U+002E</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 207.2 280 A 7.2 7.2 0 0 1 200 287.2 A 7.2 7.2 0 0 1 192.8 280 A 7.2 7.2 0 0 1 200 272.8 A 7.2 7.2 0 0 1 207.2 280" />
-</g>
-<text class="lbl" x="0" y="336">. U+002E</text>
-</g>
-<g transform="translate(4780 380)">
-<desc>glyph: „ U+201E</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 126.4 282 A 6.4 6.4 0 0 1 120 288.4 A 6.4 6.4 0 0 1 113.6 282 A 6.4 6.4 0 0 1 120 275.6 A 6.4 6.4 0 0 1 126.4 282" />
-<path d="M 206.4 282 A 6.4 6.4 0 0 1 200 288.4 A 6.4 6.4 0 0 1 193.6 282 A 6.4 6.4 0 0 1 200 275.6 A 6.4 6.4 0 0 1 206.4 282" />
-</g>
-<text class="lbl" x="0" y="336">„ U+201E</text>
-</g>
-<g transform="translate(5050 380)">
-<desc>glyph: ” U+201D</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 126.4 102 A 6.4 6.4 0 0 1 120 108.4 A 6.4 6.4 0 0 1 113.6 102 A 6.4 6.4 0 0 1 120 95.6 A 6.4 6.4 0 0 1 126.4 102" />
-<path d="M 206.4 102 A 6.4 6.4 0 0 1 200 108.4 A 6.4 6.4 0 0 1 193.6 102 A 6.4 6.4 0 0 1 200 95.6 A 6.4 6.4 0 0 1 206.4 102" />
-</g>
-<text class="lbl" x="0" y="336">” U+201D</text>
-</g>
-<g transform="translate(5320 380)">
-<desc>glyph: ? U+003F</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 120 80 A 40 40 0 0 1 160 120 A 40 40 0 0 1 120 160" />
-<path d="M 120 160 L 120 200" />
-<path d="['M 207.2 280 A 7.2 7.2 0 0 1 200 287.2 A 7.2 7.2 0 0 1 192.8 280 A 7.2 7.2 0 0 1 200 272.8 A 7.2 7.2 0 0 1 207.2 280']" />
-</g>
-<text class="lbl" x="0" y="336">? U+003F</text>
-</g>
-<g transform="translate(30 730)">
-<desc>glyph: 0 U+0030</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
-</g>
-<text class="lbl" x="0" y="336">0 U+0030</text>
-</g>
-<g transform="translate(300 730)">
-<desc>glyph: 1 U+0031</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 160 160 L 160 240" />
-</g>
-<text class="lbl" x="0" y="336">1 U+0031</text>
-</g>
-<g transform="translate(570 730)">
-<desc>glyph: 2 U+0032</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
-<path d="M 160 200 L 80 240" />
-<path d="M 80 240 L 160 240" />
-</g>
-<text class="lbl" x="0" y="336">2 U+0032</text>
-</g>
-<g transform="translate(840 730)">
-<desc>glyph: 3 U+0033</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 120 80 A 40 40 0 0 1 160 120 A 40 40 0 0 1 120 160" />
-<path d="M 120 160 A 40 40 0 0 1 160 200 A 40 40 0 0 1 120 240" />
-</g>
-<text class="lbl" x="0" y="336">3 U+0033</text>
-</g>
-<g transform="translate(1110 730)">
-<desc>glyph: 4 U+0034</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 160 160 L 80 200" />
-<path d="M 80 200 L 160 200" />
-<path d="M 160 160 L 160 240" />
-</g>
-<text class="lbl" x="0" y="336">4 U+0034</text>
-</g>
-<g transform="translate(1380 730)">
-<desc>glyph: 5 U+0035</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 160 160 L 80 160 L 80 200" />
-<path d="M 80 200 A 40 40 0 0 0 160 200" />
-</g>
-<text class="lbl" x="0" y="336">5 U+0035</text>
-</g>
-<g transform="translate(1650 730)">
-<desc>glyph: 6 U+0036</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
-<path d="M 120 160 L 80 120" />
-</g>
-<text class="lbl" x="0" y="336">6 U+0036</text>
-</g>
-<g transform="translate(1920 730)">
-<desc>glyph: 7 U+0037</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 160 L 160 160 L 80 240" />
-</g>
-<text class="lbl" x="0" y="336">7 U+0037</text>
-</g>
-<g transform="translate(2190 730)">
-<desc>glyph: 8 U+0038</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 160 120 A 40 40 0 0 1 120 160 A 40 40 0 0 1 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120" />
-<path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
-</g>
-<text class="lbl" x="0" y="336">8 U+0038</text>
-</g>
-<g transform="translate(2460 730)">
-<desc>glyph: 9 U+0039</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 160 120 A 40 40 0 0 1 120 160 A 40 40 0 0 1 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120" />
-<path d="M 120 160 L 160 200" />
-</g>
-<text class="lbl" x="0" y="336">9 U+0039</text>
-</g>
-<g transform="translate(30 1080)">
-<desc>glyph: A U+0041</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120 L 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200" />
-<path d="M 120 160 A 40 40 0 0 0 160 120" />
-<path d="M 120 160 A 40 40 0 0 0 80 200" />
-</g>
-<g fill="#1e6bff" stroke="none">
-<circle cx="80" cy="120" r="3.5" />
-<circle cx="120" cy="80" r="3.5" />
-<circle cx="160" cy="120" r="3.5" />
-<circle cx="160" cy="200" r="3.5" />
-<circle cx="120" cy="240" r="3.5" />
-<circle cx="80" cy="200" r="3.5" />
-<circle cx="120" cy="160" r="3.5" />
-</g>
-<text class="lbl" x="0" y="336">A U+0041</text>
-</g>
-<g transform="translate(300 1080)">
-<desc>glyph: c U+0063</desc>
-<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-</g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 120 160 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 240" />
-</g>
-<text class="lbl" x="0" y="336">c U+0063</text>
-</g>
-<g transform="translate(570 1080)">
+<g transform="translate(1380 380)">
 <desc>glyph: G U+0047</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
@@ -1047,7 +390,7 @@
 </g>
 <text class="lbl" x="0" y="336">G U+0047</text>
 </g>
-<g transform="translate(840 1080)">
+<g transform="translate(1650 380)">
 <desc>glyph: H U+0048</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
@@ -1071,7 +414,52 @@
 </g>
 <text class="lbl" x="0" y="336">H U+0048</text>
 </g>
-<g transform="translate(1110 1080)">
+<g transform="translate(1920 380)">
+<desc>glyph: I U+0049</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 80 80 L 80 240" />
+</g>
+<text class="lbl" x="0" y="336">I U+0049</text>
+</g>
+<g transform="translate(2190 380)">
+<desc>glyph: J U+004A</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 160 80 L 160 200" />
+<path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200" />
+</g>
+<text class="lbl" x="0" y="336">J U+004A</text>
+</g>
+<g transform="translate(2460 380)">
 <desc>glyph: K U+004B</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
@@ -1101,7 +489,31 @@
 </g>
 <text class="lbl" x="0" y="336">K U+004B</text>
 </g>
-<g transform="translate(1380 1080)">
+<g transform="translate(30 730)">
+<desc>glyph: L U+004C</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 80 80 L 80 200" />
+<path d="M 80 200 A 40 40 0 0 0 120 240" />
+<path d="M 120 240 L 160 240" />
+</g>
+<text class="lbl" x="0" y="336">L U+004C</text>
+</g>
+<g transform="translate(300 730)">
 <desc>glyph: M U+004D</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
@@ -1131,7 +543,7 @@
 </g>
 <text class="lbl" x="0" y="336">M U+004D</text>
 </g>
-<g transform="translate(1730 1080)">
+<g transform="translate(650 730)">
 <desc>glyph: N U+004E</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
@@ -1155,7 +567,56 @@
 </g>
 <text class="lbl" x="0" y="336">N U+004E</text>
 </g>
-<g transform="translate(2000 1080)">
+<g transform="translate(920 730)">
+<desc>glyph: S U+0053</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 160 120 A 40 40 0 0 0 120 80 A 40 40 0 0 0 80 120 A 40 40 0 0 0 120 160 A 40 40 0 0 1 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200" />
+</g>
+<g fill="#1e6bff" stroke="none">
+<circle cx="120" cy="160" r="3.5" />
+</g>
+<text class="lbl" x="0" y="336">S U+0053</text>
+</g>
+<g transform="translate(1190 730)">
+<desc>glyph: U U+0055</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 80 200 L 80 160" />
+<path d="M 80 200 A 40 40 0 0 0 120 240 A 40 40 0 0 0 160 200" />
+<path d="M 160 200 L 160 160" />
+</g>
+<text class="lbl" x="0" y="336">U U+0055</text>
+</g>
+<g transform="translate(1460 730)">
 <desc>glyph: X U+0058</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
@@ -1173,9 +634,544 @@
 <circle cx="200" cy="280" r="40" />
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 160 L 160 240" />
-<path d="M 160 160 L 80 240" />
+<path d="M 80 160 A 40 40 0 0 1 80 240" />
+<path d="M 160 160 A 40 40 0 0 0 160 240" />
 </g>
 <text class="lbl" x="0" y="336">X U+0058</text>
+</g>
+<g transform="translate(1730 730)">
+<desc>glyph: Z U+005A</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 80 160 L 160 160" />
+<path d="M 160 160 L 80 240" />
+<path d="M 80 240 L 160 240" />
+</g>
+<text class="lbl" x="0" y="336">Z U+005A</text>
+</g>
+<g transform="translate(2000 730)">
+<desc>glyph: b U+0062</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 80 80 L 80 200" />
+<path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
+</g>
+<g fill="#1e6bff" stroke="none">
+<circle cx="80" cy="80" r="3.5" />
+<circle cx="80" cy="200" r="3.5" />
+</g>
+<text class="lbl" x="0" y="336">b U+0062</text>
+</g>
+<g transform="translate(2270 730)">
+<desc>glyph: c U+0063</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 120 160 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 240" />
+</g>
+<text class="lbl" x="0" y="336">c U+0063</text>
+</g>
+<g transform="translate(2540 730)">
+<desc>glyph: d U+0064</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 160 80 L 160 200" />
+<path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
+</g>
+<text class="lbl" x="0" y="336">d U+0064</text>
+</g>
+<g transform="translate(30 1080)">
+<desc>glyph: f U+0066</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 80 240 L 80 120" />
+<path d="M 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120" />
+<path d="M 80 200 A 40 40 0 0 1 120 160" />
+</g>
+<text class="lbl" x="0" y="336">f U+0066</text>
+</g>
+<g transform="translate(300 1080)">
+<desc>glyph: g U+0067</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 160 120 A 40 40 0 0 1 120 160 A 40 40 0 0 1 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120" />
+<path d="M 120 160 A 40 40 0 0 1 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200" />
+</g>
+<text class="lbl" x="0" y="336">g U+0067</text>
+</g>
+<g transform="translate(570 1080)">
+<desc>glyph: h U+0068</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 80 80 L 80 240" />
+<path d="M 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
+<path d="M 160 200 L 160 240" />
+</g>
+<text class="lbl" x="0" y="336">h U+0068</text>
+</g>
+<g transform="translate(840 1080)">
+<desc>glyph: k U+006B</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 80 80 L 80 240" />
+<path d="M 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
+<path d="M 120 160 A 40 40 0 0 0 160 120" />
+<path d="M 160 200 L 160 240" />
+</g>
+<g fill="#1e6bff" stroke="none">
+<circle cx="120" cy="160" r="3.5" />
+<circle cx="160" cy="200" r="3.5" />
+<circle cx="160" cy="240" r="3.5" />
+</g>
+<text class="lbl" x="0" y="336">k U+006B</text>
+</g>
+<g transform="translate(1110 1080)">
+<desc>glyph: m U+006D</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="280" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="280" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="280" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+<circle cx="280" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 80 240 L 80 200" />
+<path d="M 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
+<path d="M 160 240 L 160 200" />
+<path d="M 160 200 A 40 40 0 0 1 200 160 A 40 40 0 0 1 240 200" />
+<path d="M 240 240 L 240 200" />
+</g>
+<text class="lbl" x="0" y="336">m U+006D</text>
+</g>
+<g transform="translate(1460 1080)">
+<desc>glyph: n U+006E</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 80 240 L 80 200" />
+<path d="M 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
+<path d="M 160 240 L 160 200" />
+</g>
+<text class="lbl" x="0" y="336">n U+006E</text>
+</g>
+<g transform="translate(1730 1080)">
+<desc>glyph: o U+006F</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
+</g>
+<text class="lbl" x="0" y="336">o U+006F</text>
+</g>
+<g transform="translate(2000 1080)">
+<desc>glyph: p U+0070</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 80 320 L 80 200" />
+<path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
+</g>
+<text class="lbl" x="0" y="336">p U+0070</text>
+</g>
+<g transform="translate(2270 1080)">
+<desc>glyph: q U+0071</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 160 320 L 160 200" />
+<path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
+</g>
+<text class="lbl" x="0" y="336">q U+0071</text>
+</g>
+<g transform="translate(2540 1080)">
+<desc>glyph: r U+0072</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 80 240 L 80 200" />
+<path d="M 80 200 A 40 40 0 0 1 120 160" />
+</g>
+<text class="lbl" x="0" y="336">r U+0072</text>
+</g>
+<g transform="translate(30 1430)">
+<desc>glyph: t U+0074</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 80 80 L 80 200" />
+<path d="M 80 120 A 40 40 0 0 0 120 160" />
+<path d="M 80 200 A 40 40 0 0 0 120 240 A 40 40 0 0 0 160 200" />
+</g>
+<text class="lbl" x="0" y="336">t U+0074</text>
+</g>
+<g transform="translate(300 1430)">
+<desc>glyph: u U+0075</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 80 200 L 80 160" />
+<path d="M 80 200 A 40 40 0 0 0 120 240 A 40 40 0 0 0 160 200" />
+<path d="M 160 200 L 160 160" />
+</g>
+<text class="lbl" x="0" y="336">u U+0075</text>
+</g>
+<g transform="translate(570 1430)">
+<desc>glyph: v U+0076</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 80 160 L 120 240 L 160 160" />
+</g>
+<text class="lbl" x="0" y="336">v U+0076</text>
+</g>
+<g transform="translate(840 1430)">
+<desc>glyph: w U+0077</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="280" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="280" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="280" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+<circle cx="280" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 80 200 L 80 160" />
+<path d="M 80 200 A 40 40 0 0 0 120 240 A 40 40 0 0 0 160 200" />
+<path d="M 160 200 L 160 160" />
+<path d="M 160 200 A 40 40 0 0 0 200 240 A 40 40 0 0 0 240 200" />
+<path d="M 240 200 L 240 160" />
+</g>
+<text class="lbl" x="0" y="336">w U+0077</text>
+</g>
+<g transform="translate(1190 1430)">
+<desc>glyph: x U+0078</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 80 160 A 40 40 0 0 1 80 240" />
+<path d="M 160 160 A 40 40 0 0 0 160 240" />
+</g>
+<text class="lbl" x="0" y="336">x U+0078</text>
+</g>
+<g transform="translate(1460 1430)">
+<desc>glyph: y U+0079</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 80 160 L 80 240" />
+<path d="M 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
+<path d="M 160 200 L 160 320" />
+</g>
+<text class="lbl" x="0" y="336">y U+0079</text>
+</g>
+<g transform="translate(1730 1430)">
+<desc>glyph: ” U+201D</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 126.4 102 A 6.4 6.4 0 0 1 120 108.4 A 6.4 6.4 0 0 1 113.6 102 A 6.4 6.4 0 0 1 120 95.6 A 6.4 6.4 0 0 1 126.4 102" />
+<path d="M 206.4 102 A 6.4 6.4 0 0 1 200 108.4 A 6.4 6.4 0 0 1 193.6 102 A 6.4 6.4 0 0 1 200 95.6 A 6.4 6.4 0 0 1 206.4 102" />
+</g>
+<text class="lbl" x="0" y="336">” U+201D</text>
+</g>
+<g transform="translate(2000 1430)">
+<desc>glyph: „ U+201E</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="200" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="200" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="200" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+<circle cx="200" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 126.4 282 A 6.4 6.4 0 0 1 120 288.4 A 6.4 6.4 0 0 1 113.6 282 A 6.4 6.4 0 0 1 120 275.6 A 6.4 6.4 0 0 1 126.4 282" />
+<path d="M 206.4 282 A 6.4 6.4 0 0 1 200 288.4 A 6.4 6.4 0 0 1 193.6 282 A 6.4 6.4 0 0 1 200 275.6 A 6.4 6.4 0 0 1 206.4 282" />
+</g>
+<text class="lbl" x="0" y="336">„ U+201E</text>
 </g>
 </svg>
