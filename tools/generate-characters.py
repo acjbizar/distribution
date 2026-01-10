@@ -7,7 +7,6 @@ import argparse
 from dataclasses import dataclass
 from pathlib import Path as FSPath
 from typing import Callable, Dict, List, Tuple
-import math
 
 # -----------------------------
 # Character set (exact)
@@ -37,12 +36,14 @@ Y0 = 40.0
 GRID_ROWS = 4            # 4 circles high
 GRID_COLS_DEFAULT = 3    # 3 circles wide by default
 GRID_COLS_WIDE = 4       # for m / M
+GRID_COLS_NARROW = 2
 
 BASE_ROW = 1             # glyphs start at row 1 (row 0 is top margin)
 
 VIEW_H = int(GRID_ROWS * DY)        # 320
 VIEW_W_DEFAULT = int(GRID_COLS_DEFAULT * DX)  # 240
 VIEW_W_WIDE = int(GRID_COLS_WIDE * DX)        # 320
+VIEW_W_NARROW = int(GRID_COLS_NARROW * DX)  # 160
 
 STROKE = 9.0
 
@@ -304,9 +305,27 @@ def glyph_k(grid: Grid):
 # ---- OTHER GLYPHS (grid-faithful placeholders; not “locked” yet) ----
 
 def glyph_c(grid: Grid):
+    # c = u rotated 90° (opens to the right):
+    # - left half-circle (T -> L -> B)
+    # - top and bottom horizontal stems to the right
+
     c = grid.circle(1, BASE_ROW + 1)
-    path = SvgPath().M(c.T()).A(c.r, 0, 1, c.L()).A(c.r, 0, 1, c.B()).d()
-    return [path], []
+    xR = grid.x_tan(1)
+
+    # stems (top + bottom), like the two vertical stems of u but rotated
+    stem_top = SvgPath().M(c.T()).L((xR, c.T()[1])).d()
+    stem_bot = SvgPath().M(c.B()).L((xR, c.B()[1])).d()
+
+    # left half circle (like u's bowl, rotated)
+    arc = (
+        SvgPath()
+        .M(c.T())
+        .A(c.r, 0, 0, c.L())
+        .A(c.r, 0, 0, c.B())
+        .d()
+    )
+
+    return [stem_top, arc, stem_bot], []
 
 def glyph_d(grid: Grid):
     bowl = grid.circle(1, BASE_ROW + 1)
@@ -608,20 +627,33 @@ def glyph_x(grid: Grid):
     return [left_half, right_half], []
 
 def glyph_y(grid: Grid):
-    c = grid.circle(1, BASE_ROW + 1)
+    # y = u + long stem (descender) on the right
+    c = grid.circle(1, BASE_ROW + 1)  # same bowl as u
 
     xL = grid.x_tan(0)
     xR = grid.x_tan(1)
 
     y_top = xheight_top(grid)
-    y_base = baseline(grid)
+    y_join = c.cy
     y_desc = descender_bottom(grid)
 
-    stem_left = SvgPath().M((xL, y_top)).L((xL, y_base)).d()
-    arch = SvgPath().M(c.L()).A(c.r, 0, 1, c.T()).A(c.r, 0, 1, c.R()).d()
-    stem_right = SvgPath().M(c.R()).L((xR, y_desc)).d()
+    # stems like u (go UP)
+    stemL = SvgPath().M((xL, y_join)).L((xL, y_top)).d()
+    stemR_up = SvgPath().M((xR, y_join)).L((xR, y_top)).d()
 
-    return [stem_left, arch, stem_right], []
+    # bowl like u (same bend as your current u/w bowls)
+    bowl = (
+        SvgPath()
+        .M(c.L())
+        .A(c.r, 0, 0, c.B())
+        .A(c.r, 0, 0, c.R())
+        .d()
+    )
+
+    # long stem down from the right join
+    stemR_down = SvgPath().M((xR, y_join)).L((xR, y_desc)).d()
+
+    return [stemL, bowl, stemR_up, stemR_down], []
 
 def glyph_Z(grid: Grid):
     xL = grid.x_tan(0)
@@ -695,42 +727,23 @@ def digit_1(grid: Grid):
     stem = SvgPath().M((x, y_top)).L((x, y_base)).d()
     return [hook, stem], []
 
-
 def digit_2(grid: Grid):
-    # 2 = upper 3/4 arc + lower 3/4 arc + short base, with a small gap at the middle
+    # 2 = connected in the middle via tangency G (like S)
     cu = grid.circle(1, BASE_ROW)
     cl = grid.circle(1, BASE_ROW + 1)
+    G = grid.tangency_vertical(1, BASE_ROW)
 
-    def pt(c: Circle, deg: float):
-        a = math.radians(deg)
-        return (c.cx + c.r * math.cos(a), c.cy + c.r * math.sin(a))
-
-    # create a little gap around the tangency by not using exact cu.B / cl.T
-    end_top = pt(cu, 82)      # near bottom-right (but not the exact bottom)
-    start_bot = pt(cl, 258)   # near top-left (but not the exact top)
-
-    top = (
-        SvgPath()
-        .M(cu.L())
-        .A(cu.r, 0, 1, cu.T())
-        .A(cu.r, 0, 1, cu.R())
-        .A(cu.r, 0, 1, end_top)
-        .d()
-    )
-
-    base_y = baseline(grid)
     xR = grid.x_tan(1)
+    y_base = baseline(grid)
 
-    bottom = (
-        SvgPath()
-        .M(start_bot)
-        .A(cl.r, 0, 0, cl.L())
-        .A(cl.r, 0, 0, cl.B())
-        .L((xR, base_y))
-        .d()
-    )
+    p = SvgPath().M(cu.L())
+    # top: L -> T -> R -> G (connected)
+    p.A(cu.r, 0, 1, cu.T()).A(cu.r, 0, 1, cu.R()).A(cu.r, 0, 1, G)
+    # bottom: G -> L -> B (wrap left + bottom), then baseline to right
+    p.A(cl.r, 0, 0, cl.L()).A(cl.r, 0, 0, cl.B())
+    p.L((xR, y_base))
 
-    return [top, bottom], []
+    return [p.d()], [("G", G)]
 
 def digit_3(grid: Grid):
     # 3 = two right-facing arcs + small middle bar
@@ -748,40 +761,41 @@ def digit_3(grid: Grid):
     p.A(cl.r, 0, 1, cl.R()).A(cl.r, 0, 1, cl.B()).A(cl.r, 0, 1, cl.L())
     return [p.d()], []
 
-
 def digit_4(grid: Grid):
-    # 4 = left stem + correct bowl (bend direction fixed) + right stem
-    cl = grid.circle(1, BASE_ROW + 1)
-
-    xL = grid.x_tan(0)
-    xR = grid.x_tan(1)
-    y_top = ascender_top(grid)
-    y_base = baseline(grid)
-
-    stemL = SvgPath().M((xL, y_top)).L(cl.L()).d()
-
-    # FIX: bowl should bend like your reference (use sweep=0 here)
-    bowl = (
-        SvgPath()
-        .M(cl.L())
-        .A(cl.r, 0, 0, cl.B())
-        .A(cl.r, 0, 0, cl.R())
-        .d()
-    )
-
-    stemR = SvgPath().M((xR, y_top)).L((xR, y_base)).d()
-
-    return [stemL, bowl, stemR], []
-
-def digit_5(grid: Grid):
-    # 5 = top bar + upper-left C + lower-left C + short bottom bar (like the reference)
     cu = grid.circle(1, BASE_ROW)
     cl = grid.circle(1, BASE_ROW + 1)
 
     xL = grid.x_tan(0)
     xR = grid.x_tan(1)
-    y_top = cu.T()[1]
+
+    y_top = ascender_top(grid)
     y_base = baseline(grid)
+
+    # left stem stops where it touches the connector (cu.L)
+    stemL = SvgPath().M((xL, y_top)).L(cu.L()).d()
+
+    # connector:
+    # - flip the first arc sweep so the bottom-left bends the other way
+    # - keep the join continuous at cu.B == cl.T
+    connector = (
+        SvgPath()
+        .M(cu.L())
+        .A(cu.r, 0, 0, cu.B())   # <-- flipped sweep here
+        .A(cl.r, 0, 1, cl.R())
+        .d()
+    )
+
+    # right stem stops at baseline (not descender)
+    stemR = SvgPath().M((xR, y_top)).L((xR, y_base)).d()
+
+    return [stemL, connector, stemR], []
+
+def digit_5(grid: Grid):
+    cu = grid.circle(1, BASE_ROW)
+    cl = grid.circle(1, BASE_ROW + 1)
+
+    xR = grid.x_tan(1)
+    y_top = cu.T()[1]
 
     top_bar = SvgPath().M(cu.T()).L((xR, y_top)).d()
 
@@ -793,37 +807,39 @@ def digit_5(grid: Grid):
         .d()
     )
 
+    # bottom curve: 3/4 circle (T -> R -> B -> L)
     lower_c = (
         SvgPath()
         .M(cl.T())
-        .A(cl.r, 0, 0, cl.L())
-        .A(cl.r, 0, 0, cl.B())
+        .A(cl.r, 0, 1, cl.R())
+        .A(cl.r, 0, 1, cl.B())
+        .A(cl.r, 0, 1, cl.L())
         .d()
     )
 
-    bottom_bar = SvgPath().M((xL, y_base)).L(cl.B()).d()
-
-    return [top_bar, upper_c, lower_c, bottom_bar], []
+    return [top_bar, upper_c, lower_c], []
 
 def digit_6(grid: Grid):
-    # 6 = b-like: left stem into full bottom loop + top bar to the right
+    # 6 = top half-circle + left stem that stops at the loop + full bottom loop
     cu = grid.circle(1, BASE_ROW)
     cl = grid.circle(1, BASE_ROW + 1)
 
-    xL = grid.x_tan(0)
-    xR = grid.x_tan(1)
-    y_top = cu.T()[1]
+    # top: half circle across the upper circle (L -> T -> R)
+    top = (
+        SvgPath()
+        .M(cu.L())
+        .A(cu.r, 0, 1, cu.T())
+        .A(cu.r, 0, 1, cu.R())
+        .d()
+    )
 
-    # left stem stops where it touches the loop (at cl.L)
-    stem = SvgPath().M((xL, y_top)).L(cl.L()).d()
+    # stem: only from the join with the top (cu.L) down to the join with the loop (cl.L)
+    stem = SvgPath().M(cu.L()).L(cl.L()).d()
 
-    # top bar: small rounded corner then flat to the right (like reference)
-    corner = SvgPath().M(cu.L()).A(cu.r, 0, 1, cu.T()).d()
-    bar = SvgPath().M(cu.T()).L((xR, y_top)).d()
-
+    # bottom loop
     loop = circle_full(cl)
 
-    return [stem, corner, bar, loop], []
+    return [top, stem, loop], []
 
 def digit_7(grid: Grid):
     # 7 = flat top + rounded top-right corner + right stem
@@ -845,21 +861,27 @@ def digit_8(grid: Grid):
     # already correct
     return [circle_full(grid.circle(1, BASE_ROW)), circle_full(grid.circle(1, BASE_ROW + 1))], []
 
-
 def digit_9(grid: Grid):
-    # 9 = full top loop + right stem down to mid (like mirrored 6)
     cu = grid.circle(1, BASE_ROW)
     cl = grid.circle(1, BASE_ROW + 1)
 
-    xR = grid.x_tan(1)
+    # top loop
+    top = circle_full(cu)
 
-    loop = circle_full(cu)
-    # drop from bottom of top loop to the join on the lower circle right side
-    stem = SvgPath().M(cu.B()).L(cl.R()).d()
-    # small lower-right hook
-    hook = SvgPath().M(cl.R()).A(cl.r, 0, 0, cl.T()).d()
+    # vertical stem that stops exactly at the arcs:
+    # from upper-circle right point to lower-circle right point
+    stem = SvgPath().M(cu.R()).L(cl.R()).d()
 
-    return [loop, stem, hook], []
+    # bottom half-circle (on the BOTTOM): R -> B -> L
+    bottom = (
+        SvgPath()
+        .M(cl.R())
+        .A(cl.r, 0, 1, cl.B())
+        .A(cl.r, 0, 1, cl.L())
+        .d()
+    )
+
+    return [top, stem, bottom], []
 
 # Uppercase placeholders for extra set (until we lock them)
 def glyph_H(grid: Grid):
@@ -878,33 +900,88 @@ def glyph_K(grid: Grid):
     return glyph_k(grid)
 
 def glyph_M(grid: Grid):
-    # wide; reuse lowercase m but with ascender stem
-    xL = grid.x_tan(0)
-    y_top = ascender_top(grid)
-    y_base = baseline(grid)
-    c1 = grid.circle(1, BASE_ROW + 1)
-    c2 = grid.circle(2, BASE_ROW + 1)
+    # M = like m, but with the arches at the TOP (ascender area),
+    # and stems stop where they touch the arches.
 
-    stem = SvgPath().M((xL, y_top)).L((xL, y_base)).d()
+    c1 = grid.circle(1, BASE_ROW)   # top arch 1
+    c2 = grid.circle(2, BASE_ROW)   # top arch 2
+
+    x0 = grid.x_tan(0)
+    x1 = grid.x_tan(1)
+    x2 = grid.x_tan(2)
+
+    y_base = baseline(grid)
+    y_join = c1.L()[1]              # == c1.cy
+
+    stem0 = SvgPath().M((x0, y_base)).L((x0, y_join)).d()
+    stem1 = SvgPath().M((x1, y_base)).L((x1, y_join)).d()
+    stem2 = SvgPath().M((x2, y_base)).L((x2, y_join)).d()
+
     arch1 = SvgPath().M(c1.L()).A(c1.r, 0, 1, c1.T()).A(c1.r, 0, 1, c1.R()).d()
-    leg1 = SvgPath().M(c1.R()).L((c1.R()[0], y_base)).d()
     arch2 = SvgPath().M(c2.L()).A(c2.r, 0, 1, c2.T()).A(c2.r, 0, 1, c2.R()).d()
-    leg2 = SvgPath().M(c2.R()).L((c2.R()[0], y_base)).d()
-    return [stem, arch1, leg1, arch2, leg2], []
+
+    return [stem0, arch1, stem1, arch2, stem2], []
 
 def glyph_N(grid: Grid):
-    xL = grid.x_tan(0); xR = grid.x_tan(1)
-    yT = ascender_top(grid); yB = baseline(grid)
-    diag = SvgPath().M((xL, yT)).L((xR, yB)).d()
-    return [
-        SvgPath().M((xL, yT)).L((xL, yB)).d(),
-        diag,
-        SvgPath().M((xR, yT)).L((xR, yB)).d(),
-    ], []
+    # N = like n, but the arch is at the TOP (ascender area),
+    # and both stems stop where they touch the arch.
+
+    cu = grid.circle(1, BASE_ROW)   # TOP circle for the arch
+
+    x0 = grid.x_tan(0)
+    x1 = grid.x_tan(1)
+
+    y_base = baseline(grid)
+    y_join = cu.L()[1]              # == cu.cy (stem/arch join height)
+
+    stem0 = SvgPath().M((x0, y_base)).L((x0, y_join)).d()
+    stem1 = SvgPath().M((x1, y_base)).L((x1, y_join)).d()
+
+    arch = SvgPath().M(cu.L()).A(cu.r, 0, 1, cu.T()).A(cu.r, 0, 1, cu.R()).d()
+
+    return [stem0, arch, stem1], []
 
 def glyph_X(grid: Grid):
-    return glyph_x(grid)
+    # X = lowercase u on top of lowercase n
+    # Top "u": use the upper circle row (BASE_ROW) as the bowl, with stems going UP to ascender.
+    # Bottom "n": normal n at (BASE_ROW+1), with stems from baseline up to the arch join.
 
+    # ---- top u (in ascender area) ----
+    cu = grid.circle(1, BASE_ROW)   # upper circle becomes the bowl of the top-u
+    x0 = grid.x_tan(0)
+    x1 = grid.x_tan(1)
+
+    y_top_u = ascender_top(grid)
+    y_join_u = cu.cy  # where stems meet the bowl
+
+    stem_u_L = SvgPath().M((x0, y_join_u)).L((x0, y_top_u)).d()
+    stem_u_R = SvgPath().M((x1, y_join_u)).L((x1, y_top_u)).d()
+
+    bowl_u = (
+        SvgPath()
+        .M(cu.L())
+        .A(cu.r, 0, 0, cu.B())
+        .A(cu.r, 0, 0, cu.R())
+        .d()
+    )
+
+    # ---- bottom n (normal x-height area) ----
+    cn = grid.circle(1, BASE_ROW + 1)
+    y_base = baseline(grid)
+    y_join_n = cn.cy
+
+    stem_n_L = SvgPath().M((x0, y_base)).L((x0, y_join_n)).d()
+    stem_n_R = SvgPath().M((x1, y_base)).L((x1, y_join_n)).d()
+
+    arch_n = (
+        SvgPath()
+        .M(cn.L())
+        .A(cn.r, 0, 1, cn.T())
+        .A(cn.r, 0, 1, cn.R())
+        .d()
+    )
+
+    return [stem_u_L, bowl_u, stem_u_R, stem_n_L, arch_n, stem_n_R], []
 
 # -----------------------------
 # Builder map (must cover all requested chars)
@@ -973,9 +1050,13 @@ BUILDERS: Dict[str, GlyphFn] = {
 # SVG rendering (variable width)
 # -----------------------------
 def glyph_view_width(ch: str) -> int:
+    if ch == "I":
+        return VIEW_W_NARROW
     return VIEW_W_WIDE if ch in ("m", "M", "w") else VIEW_W_DEFAULT
 
 def glyph_grid_cols(ch: str) -> int:
+    if ch == "I":
+        return GRID_COLS_NARROW
     return GRID_COLS_WIDE if ch in ("m", "M", "w") else GRID_COLS_DEFAULT
 
 def svg_glyph_doc(

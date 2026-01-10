@@ -88,8 +88,10 @@
 <circle cx="200" cy="280" r="40" />
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120 A 40 40 0 0 1 125.567 159.611" />
-<path d="M 111.684 160.874 A 40 40 0 0 0 80 200 A 40 40 0 0 0 120 240 L 160 240" />
+<path d="M 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120 A 40 40 0 0 1 120 160 A 40 40 0 0 0 80 200 A 40 40 0 0 0 120 240 L 160 240" />
+</g>
+<g fill="#1e6bff" stroke="none">
+<circle cx="120" cy="160" r="3.5" />
 </g>
 <text class="lbl" x="0" y="336">2 U+0032</text>
 </g>
@@ -133,8 +135,8 @@
 <circle cx="200" cy="280" r="40" />
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 80 L 80 200" />
-<path d="M 80 200 A 40 40 0 0 0 120 240 A 40 40 0 0 0 160 200" />
+<path d="M 80 80 L 80 120" />
+<path d="M 80 120 A 40 40 0 0 0 120 160 A 40 40 0 0 1 160 200" />
 <path d="M 160 80 L 160 240" />
 </g>
 <text class="lbl" x="0" y="336">4 U+0034</text>
@@ -159,8 +161,7 @@
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
 <path d="M 120 80 L 160 80" />
 <path d="M 120 80 A 40 40 0 0 0 80 120 A 40 40 0 0 0 120 160" />
-<path d="M 120 160 A 40 40 0 0 0 80 200 A 40 40 0 0 0 120 240" />
-<path d="M 80 240 L 120 240" />
+<path d="M 120 160 A 40 40 0 0 1 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200" />
 </g>
 <text class="lbl" x="0" y="336">5 U+0035</text>
 </g>
@@ -182,9 +183,8 @@
 <circle cx="200" cy="280" r="40" />
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 80 L 80 200" />
-<path d="M 80 120 A 40 40 0 0 1 120 80" />
-<path d="M 120 80 L 160 80" />
+<path d="M 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120" />
+<path d="M 80 120 L 80 200" />
 <path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
 </g>
 <text class="lbl" x="0" y="336">6 U+0036</text>
@@ -255,8 +255,8 @@
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
 <path d="M 160 120 A 40 40 0 0 1 120 160 A 40 40 0 0 1 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120" />
-<path d="M 120 160 L 160 200" />
-<path d="M 160 200 A 40 40 0 0 0 120 160" />
+<path d="M 160 120 L 160 200" />
+<path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200" />
 </g>
 <text class="lbl" x="0" y="336">9 U+0039</text>
 </g>
@@ -426,23 +426,19 @@
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
 <circle cx="40" cy="40" r="40" />
 <circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
 <circle cx="40" cy="120" r="40" />
 <circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
 <circle cx="40" cy="200" r="40" />
 <circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
 <circle cx="40" cy="280" r="40" />
 <circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
 <path d="M 80 80 L 80 240" />
 </g>
 <text class="lbl" x="0" y="336">I U+0049</text>
 </g>
-<g transform="translate(1920 320)">
+<g transform="translate(1840 320)">
 <desc>glyph: J U+004A</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
@@ -465,7 +461,7 @@
 </g>
 <text class="lbl" x="0" y="336">J U+004A</text>
 </g>
-<g transform="translate(2160 320)">
+<g transform="translate(2080 320)">
 <desc>glyph: K U+004B</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
@@ -541,11 +537,11 @@
 <circle cx="280" cy="280" r="40" />
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 80 L 80 240" />
-<path d="M 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
-<path d="M 160 200 L 160 240" />
-<path d="M 160 200 A 40 40 0 0 1 200 160 A 40 40 0 0 1 240 200" />
-<path d="M 240 200 L 240 240" />
+<path d="M 80 240 L 80 120" />
+<path d="M 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120" />
+<path d="M 160 240 L 160 120" />
+<path d="M 160 120 A 40 40 0 0 1 200 80 A 40 40 0 0 1 240 120" />
+<path d="M 240 240 L 240 120" />
 </g>
 <text class="lbl" x="0" y="336">M U+004D</text>
 </g>
@@ -567,9 +563,9 @@
 <circle cx="200" cy="280" r="40" />
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 80 L 80 240" />
-<path d="M 80 80 L 160 240" />
-<path d="M 160 80 L 160 240" />
+<path d="M 80 240 L 80 120" />
+<path d="M 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120" />
+<path d="M 160 240 L 160 120" />
 </g>
 <text class="lbl" x="0" y="336">N U+004E</text>
 </g>
@@ -640,8 +636,12 @@
 <circle cx="200" cy="280" r="40" />
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 160 A 40 40 0 0 1 80 240" />
-<path d="M 160 160 A 40 40 0 0 0 160 240" />
+<path d="M 80 120 L 80 80" />
+<path d="M 80 120 A 40 40 0 0 0 120 160 A 40 40 0 0 0 160 120" />
+<path d="M 160 120 L 160 80" />
+<path d="M 80 240 L 80 200" />
+<path d="M 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
+<path d="M 160 240 L 160 200" />
 </g>
 <text class="lbl" x="0" y="336">X U+0058</text>
 </g>
@@ -714,7 +714,9 @@
 <circle cx="200" cy="280" r="40" />
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 120 160 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 240" />
+<path d="M 120 160 L 160 160" />
+<path d="M 120 160 A 40 40 0 0 0 80 200 A 40 40 0 0 0 120 240" />
+<path d="M 120 240 L 160 240" />
 </g>
 <text class="lbl" x="0" y="336">c U+0063</text>
 </g>
@@ -1128,8 +1130,9 @@
 <circle cx="200" cy="280" r="40" />
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 160 L 80 240" />
-<path d="M 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
+<path d="M 80 200 L 80 160" />
+<path d="M 80 200 A 40 40 0 0 0 120 240 A 40 40 0 0 0 160 200" />
+<path d="M 160 200 L 160 160" />
 <path d="M 160 200 L 160 320" />
 </g>
 <text class="lbl" x="0" y="336">y U+0079</text>
