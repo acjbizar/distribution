@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
-  <title>glyph n</title>
-  <g fill="none" stroke="#000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M 60.00 120.00 L 60.00 180.00" />
-  <path d="M 60.00 120.00 C 90.00 90.00, 150.00 90.00, 180.00 120.00" />
-  <path d="M 180.00 120.00 L 180.00 180.00" />
-  </g>
-</svg>

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
-  <title>glyph m (U+006D)</title>
-  <g fill="none" stroke="#000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M108,101.21 L108,191.277" />
-    <path d="M84,142.779 C84,126.874 108.094,102.779 124,102.779 C139.906,102.779 164,126.874 164,142.779" />
-    <path d="M128,142.779 C128,126.874 152.094,102.779 168,102.779 C183.906,102.779 208,126.874 208,142.779" />
-  </g>
-</svg>
