@@ -1,19 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-generate-fonts.py
+tools/generate-fonts.py
 
-Build a variable font from your generated SVG glyphs that are drawn with strokes.
-Axis: wght (maps to stroke thickness).
+Build a variable font from your generated SVG glyphs (centerline strokes).
+Axis: wght (mapped to stroke thickness).
 
-Input:  src/character-uXXXX.svg
-Output: dist/fonts/distribution.ttf
-        dist/fonts/distribution.woff2
+Input:
+  src/character-uXXXX.svg
 
-Design assumptions (from your glyph generator):
-- SVG viewBox heights are 320 units.
-- Baseline is at y=240 in SVG coordinates.
-- y grows downward in SVG; in fonts y grows upward.
+Output:
+  dist/fonts/distribution.ttf
+  dist/fonts/distribution.woff2
+
+Fixes included:
+- Stable interpolation between masters using arc-length–anchored resampling.
+- Dots scale with weight: effective disk radius = dot_r + stroke/2.
+- Prevent varLib "incompatible masters; skipping" for dot glyphs by:
+  - using fewer points for dot contours (default 32)
+  - nudging consecutive duplicate integer points so contours don't collapse
 
 Dependencies:
   pip install shapely fonttools brotli
@@ -24,14 +29,13 @@ from __future__ import annotations
 import argparse
 import math
 import re
-import sys
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 # -----------------------------
-# Required deps
+# Dependencies
 # -----------------------------
 try:
     from shapely.geometry import LineString, LinearRing, Point, Polygon, MultiPolygon
@@ -52,16 +56,22 @@ except Exception:
 
 
 # -----------------------------
-# SVG -> font mapping config
+# SVG -> font mapping config (from your glyph generator)
 # -----------------------------
-SVG_BASELINE_Y = 240.0
 SVG_VIEW_H = 320.0
+SVG_BASELINE_Y = 240.0  # baseline at bottom tangent of row BASE_ROW+1 circle in your SVG
 
 DEFAULT_UPM = 1000
-DEFAULT_EXTERIOR_PTS = 96
-DEFAULT_HOLE_PTS = 48
+
+# Resampling:
+DEFAULT_EXTERIOR_PTS = 128
+DEFAULT_HOLE_PTS = 64
+DEFAULT_DOT_PTS = 32  # fewer points -> avoids tiny dot collapsing at thin weights
+
+# Arc approximation for centerlines (SVG A command sampling)
 ARC_SEGMENTS_PER_CIRCLE = 64
 
+# Input file pattern
 SVG_FILE_RE = re.compile(r"^character-u([0-9a-fA-F]{4,6})\.svg$")
 NUM_RE = re.compile(r"[-+]?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?")
 
@@ -79,7 +89,7 @@ class CenterlinePath:
 class DotSpec:
     cx: float
     cy: float
-    r: float  # dot radius in SVG (your DOT_R=1)
+    r: float  # SVG circle radius from file (your DOT_R is 1)
 
 
 @dataclass
@@ -92,7 +102,7 @@ class GlyphSpec:
 
 
 # -----------------------------
-# Small helpers
+# General helpers
 # -----------------------------
 def glyph_name_from_cp(cp: int) -> str:
     if cp == 0x20:
@@ -118,34 +128,7 @@ def signed_area(pts: List[Tuple[float, float]]) -> float:
     return 0.5 * s
 
 
-def rotate_to_min_xy(pts: List[Tuple[int, int]]) -> List[Tuple[int, int]]:
-    if not pts:
-        return pts
-    i0 = min(range(len(pts)), key=lambda i: (pts[i][0], pts[i][1]))
-    return pts[i0:] + pts[:i0]
-
-
-def ensure_direction(pts: List[Tuple[int, int]], clockwise: bool) -> List[Tuple[int, int]]:
-    # pts is a ring without duplicated last point
-    a = signed_area([(float(x), float(y)) for (x, y) in pts])
-    is_ccw = a > 0
-    if clockwise and is_ccw:
-        pts = list(reversed(pts))
-    if (not clockwise) and (not is_ccw):
-        pts = list(reversed(pts))
-    return pts
-
-def rotate_to_seed(pts: List[Tuple[float, float]], seed: Tuple[float, float]) -> List[Tuple[float, float]]:
-    """Rotate a ring point list so it starts at the point closest to seed (both in same coord space)."""
-    if not pts:
-        return pts
-    sx, sy = seed
-    i0 = min(range(len(pts)), key=lambda i: (pts[i][0] - sx) ** 2 + (pts[i][1] - sy) ** 2)
-    return pts[i0:] + pts[:i0]
-
-
 def ensure_direction_f(pts: List[Tuple[float, float]], clockwise: bool) -> List[Tuple[float, float]]:
-    """Ensure ring winding direction (float version)."""
     a = signed_area(pts)
     is_ccw = a > 0
     if clockwise and is_ccw:
@@ -156,12 +139,42 @@ def ensure_direction_f(pts: List[Tuple[float, float]], clockwise: bool) -> List[
 
 
 def svg_to_font_xy(x: float, y: float, scale: float) -> Tuple[float, float]:
-    # flip y and set baseline
+    # SVG y grows downward; fonts use y up. Baseline at y=0.
     return (x * scale, (SVG_BASELINE_Y - y) * scale)
 
 
+def nudge_consecutive_duplicates(ring: List[Tuple[int, int]]) -> List[Tuple[int, int]]:
+    """
+    Prevent degenerate contours: if rounding creates consecutive identical points,
+    nudge the later point by ±1 in a deterministic pattern so the point count stays fixed.
+
+    This is crucial for tiny dots at thin weights (otherwise varLib can see incompatible masters).
+    """
+    if len(ring) < 3:
+        return ring
+
+    out: List[Tuple[int, int]] = []
+    offsets = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+
+    for i, (x, y) in enumerate(ring):
+        if out and (x, y) == out[-1]:
+            dx, dy = offsets[i % 4]
+            x2, y2 = x + dx, y + dy
+            if (x2, y2) == out[-1]:
+                x2, y2 = x + 2 * dx, y + 2 * dy
+            x, y = x2, y2
+        out.append((x, y))
+
+    # Also avoid last == first (zero-length closing segment)
+    if out[-1] == out[0]:
+        x, y = out[-1]
+        out[-1] = (x + 1, y)
+
+    return out
+
+
 # -----------------------------
-# SVG path parsing (only M, L, A; matches your generator)
+# SVG path parsing (only M, L, A as used by your generator)
 # -----------------------------
 def tokenize_path(d: str) -> List[str]:
     out: List[str] = []
@@ -193,10 +206,10 @@ def arc_center_parameterization(
     sweep: int,
 ) -> Tuple[float, float, float, float]:
     """
-    SVG arc center conversion specialized for:
-    - rx == ry == r
-    - xAxisRotation == 0
-    Returns: (cx, cy, theta1, delta_theta) in SVG coords (y down).
+    SVG circular arc conversion specialized for:
+      - rx == ry == r
+      - xAxisRotation == 0
+    Returns (cx, cy, theta1, delta_theta) in SVG coordinates (y down).
     """
     dx2 = (x1 - x2) / 2.0
     dy2 = (y1 - y2) / 2.0
@@ -303,15 +316,15 @@ def path_d_to_centerline(d: str) -> CenterlinePath:
             large = int(float(toks[i]))
             sweep = int(float(toks[i + 1]))
             i += 2
-            x = parse_float(toks[i])
-            y = parse_float(toks[i + 1])
+            x2 = parse_float(toks[i])
+            y2 = parse_float(toks[i + 1])
             i += 2
 
             if abs(rx - ry) > 1e-6:
                 raise ValueError("Only circular arcs (rx==ry) supported for this glyph set.")
 
-            pts.extend(sample_arc(cur[0], cur[1], x, y, rx, large, sweep))
-            cur = (x, y)
+            pts.extend(sample_arc(cur[0], cur[1], x2, y2, rx, large, sweep))
+            cur = (x2, y2)
 
         else:
             raise ValueError(f"Unsupported SVG path command: {cmd}")
@@ -325,33 +338,34 @@ def path_d_to_centerline(d: str) -> CenterlinePath:
 
 
 # -----------------------------
-# Resampling rings (stable interpolation topology)
+# Stable closed-boundary resampling (prevents broken in-betweens)
 # -----------------------------
-def resample_closed_ring(coords: List[Tuple[float, float]], n: int) -> List[Tuple[float, float]]:
-    if not coords:
-        return []
-    if dist(coords[0], coords[-1]) > 1e-9:
-        coords = coords + [coords[0]]
+def resample_linestring_closed(ls: LineString, n: int, start_d: float = 0.0) -> List[Tuple[float, float]]:
+    """
+    Sample a *closed* LineString at N evenly spaced points, starting at arc-length start_d.
+    Returns N points (not explicitly closed).
+    """
+    L = ls.length
+    if L <= 1e-9:
+        p = ls.coords[0]
+        return [(float(p[0]), float(p[1])) for _ in range(n)]
 
-    ls = LineString(coords)
-    total = ls.length
-    if total <= 1e-9:
-        p = coords[0]
-        return [p for _ in range(n)]
+    start_d = start_d % L
+    step = L / n
 
     out: List[Tuple[float, float]] = []
     for k in range(n):
-        d = (total * k) / n
+        d = (start_d + k * step) % L
         p = ls.interpolate(d)
         out.append((p.x, p.y))
     return out
 
 
 # -----------------------------
-# Buffer centerlines -> polygons -> fixed contours
+# Centerline buffer -> polygon -> contours
 # -----------------------------
 def buffer_centerline_to_polygon(center: CenterlinePath, radius: float) -> Polygon:
-    # cap_style=1 (round), join_style=1 (round)
+    # round caps and joins (matches your SVG round caps/joins)
     if center.closed:
         ring = LinearRing(center.pts)
         geom = ring.buffer(radius, cap_style=1, join_style=1, resolution=16)
@@ -364,7 +378,7 @@ def buffer_centerline_to_polygon(center: CenterlinePath, radius: float) -> Polyg
     if isinstance(geom, MultiPolygon):
         raise RuntimeError(
             "Buffer produced a MultiPolygon (disconnected outline). "
-            "Try reducing --stroke-max/--stroke-min."
+            "Reduce stroke range (e.g. lower --stroke-max) or simplify paths."
         )
     raise RuntimeError(f"Unexpected buffered geometry type: {type(geom)}")
 
@@ -374,62 +388,72 @@ def polygon_to_contours_fixed(
     exterior_pts: int,
     hole_pts: int,
     scale: float,
-    seed_font: Optional[Tuple[float, float]] = None,
+    seed_svg: Optional[Tuple[float, float]] = None,  # seed in SVG coordinates
 ) -> List[List[Tuple[int, int]]]:
+    """
+    Convert polygon to a list of integer contours with fixed point counts.
+    Exterior start point is anchored by projecting seed onto boundary and
+    sampling from that arc-length position (stable across masters).
+    """
     contours: List[List[Tuple[int, int]]] = []
 
-    # Exterior (float points in FONT coords)
-    ext_coords = list(poly.exterior.coords)
-    ext_svg = resample_closed_ring(ext_coords, exterior_pts)  # returns N points (not closed)
+    # Exterior boundary
+    ext_ring = LinearRing(poly.exterior.coords)
+    ext_ls = LineString(ext_ring.coords)
+
+    start_d = 0.0
+    if seed_svg is not None:
+        sp = Point(seed_svg[0], seed_svg[1])
+        start_d = ext_ls.project(sp)
+
+    ext_svg = resample_linestring_closed(ext_ls, exterior_pts, start_d=start_d)
     ext_font_f = [svg_to_font_xy(x, y, scale) for (x, y) in ext_svg]
-
-    # Make the start point stable across masters
-    if seed_font is not None:
-        ext_font_f = rotate_to_seed(ext_font_f, seed_font)
-    else:
-        # fallback if you ever call without seed
-        # (avoid min-xy as primary strategy)
-        pass
-
     ext_font_f = ensure_direction_f(ext_font_f, clockwise=True)
-
-    # Round to ints after rotation + direction fixing
     ext_int = [(int(round(x)), int(round(y))) for (x, y) in ext_font_f]
+    ext_int = nudge_consecutive_duplicates(ext_int)
     contours.append(ext_int)
 
-    # Holes: usually not the problem; keep deterministic but simple
+    # Holes (interiors)
     for interior in poly.interiors:
-        hole_coords = list(interior.coords)
-        hole_svg = resample_closed_ring(hole_coords, hole_pts)
+        hole_ring = LinearRing(interior.coords)
+        hole_ls = LineString(hole_ring.coords)
+
+        hole_svg = resample_linestring_closed(hole_ls, hole_pts, start_d=0.0)
         hole_font_f = [svg_to_font_xy(x, y, scale) for (x, y) in hole_svg]
-        # If you want: rotate holes too, but with their own seed (centroid). Not necessary for your case.
         hole_font_f = ensure_direction_f(hole_font_f, clockwise=False)
         hole_int = [(int(round(x)), int(round(y))) for (x, y) in hole_font_f]
+        hole_int = nudge_consecutive_duplicates(hole_int)
         contours.append(hole_int)
 
     return contours
 
+
+# -----------------------------
+# TT glyph construction
+# -----------------------------
 def build_glyph_tt(
     spec: GlyphSpec,
     stroke_width_svg: float,
     scale: float,
     exterior_pts: int,
     hole_pts: int,
+    dot_pts: int,
 ) -> Tuple[object, int]:
     pen = TTGlyphPen(None)
     radius = stroke_width_svg / 2.0
 
     # Deterministic contour order:
-    # - centerlines in SVG order
-    # - dots in SVG order
+    #  - centerline components in SVG <path> order
+    #  - then dots in SVG <circle> order
     for cl in spec.centerlines:
         poly = buffer_centerline_to_polygon(cl, radius=radius)
 
-        # Seed: first point of the ORIGINAL centerline, in FONT coords
-        seed_font = svg_to_font_xy(cl.pts[0][0], cl.pts[0][1], scale)
+        # Seed: first point of the ORIGINAL centerline path (SVG coords)
+        seed_svg = (cl.pts[0][0], cl.pts[0][1])
 
-        contours = polygon_to_contours_fixed(poly, exterior_pts, hole_pts, scale, seed_font=seed_font)
-
+        contours = polygon_to_contours_fixed(
+            poly, exterior_pts=exterior_pts, hole_pts=hole_pts, scale=scale, seed_svg=seed_svg
+        )
         for ring in contours:
             if len(ring) < 3:
                 continue
@@ -438,12 +462,23 @@ def build_glyph_tt(
                 pen.lineTo(p)
             pen.closePath()
 
-    # Dots: SVG dots are drawn as filled circles *and* stroked with the same stroke width,
-    # so the effective filled disk radius is (dot_r + stroke/2).
+    # Dots scale with weight:
+    # SVG draws dots as a filled circle with the same stroke-width as the glyph strokes.
+    # Filled+stroked circle => effective filled disk radius = dot_r + stroke/2.
     for d in spec.dots:
         rr = d.r + radius
         poly = Point(d.cx, d.cy).buffer(rr, resolution=32)
-        contours = polygon_to_contours_fixed(poly, exterior_pts, hole_pts, scale)
+
+        # Seed on the right-most point of the circle (stable)
+        seed_svg = (d.cx + rr, d.cy)
+
+        contours = polygon_to_contours_fixed(
+            poly,
+            exterior_pts=dot_pts,   # <-- fewer points for tiny dots
+            hole_pts=hole_pts,
+            scale=scale,
+            seed_svg=seed_svg,
+        )
         for ring in contours:
             if len(ring) < 3:
                 continue
@@ -478,15 +513,17 @@ def parse_svg_glyph(svg_path: Path) -> GlyphSpec:
     adv_w = float(parts[2])
     h = float(parts[3])
     if abs(h - SVG_VIEW_H) > 1e-3:
-        print(f"Warning: {svg_path} viewBox height={h}, expected {SVG_VIEW_H}")
+        print(f"Warning: {svg_path.name} viewBox height={h}, expected {SVG_VIEW_H}")
 
+    # Centerline <path> elements
     centerlines: List[CenterlinePath] = []
     for el in root.iter():
         if el.tag.endswith("path"):
-            d = el.attrib.get("d", "").strip()
+            d = (el.attrib.get("d") or "").strip()
             if d:
                 centerlines.append(path_d_to_centerline(d))
 
+    # Dots (tiny <circle> with r <= 2)
     dots: List[DotSpec] = []
     for el in root.iter():
         if el.tag.endswith("circle"):
@@ -494,14 +531,16 @@ def parse_svg_glyph(svg_path: Path) -> GlyphSpec:
                 r = float(el.attrib.get("r", "0"))
                 if r <= 0:
                     continue
-                # ignore grid circles (r ~ 40) and only keep tiny dots (r <= 2)
+                # ignore grid circles (r~40), keep only DOT_R-ish circles
                 if r > 2.0:
                     continue
                 cx = float(el.attrib["cx"])
                 cy = float(el.attrib["cy"])
+
                 fill = (el.attrib.get("fill") or "").lower()
                 stroke = (el.attrib.get("stroke") or "").lower()
-                # heuristic: your dots are black-ish
+
+                # Accept dot circles that are black-ish (or not explicitly styled)
                 if ("#000" in fill) or ("#000" in stroke) or (fill == ""):
                     dots.append(DotSpec(cx=cx, cy=cy, r=r))
             except Exception:
@@ -524,7 +563,7 @@ def load_glyphs_from_src(src_dir: Path) -> List[GlyphSpec]:
 
 
 # -----------------------------
-# Master TTF build
+# Master TTF builder
 # -----------------------------
 def build_master_ttf(
     specs: List[GlyphSpec],
@@ -538,6 +577,7 @@ def build_master_ttf(
     scale: float,
     exterior_pts: int,
     hole_pts: int,
+    dot_pts: int,
 ) -> None:
     glyph_order = [".notdef", "space"] + [s.glyph_name for s in specs]
     fb = FontBuilder(upm, isTTF=True)
@@ -546,7 +586,7 @@ def build_master_ttf(
     glyf: Dict[str, object] = {}
     hmtx: Dict[str, Tuple[int, int]] = {}
 
-    # .notdef
+    # .notdef (simple rectangle)
     pen = TTGlyphPen(None)
     x0, y0 = 50, descent + 50
     x1, y1 = 450, ascent - 50
@@ -569,6 +609,7 @@ def build_master_ttf(
             scale=scale,
             exterior_pts=exterior_pts,
             hole_pts=hole_pts,
+            dot_pts=dot_pts,
         )
         glyf[s.glyph_name] = g
         hmtx[s.glyph_name] = (aw, 0)
@@ -576,9 +617,16 @@ def build_master_ttf(
     fb.setupGlyf(glyf)
     fb.setupHorizontalMetrics(hmtx)
 
+    # cmap (plus optional ASCII quote alias)
     cmap: Dict[int, str] = {0x20: "space"}
     for s in specs:
         cmap[s.codepoint] = s.glyph_name
+
+    # If you have curly right double quote U+201D, map ASCII " (U+0022) to it
+    # so "quotation marks" typed normally also scale.
+    if 0x201D in cmap and 0x0022 not in cmap:
+        cmap[0x0022] = cmap[0x201D]
+
     fb.setupCharacterMap(cmap)
 
     fb.setupHorizontalHeader(ascent=ascent, descent=descent)
@@ -605,36 +653,32 @@ def build_master_ttf(
 
 
 # -----------------------------
-# Variable font build
+# Variable font builder
 # -----------------------------
 def build_variable_font(
     master_min_path: Path,
     master_reg_path: Path,
     master_max_path: Path,
     out_var_path: Path,
-    family: str,
 ) -> None:
     """
     Build variable TTF using an in-memory designspace.
 
-    IMPORTANT:
-    Designspace locations are keyed by AXIS *NAME* (e.g. "Weight"),
-    not the OpenType axis tag (e.g. "wght").
+    Important designspace detail:
+    - Source locations are keyed by AXIS NAME ("Weight"), not axis tag ("wght").
     """
     from fontTools.designspaceLib import DesignSpaceDocument, AxisDescriptor, SourceDescriptor
-    from fontTools.varLib import build as var_build
 
     doc = DesignSpaceDocument()
 
     axis = AxisDescriptor()
     axis.tag = "wght"
-    axis.name = "Weight"   # <-- axis NAME
+    axis.name = "Weight"
     axis.minimum = 100
     axis.default = 400
     axis.maximum = 900
     doc.addAxis(axis)
 
-    # NOTE: locations must use axis.name ("Weight"), NOT axis.tag ("wght")
     s_min = SourceDescriptor()
     s_min.path = str(master_min_path)
     s_min.name = "master_min"
@@ -644,7 +688,7 @@ def build_variable_font(
     s_reg = SourceDescriptor()
     s_reg.path = str(master_reg_path)
     s_reg.name = "master_reg"
-    s_reg.location = {"Weight": 400}   # default => base master
+    s_reg.location = {"Weight": 400}
     doc.addSource(s_reg)
 
     s_max = SourceDescriptor()
@@ -658,7 +702,6 @@ def build_variable_font(
     varfont.save(out_var_path)
 
 
-
 # -----------------------------
 # Main
 # -----------------------------
@@ -669,11 +712,15 @@ def main() -> None:
     ap.add_argument("--family", default="Distribution", help="Font family name (default: Distribution)")
     ap.add_argument("--basename", default="distribution", help="Output base filename (default: distribution)")
     ap.add_argument("--upm", type=int, default=DEFAULT_UPM, help="Units per em (default: 1000)")
+
+    # Expressive range defaults; keep reg at 9 like your current stroke.
     ap.add_argument("--stroke-min", type=float, default=2.5, help="Min stroke width in SVG units (default: 2.5)")
     ap.add_argument("--stroke-reg", type=float, default=9.0, help="Regular stroke width in SVG units (default: 9.0)")
     ap.add_argument("--stroke-max", type=float, default=26.0, help="Max stroke width in SVG units (default: 26.0)")
-    ap.add_argument("--exterior-pts", type=int, default=DEFAULT_EXTERIOR_PTS, help="Points per exterior contour (default: 96)")
-    ap.add_argument("--hole-pts", type=int, default=DEFAULT_HOLE_PTS, help="Points per hole contour (default: 48)")
+
+    ap.add_argument("--exterior-pts", type=int, default=DEFAULT_EXTERIOR_PTS, help="Points per exterior contour (default: 128)")
+    ap.add_argument("--hole-pts", type=int, default=DEFAULT_HOLE_PTS, help="Points per hole contour (default: 64)")
+    ap.add_argument("--dot-pts", type=int, default=DEFAULT_DOT_PTS, help="Points per dot contour (default: 32)")
     args = ap.parse_args()
 
     src_dir = Path(args.src_dir)
@@ -681,7 +728,7 @@ def main() -> None:
 
     specs = load_glyphs_from_src(src_dir)
 
-    # scale so 320 SVG units == UPM
+    # Scale so 320 SVG units == UPM
     scale = args.upm / SVG_VIEW_H
     ascent = int(round((SVG_BASELINE_Y - 0.0) * scale))
     descent = -int(round((SVG_VIEW_H - SVG_BASELINE_Y) * scale))
@@ -711,6 +758,7 @@ def main() -> None:
         scale=scale,
         exterior_pts=args.exterior_pts,
         hole_pts=args.hole_pts,
+        dot_pts=args.dot_pts,
     )
 
     build_master_ttf(
@@ -721,10 +769,11 @@ def main() -> None:
         upm=args.upm,
         ascent=ascent,
         descent=descent,
-        stroke_width_svg=args.stroke_reg,  # <-- here
+        stroke_width_svg=args.stroke_reg,
         scale=scale,
         exterior_pts=args.exterior_pts,
         hole_pts=args.hole_pts,
+        dot_pts=args.dot_pts,
     )
 
     build_master_ttf(
@@ -739,6 +788,7 @@ def main() -> None:
         scale=scale,
         exterior_pts=args.exterior_pts,
         hole_pts=args.hole_pts,
+        dot_pts=args.dot_pts,
     )
 
     out_var_ttf = out_dir / f"{args.basename}.ttf"
@@ -750,7 +800,6 @@ def main() -> None:
         master_reg_path=master_reg,
         master_max_path=master_max,
         out_var_path=out_var_ttf,
-        family=args.family,
     )
 
     # WOFF2
