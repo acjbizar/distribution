@@ -34,6 +34,7 @@ def main() -> None:
         ("generate-templates.py", []),
         ("generate-images.py", []),
         ("generate-fonts.py", []),
+        ("generate-markdown.py", []),
     ]
 
     # Use the same Python interpreter that runs this script.

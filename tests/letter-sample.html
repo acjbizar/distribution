@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Distribution – Variable Font Demo</title>
+
+    <style>
+        @font-face {
+            font-family: "Distribution";
+            src:
+                    url("../dist/fonts/distribution.woff2") format("woff2"),
+                    url("../dist/fonts/distribution.ttf") format("truetype");
+            font-display: swap;
+            /* We still control wght via font-variation-settings, but this helps some engines */
+            font-weight: 100 900;
+            font-style: normal;
+        }
+
+        :root {
+            --wght: 400;
+            --size: 96px;
+            --lh: 1.1;
+            --ls: 0px;
+            --pad: 18px;
+            --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+            background: #0e0f12;
+            color: #e9ecf1;
+        }
+
+        header {
+            padding: 16px 18px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.03);
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(10px);
+        }
+
+        header .row {
+            display: flex;
+            gap: 12px;
+            align-items: baseline;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        h1 {
+            font-size: 16px;
+            margin: 0;
+            letter-spacing: 0.02em;
+            font-weight: 650;
+        }
+
+        .status {
+            font-family: var(--mono);
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        main {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            min-height: calc(100vh - 60px);
+        }
+
+        @media (max-width: 980px) {
+            main { grid-template-columns: 1fr; }
+        }
+
+        .panel {
+            padding: var(--pad);
+            border-right: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.02);
+        }
+
+        @media (max-width: 980px) {
+            .panel { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+        }
+
+        .panel h2 {
+            margin: 0 0 12px 0;
+            font-size: 14px;
+            font-weight: 650;
+            opacity: 0.95;
+        }
+
+        .control {
+            margin-bottom: 12px;
+            padding: 12px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.25);
+        }
+
+        label {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: #9aa7ff;
+        }
+
+        .value {
+            font-family: var(--mono);
+            opacity: 0.9;
+        }
+
+        .btnrow {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        button {
+            border: 1px solid rgba(255,255,255,0.10);
+            background: rgba(255,255,255,0.06);
+            color: #e9ecf1;
+            padding: 10px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 650;
+            font-size: 12px;
+        }
+        button:hover { background: rgba(255,255,255,0.10); }
+
+        .content {
+            padding: var(--pad);
+        }
+
+        .demoText {
+            width: 100%;
+            min-height: 220px;
+            border: 1px solid rgba(255,255,255,0.10);
+            background: rgba(0,0,0,0.35);
+            color: #e9ecf1;
+            border-radius: 14px;
+            padding: 14px;
+            resize: vertical;
+
+            font-family: "Distribution", system-ui, sans-serif;
+            font-size: var(--size);
+            line-height: var(--lh);
+            letter-spacing: var(--ls);
+
+            /* Use the axis explicitly */
+            font-variation-settings: "wght" var(--wght);
+
+            outline: none;
+        }
+
+        .meta {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 16px;
+            font-family: var(--mono);
+            font-size: 12px;
+            opacity: 0.85;
+        }
+
+        .hr {
+            margin: 18px 0;
+            height: 1px;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .glyphGridWrap {
+            margin-top: 14px;
+            border: 1px solid rgba(255,255,255,0.10);
+            background: rgba(0,0,0,0.30);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .gridHeader {
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .glyphGrid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+        }
+
+        .cell {
+            border-right: 1px solid rgba(255,255,255,0.06);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding: 10px 8px 8px 8px;
+            display: grid;
+            gap: 6px;
+            justify-items: center;
+            align-content: start;
+            min-height: 74px;
+        }
+
+        .cell .g {
+            font-family: "Distribution", system-ui, sans-serif;
+            font-variation-settings: "wght" var(--wght);
+            font-size: 38px;
+            line-height: 1;
+        }
+
+        .cell .cp {
+            font-family: var(--mono);
+            font-size: 10px;
+            opacity: 0.75;
+        }
+
+        .hidden { display: none !important; }
+
+        .hint {
+            font-size: 12px;
+            opacity: 0.85;
+            line-height: 1.45;
+        }
+        .hint code {
+            font-family: var(--mono);
+            font-size: 11px;
+            opacity: 0.95;
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <div class="row">
+        <h1>Distribution – Variable Font Demo</h1>
+        <div class="status" id="status">Loading font…</div>
+    </div>
+</header>
+
+<main>
+    <aside class="panel">
+        <h2>Controls</h2>
+
+        <div class="control">
+            <label>
+                <span>wght (stroke width)</span>
+                <span class="value" id="wghtVal">400</span>
+            </label>
+            <input id="wght" type="range" min="100" max="900" step="1" value="400" />
+        </div>
+
+        <div class="control">
+            <label>
+                <span>Font size</span>
+                <span class="value" id="sizeVal">96px</span>
+            </label>
+            <input id="size" type="range" min="12" max="220" step="1" value="96" />
+        </div>
+
+        <div class="control">
+            <label>
+                <span>Line height</span>
+                <span class="value" id="lhVal">1.10</span>
+            </label>
+            <input id="lh" type="range" min="0.7" max="2.2" step="0.01" value="1.10" />
+        </div>
+
+        <div class="control">
+            <label>
+                <span>Letter spacing</span>
+                <span class="value" id="lsVal">0px</span>
+            </label>
+            <input id="ls" type="range" min="-10" max="40" step="0.25" value="0" />
+        </div>
+
+        <div class="control">
+            <label>
+                <span>Show all glyphs</span>
+                <span class="value" id="glyphCount">—</span>
+            </label>
+            <input id="showGlyphs" type="checkbox" />
+            <div class="hint" style="margin-top:10px;">
+                Loads from <code>../dist/fonts/distribution.woff2</code> (fallback <code>.ttf</code>).
+                If you open this file directly in the browser, some browsers block local font loading.
+                Prefer serving your project (even a simple local webserver).
+            </div>
+
+            <div class="btnrow">
+                <button type="button" id="preset1">Preset: tight</button>
+                <button type="button" id="preset2">Preset: poster</button>
+                <button type="button" id="reset">Reset</button>
+            </div>
+        </div>
+    </aside>
+
+    <section class="content">
+      <textarea class="demoText" id="demoText" spellcheck="false">
+AbCdEfghIJ
+kLmnopqrStUvwxyZ.„”?
+0123456789
+AcGHKMNWX
+      </textarea>
+
+        <div class="meta" id="meta">
+            <div>wght: <span id="metaWght">400</span></div>
+            <div>size: <span id="metaSize">96px</span></div>
+            <div>line-height: <span id="metaLh">1.10</span></div>
+            <div>letter-spacing: <span id="metaLs">0px</span></div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="glyphGridWrap hidden" id="glyphWrap">
+            <div class="gridHeader">
+                <div>Glyphs in demo set</div>
+                <div class="status" style="opacity:.75;">(wght affects this grid too)</div>
+            </div>
+            <div class="glyphGrid" id="glyphGrid"></div>
+        </div>
+    </section>
+</main>
+
+<script>
+    const $ = (id) => document.getElementById(id);
+
+    const root = document.documentElement;
+
+    const wght = $("wght");
+    const size = $("size");
+    const lh = $("lh");
+    const ls = $("ls");
+
+    const wghtVal = $("wghtVal");
+    const sizeVal = $("sizeVal");
+    const lhVal = $("lhVal");
+    const lsVal = $("lsVal");
+
+    const metaWght = $("metaWght");
+    const metaSize = $("metaSize");
+    const metaLh = $("metaLh");
+    const metaLs = $("metaLs");
+
+    const showGlyphs = $("showGlyphs");
+    const glyphWrap = $("glyphWrap");
+    const glyphGrid = $("glyphGrid");
+    const glyphCount = $("glyphCount");
+    const status = $("status");
+
+    // Your requested/demo set (same as your generator rows)
+    const SHEET_ROWS = [
+        "AbCdEfghIJ",
+        "kLmnopqrStUvwxyZ.„”?",
+        "0123456789",
+        "AcGHKMNWX",
+    ];
+    const REQUESTED = SHEET_ROWS.join("");
+
+    function uniq(str) {
+        const seen = new Set();
+        const out = [];
+        for (const ch of str) {
+            if (!seen.has(ch)) { seen.add(ch); out.push(ch); }
+        }
+        return out;
+    }
+
+    const glyphs = uniq(REQUESTED);
+
+    function apply() {
+        const w = Number(wght.value);
+        const s = Number(size.value);
+        const lhv = Number(lh.value);
+        const lsv = Number(ls.value);
+
+        root.style.setProperty("--wght", w);
+        root.style.setProperty("--size", s + "px");
+        root.style.setProperty("--lh", lhv.toFixed(2));
+        root.style.setProperty("--ls", lsv + "px");
+
+        wghtVal.textContent = String(w);
+        sizeVal.textContent = s + "px";
+        lhVal.textContent = lhv.toFixed(2);
+        lsVal.textContent = lsv + "px";
+
+        metaWght.textContent = String(w);
+        metaSize.textContent = s + "px";
+        metaLh.textContent = lhv.toFixed(2);
+        metaLs.textContent = lsv + "px";
+    }
+
+    function buildGrid() {
+        glyphGrid.innerHTML = "";
+        for (const ch of glyphs) {
+            const cp = ch.codePointAt(0);
+            const cell = document.createElement("div");
+            cell.className = "cell";
+
+            const g = document.createElement("div");
+            g.className = "g";
+            g.textContent = ch;
+
+            const lab = document.createElement("div");
+            lab.className = "cp";
+            lab.textContent = "U+" + cp.toString(16).toUpperCase().padStart(4, "0");
+
+            cell.appendChild(g);
+            cell.appendChild(lab);
+            glyphGrid.appendChild(cell);
+        }
+        glyphCount.textContent = String(glyphs.length);
+    }
+
+    // Presets
+    $("preset1").addEventListener("click", () => {
+        wght.value = 320;
+        size.value = 72;
+        lh.value = 1.05;
+        ls.value = 0;
+        apply();
+    });
+
+    $("preset2").addEventListener("click", () => {
+        wght.value = 720;
+        size.value = 160;
+        lh.value = 0.95;
+        ls.value = 2;
+        apply();
+    });
+
+    $("reset").addEventListener("click", () => {
+        wght.value = 400;
+        size.value = 96;
+        lh.value = 1.10;
+        ls.value = 0;
+        apply();
+    });
+
+    // Toggle grid
+    showGlyphs.addEventListener("change", () => {
+        glyphWrap.classList.toggle("hidden", !showGlyphs.checked);
+    });
+
+    // Hook up sliders
+    [wght, size, lh, ls].forEach((el) => el.addEventListener("input", apply));
+
+    // Initial
+    buildGrid();
+    apply();
+
+    // Font loading status
+    // This checks whether the browser can resolve the face.
+    (async function () {
+        try {
+            // Trigger load of a representative text at one size
+            await document.fonts.load('16px "Distribution"', "AbCdEfghIJ0123");
+            // Wait until font set is ready
+            await document.fonts.ready;
+            status.textContent = "Font loaded: Distribution (variable)";
+        } catch (e) {
+            status.textContent = "Font load failed (check paths / serve over http)";
+        }
+    })();
+</script>
+</body>
+</html>
