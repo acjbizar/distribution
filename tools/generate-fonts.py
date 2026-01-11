@@ -669,8 +669,9 @@ def main() -> None:
     ap.add_argument("--family", default="Distribution", help="Font family name (default: Distribution)")
     ap.add_argument("--basename", default="distribution", help="Output base filename (default: distribution)")
     ap.add_argument("--upm", type=int, default=DEFAULT_UPM, help="Units per em (default: 1000)")
-    ap.add_argument("--stroke-min", type=float, default=6.0, help="Min stroke width in SVG units (default: 6.0)")
-    ap.add_argument("--stroke-max", type=float, default=14.0, help="Max stroke width in SVG units (default: 14.0)")
+    ap.add_argument("--stroke-min", type=float, default=2.5, help="Min stroke width in SVG units (default: 2.5)")
+    ap.add_argument("--stroke-reg", type=float, default=9.0, help="Regular stroke width in SVG units (default: 9.0)")
+    ap.add_argument("--stroke-max", type=float, default=26.0, help="Max stroke width in SVG units (default: 26.0)")
     ap.add_argument("--exterior-pts", type=int, default=DEFAULT_EXTERIOR_PTS, help="Points per exterior contour (default: 96)")
     ap.add_argument("--hole-pts", type=int, default=DEFAULT_HOLE_PTS, help="Points per hole contour (default: 48)")
     args = ap.parse_args()
@@ -692,15 +693,10 @@ def main() -> None:
     master_reg = build_tmp / f"{args.basename}-master-reg.ttf"
     master_max = build_tmp / f"{args.basename}-master-max.ttf"
 
-    # Map wght 100..900 -> stroke_min..stroke_max linearly; default is wght=400
-    w_min, w_def, w_max = 100.0, 400.0, 900.0
-    t = (w_def - w_min) / (w_max - w_min)
-    stroke_reg = args.stroke_min + t * (args.stroke_max - args.stroke_min)
-
     print(f"Loading {len(specs)} glyph(s) from {src_dir}…")
     print("Building masters:")
     print(f" - {master_min.name} (stroke={args.stroke_min})")
-    print(f" - {master_reg.name} (stroke={stroke_reg:.3f})")
+    print(f" - {master_reg.name} (stroke={args.stroke_reg:.3f})")
     print(f" - {master_max.name} (stroke={args.stroke_max})")
 
     build_master_ttf(
@@ -725,7 +721,7 @@ def main() -> None:
         upm=args.upm,
         ascent=ascent,
         descent=descent,
-        stroke_width_svg=stroke_reg,
+        stroke_width_svg=args.stroke_reg,  # <-- here
         scale=scale,
         exterior_pts=args.exterior_pts,
         hole_pts=args.hole_pts,
