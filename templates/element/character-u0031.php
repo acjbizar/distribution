@@ -48,7 +48,8 @@ if (!$hasAria) {
 <circle cx="200" cy="280" r="40" />
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 160 160 L 160 240" />
+<path d="M 160 240 L 160 120" />
+<path d="M 160 120 A 40 40 0 0 0 120 80" />
 </g>
 </svg>
 

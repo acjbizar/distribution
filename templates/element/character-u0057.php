@@ -1,6 +1,6 @@
 <?php
 /**
- * Auto-generated. Glyph: 2 (U+0032)
+ * Auto-generated. Glyph: W (U+0057)
  *
  * Available variables:
  *   @var string $attrs      Raw attributes appended to <svg ...> (e.g. ' class="x" width="24"')
@@ -30,28 +30,33 @@ if (!$hasAria) {
     }
 }
 ?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 320" width="240" height="320" {% if attrs is defined and attrs %} { attrs|raw }{% endif %}>
-<desc>glyph: 2 U+0032</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" width="320" height="320" {% if attrs is defined and attrs %} { attrs|raw }{% endif %}>
+<desc>glyph: W U+0057</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
 <circle cx="40" cy="40" r="40" />
 <circle cx="120" cy="40" r="40" />
 <circle cx="200" cy="40" r="40" />
+<circle cx="280" cy="40" r="40" />
 <circle cx="40" cy="120" r="40" />
 <circle cx="120" cy="120" r="40" />
 <circle cx="200" cy="120" r="40" />
+<circle cx="280" cy="120" r="40" />
 <circle cx="40" cy="200" r="40" />
 <circle cx="120" cy="200" r="40" />
 <circle cx="200" cy="200" r="40" />
+<circle cx="280" cy="200" r="40" />
 <circle cx="40" cy="280" r="40" />
 <circle cx="120" cy="280" r="40" />
 <circle cx="200" cy="280" r="40" />
+<circle cx="280" cy="280" r="40" />
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120 A 40 40 0 0 1 120 160 A 40 40 0 0 0 80 200 A 40 40 0 0 0 120 240 L 160 240" />
-</g>
-<g fill="#1e6bff" stroke="none">
-<circle cx="120" cy="160" r="3.5" />
+<path d="M 80 80 L 80 200" />
+<path d="M 160 80 L 160 200" />
+<path d="M 240 80 L 240 200" />
+<path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200" />
+<path d="M 240 200 A 40 40 0 0 1 200 240 A 40 40 0 0 1 160 200" />
 </g>
 </svg>
 

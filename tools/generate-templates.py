@@ -6,29 +6,7 @@ from __future__ import annotations
 import argparse
 import re
 from pathlib import Path
-from typing import List, Tuple, Optional
-
-
-# -----------------------------
-# Character set (must match glyph generator)
-# -----------------------------
-SHEET_ROWS = [
-    "AbCdEfghIJ",
-    "kLmnopqrStUvwxyZ.„”?",
-    "0123456789",
-    "AcGHKMNX",
-]
-REQUESTED = "".join(SHEET_ROWS)
-
-
-def uniq(s: str) -> List[str]:
-    out: List[str] = []
-    seen = set()
-    for ch in s:
-        if ch not in seen:
-            seen.add(ch)
-            out.append(ch)
-    return out
+from typing import List, Tuple
 
 
 def write_text_lf(path: Path, text: str) -> None:
@@ -47,6 +25,7 @@ def strip_xml_prolog(svg: str) -> str:
 
 
 SVG_OPEN_RE = re.compile(r"<svg\b([^>]*)>", re.IGNORECASE | re.DOTALL)
+CODEPOINT_RE = re.compile(r"^character-u([0-9a-fA-F]{4,6})\.svg$")
 
 
 def inject_twig_attrs_into_svg_open(svg: str) -> str:
@@ -54,18 +33,15 @@ def inject_twig_attrs_into_svg_open(svg: str) -> str:
     Turn:
       <svg ...>
     into:
-      <svg ... {{ attrs|raw }}>
+      <svg ... {% if attrs is defined and attrs %} {{ attrs|raw }}{% endif %}>
     so templates can pass attributes like class/width/height/aria-label.
-
-    We also set a default of empty string for attrs in Twig/PHP wrappers
-    to avoid undefined variable notices.
     """
     def repl(m: re.Match) -> str:
         before = m.group(0)
         attrs = m.group(1) or ""
 
         # If already contains a Twig interpolation, don't double-inject.
-        if "{{" in before:
+        if "{{" in before or "{%" in before:
             return before
 
         return f"<svg{attrs} {{% if attrs is defined and attrs %}} {{ attrs|raw }}{{% endif %}}>"
@@ -74,15 +50,6 @@ def inject_twig_attrs_into_svg_open(svg: str) -> str:
 
 
 def twig_wrapper(svg_inner: str, label: str, codepoint_hex: str) -> str:
-    """
-    Expose:
-      - attrs: raw attribute string appended to <svg ...>
-      - title: optional <title> for accessibility
-      - aria_label: optional aria-label (fallback to title/label)
-      - role: optional, default 'img' if any label/title provided
-    """
-    # Add a11y defaults without touching the SVG paths.
-    # We'll append `attrs` into the <svg ...> tag, and optionally inject <title>.
     lines: List[str] = []
     lines.append("{# Auto-generated. Glyph: %s (U+%s) #}" % (label, codepoint_hex.upper()))
     lines.append("{% set attrs = attrs|default('') %}")
@@ -90,7 +57,6 @@ def twig_wrapper(svg_inner: str, label: str, codepoint_hex: str) -> str:
     lines.append("{% set aria_label = aria_label|default('') %}")
     lines.append("{% set role = role|default('') %}")
     lines.append("")
-    # If user provided aria_label/title, we want role=img unless user overrides.
     lines.append("{% if (aria_label or title) and not role %}{% set role = 'img' %}{% endif %}")
     lines.append("{% if role %}{% set attrs = attrs ~ ' role=\"' ~ role ~ '\"' %}{% endif %}")
     lines.append("{% if aria_label %}")
@@ -98,22 +64,14 @@ def twig_wrapper(svg_inner: str, label: str, codepoint_hex: str) -> str:
     lines.append("{% elseif title %}")
     lines.append("  {% set attrs = attrs ~ ' aria-label=\"' ~ title|e('html_attr') ~ '\"' %}")
     lines.append("{% else %}")
-    # If no label/title supplied, hide from AT unless user overrides via attrs.
     lines.append("  {# If you want it accessible, pass aria_label or title. #}")
     lines.append("{% endif %}")
     lines.append("")
-    # Insert <title> as the first child of svg if title provided.
-    # We'll do this by splitting on the first '>' after <svg ...>.
-    # But easiest: if title is set, prepend a Twig block right after opening tag:
-    # We'll rely on svg_inner already having attrs injection.
-    # We'll replace first occurrence of '>' of the opening svg tag with a title block.
     lines.append("{% set __svg %}")
     lines.append(svg_inner.rstrip())
     lines.append("{% endset %}")
     lines.append("{% if title %}")
-    lines.append(
-        "{{ __svg|replace({'>':'>' ~ '<title>' ~ title|e ~ '</title>'})|raw }}"
-    )
+    lines.append("{{ __svg|replace({'>':'>' ~ '<title>' ~ title|e ~ '</title>'})|raw }}")
     lines.append("{% else %}")
     lines.append("{{ __svg|raw }}")
     lines.append("{% endif %}")
@@ -122,17 +80,6 @@ def twig_wrapper(svg_inner: str, label: str, codepoint_hex: str) -> str:
 
 
 def php_wrapper(svg_inner: str, label: str, codepoint_hex: str) -> str:
-    """
-    Cake element wrapper:
-      - $attrs: string of raw attributes appended into <svg ...>
-      - $title: optional <title> (escaped)
-      - $ariaLabel: optional aria-label (escaped)
-      - $role: optional role
-    """
-    # We will:
-    # - default missing vars
-    # - append role/aria-label unless caller already provided them in $attrs
-    # - optionally inject <title>
     php: List[str] = []
     php.append("<?php")
     php.append("/**")
@@ -168,8 +115,6 @@ def php_wrapper(svg_inner: str, label: str, codepoint_hex: str) -> str:
     php.append("?>")
     php.append(svg_inner.rstrip())
     php.append("")
-    # If title present, inject it after opening svg tag (same trick as Twig but with PHP).
-    # We'll do it by printing a small replace if needed.
     php.append("<?php if ($title !== ''): ?>")
     php.append("<?php")
     php.append("$__svg = ob_get_clean();")
@@ -188,13 +133,34 @@ def prepare_svg_for_embedding(svg_text: str, keep_xml_prolog: bool) -> str:
         svg_text = svg_text.rstrip() + "\n"
 
     svg_text = inject_twig_attrs_into_svg_open(svg_text)
-
     return svg_text
+
+
+def list_glyph_files(svg_dir: Path) -> List[Tuple[int, Path]]:
+    """
+    Discover src/character-u{codepoint}.svg files.
+    Returns sorted list of (codepoint_int, path).
+    """
+    items: List[Tuple[int, Path]] = []
+    if not svg_dir.exists():
+        return items
+
+    for p in svg_dir.iterdir():
+        if not p.is_file():
+            continue
+        m = CODEPOINT_RE.match(p.name)
+        if not m:
+            continue
+        cp = int(m.group(1), 16)
+        items.append((cp, p))
+
+    items.sort(key=lambda t: t[0])
+    return items
 
 
 def main() -> None:
     ap = argparse.ArgumentParser(
-        description="Generate Symfony Twig + CakePHP element templates from generated SVG glyphs."
+        description="Generate Symfony Twig + CakePHP element templates from SVG glyph files discovered on disk."
     )
     ap.add_argument("--svg-dir", default="src", help="Directory containing generated SVGs (default: src)")
     ap.add_argument("--symfony-templates-dir", default="templates", help="Symfony templates directory (default: templates)")
@@ -207,41 +173,36 @@ def main() -> None:
     symfony_dir = Path(args.symfony_templates_dir)
     cake_dir = Path(args.cake_elements_dir)
 
-    missing: List[str] = []
+    glyph_files = list_glyph_files(svg_dir)
+    if not glyph_files:
+        raise SystemExit(f"No glyph SVGs found in {svg_dir.resolve()} matching character-u{'{codepoint}'}.svg")
+
     written_symfony = 0
     written_cake = 0
 
-    for ch in uniq(REQUESTED):
-        cp = ord(ch)
+    for cp, src_svg in glyph_files:
         cp_hex = f"{cp:04x}"
-        src_svg = svg_dir / f"character-u{cp_hex}.svg"
-
-        if not src_svg.exists():
-            missing.append(f"{ch} (expected {src_svg.as_posix()})")
-            continue
+        label = chr(cp) if 0 <= cp <= 0x10FFFF else f"U+{cp:04X}"
 
         raw_svg = src_svg.read_text(encoding="utf-8")
         embedded_svg = prepare_svg_for_embedding(raw_svg, keep_xml_prolog=args.keep_xml_prolog)
 
-        # Symfony output
         out_twig = symfony_dir / f"_character-u{cp_hex}.svg.twig"
-        twig_text = twig_wrapper(embedded_svg, label=ch, codepoint_hex=cp_hex)
+        twig_text = twig_wrapper(embedded_svg, label=label, codepoint_hex=cp_hex)
 
-        # Cake output
         out_php = cake_dir / f"character-u{cp_hex}.php"
 
-        # For Cake we want attrs injection too, but Twig tags are now present.
-        # So we create a separate version where the injected block is PHP-aware instead of Twig.
+        # Convert Twig attrs-injection to PHP for Cake element output.
         php_svg = re.sub(
             r"\{\% if attrs is defined and attrs \%\}\s*\{\{ attrs\|raw \}\}\{\% endif \%\}",
             r"<?php if (!empty($attrs)) echo $attrs; ?>",
             embedded_svg,
             count=1,
         )
-        php_text = php_wrapper(php_svg, label=ch, codepoint_hex=cp_hex)
+        php_text = php_wrapper(php_svg, label=label, codepoint_hex=cp_hex)
 
         if args.dry_run:
-            print(f"[DRY] {ch} U+{cp:04X}")
+            print(f"[DRY] {label} U+{cp:04X}")
             print(f"  -> {out_twig.as_posix()}")
             print(f"  -> {out_php.as_posix()}")
         else:
@@ -249,17 +210,12 @@ def main() -> None:
             write_text_lf(out_php, php_text)
             written_symfony += 1
             written_cake += 1
-            print(f"✓ {ch} U+{cp:04X} -> {out_twig.as_posix()} + {out_php.as_posix()}")
+            print(f"✓ {label} U+{cp:04X} -> {out_twig.as_posix()} + {out_php.as_posix()}")
 
     if not args.dry_run:
         print("\nDone.")
         print(f"  Symfony templates written: {written_symfony}")
         print(f"  Cake elements written:     {written_cake}")
-
-    if missing:
-        print("\nMissing source SVGs for:")
-        for m in missing:
-            print("  -", m)
 
 
 if __name__ == "__main__":

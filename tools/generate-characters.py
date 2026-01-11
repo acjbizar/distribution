@@ -17,7 +17,7 @@ SHEET_ROWS = [
     "AbCdEfghIJ",
     "kLmnopqrStUvwxyZ.„”?",
     "0123456789",
-    "AcGHKMNX",
+    "AcGHKMNWX",
 ]
 REQUESTED = "".join(SHEET_ROWS)
 
@@ -270,16 +270,17 @@ def glyph_E(grid: Grid) -> GlyphRes2:
 
     return [p.d()], [("G", G)]
 
-
-def glyph_G(grid: Grid) -> GlyphRes2:
-    # G = fixed C + bar (connected at lower right)
+def glyph_G(grid: Grid):
+    # G = fixed C + top-right quarter-circle arc at the lower-right (same-circle principle)
     paths, _ = glyph_C(grid)
+
     cl = grid.circle(1, BASE_ROW + 1)
     BR = cl.R()
-    bar_end = (cl.cx, cl.cy)
-    bar = SvgPath().M(BR).L(bar_end).d()
-    return paths + [bar], [("barEnd", bar_end)]
+    end = cl.T()  # top-right quarter of the LOWER circle: R -> T
 
+    turn = SvgPath().M(BR).A(cl.r, 0, 0, end).d()
+
+    return paths + [turn], [("turnEnd", end)]
 
 def glyph_k(grid: Grid) -> GlyphRes2:
     """
@@ -520,18 +521,28 @@ def glyph_t(grid: Grid) -> GlyphRes2:
     return [stem, arm, bowl], []
 
 
-def glyph_U(grid: Grid) -> GlyphRes2:
-    # keep uppercase U as a "classic U"
+def glyph_U(grid: Grid):
+    # U = two long stems + bottom half-circle.
+    # Stems stop exactly at the arc endpoints.
+    c = grid.circle(1, BASE_ROW + 1)  # bottom bowl circle
+
     xL = grid.x_tan(0)
     xR = grid.x_tan(1)
-    y_top = xheight_top(grid)
-    y_base = baseline(grid)
-    c = grid.circle(1, BASE_ROW + 1)
-    stemL = SvgPath().M((xL, y_top)).L((xL, c.T()[1])).d()
-    stemR = SvgPath().M((xR, y_top)).L((xR, c.T()[1])).d()
-    bowl = SvgPath().M(c.R()).A(c.r, 0, 1, c.B()).A(c.r, 0, 1, c.L()).d()
-    return [stemL, stemR, bowl], []
+    y_top = ascender_top(grid)
 
+    stemL = SvgPath().M((xL, y_top)).L(c.L()).d()
+    stemR = SvgPath().M((xR, y_top)).L(c.R()).d()
+
+    # bottom half circle: R -> B -> L (SWEEP flipped)
+    bowl = (
+        SvgPath()
+        .M(c.R())
+        .A(c.r, 0, 1, c.B())
+        .A(c.r, 0, 1, c.L())
+        .d()
+    )
+
+    return [stemL, stemR, bowl], []
 
 def glyph_u(grid: Grid) -> GlyphRes2:
     # u = half a w: stems go UP from join to x-height, single bowl
@@ -576,6 +587,28 @@ def glyph_w(grid: Grid) -> GlyphRes2:
 
     return [leg0, bowl1, leg1, bowl2, leg2], []
 
+def glyph_W(grid: Grid):
+    # W = double U (wide glyph): three long stems + two bottom bowls
+    # Stems stop exactly at arc endpoints.
+    c1 = grid.circle(1, BASE_ROW + 1)  # left bowl circle
+    c2 = grid.circle(2, BASE_ROW + 1)  # right bowl circle
+
+    x0 = grid.x_tan(0)  # left stem
+    x1 = grid.x_tan(1)  # middle stem (shared)
+    x2 = grid.x_tan(2)  # right stem
+
+    y_top = ascender_top(grid)
+
+    # stems stop at the arc endpoints (at y = c*.cy)
+    stemL = SvgPath().M((x0, y_top)).L(c1.L()).d()  # to (x0, c1.cy)
+    stemM = SvgPath().M((x1, y_top)).L((x1, c1.cy)).d()
+    stemR = SvgPath().M((x2, y_top)).L(c2.R()).d()  # to (x2, c2.cy)
+
+    # bowls: bottom halves (SWEEP=1 to match fixed U)
+    bowl1 = SvgPath().M(c1.R()).A(c1.r, 0, 1, c1.B()).A(c1.r, 0, 1, c1.L()).d()
+    bowl2 = SvgPath().M(c2.R()).A(c2.r, 0, 1, c2.B()).A(c2.r, 0, 1, c2.L()).d()
+
+    return [stemL, stemM, stemR, bowl1, bowl2], []
 
 def glyph_x(grid: Grid) -> GlyphRes2:
     # two half circles touching in the middle
@@ -628,9 +661,11 @@ def glyph_Z(grid: Grid) -> GlyphRes2:
 # -----------------------------
 # Dot / quotes / question mark (DOT radius=1, real circle elements)
 # -----------------------------
-def glyph_dot(grid: Grid) -> GlyphRes3:
-    c = grid.circle(2, GRID_ROWS - 1)
-    return [], [], [(c.cx, c.cy, DOT_R)]
+def glyph_dot(grid: Grid):
+    # . = dot centered between four grid circles in the NARROW viewbox (one unit left)
+    cx = grid.x_tan(0)
+    cy = baseline(grid)
+    return [], [], [(cx, cy, DOT_R)]
 
 def glyph_quote_low(grid: Grid):
     # „ = two bottom-right quarter arcs of the MAIN grid circles (large)
@@ -643,21 +678,17 @@ def glyph_quote_low(grid: Grid):
     return [q1, q2], []
 
 def glyph_quote_high(grid: Grid):
-    # ” = two bottom-right quarter arcs of the MAIN grid circles (large)
-    c1 = grid.circle(1, BASE_ROW)
-    c2 = grid.circle(2, BASE_ROW)
+    # ” = two bottom-right quarter arcs of the MAIN grid circles,
+    # positioned one circle (one row) higher than BASE_ROW.
+    row = BASE_ROW - 1  # == 0
 
-    # place them slightly higher like your old version did:
-    # we keep the SAME circles but shift the arc up by an offset
-    # by drawing an equivalent quarter-arc on a virtual circle of same radius.
-    dy = -grid.r * 0.45  # same offset you used before
+    c1 = grid.circle(1, row)
+    c2 = grid.circle(2, row)
 
-    def arc(c: Circle) -> str:
-        B = (c.cx, c.cy + c.r + dy)
-        R = (c.cx + c.r, c.cy + dy)
-        return SvgPath().M(B).A(c.r, 0, 0, R).d()
+    q1 = SvgPath().M(c1.B()).A(c1.r, 0, 0, c1.R()).d()  # bottom -> right
+    q2 = SvgPath().M(c2.B()).A(c2.r, 0, 0, c2.R()).d()
 
-    return [arc(c1), arc(c2)], []
+    return [q1, q2], []
 
 def glyph_qmark(grid: Grid) -> GlyphRes3:
     # Hook closely matching the reference draft:
@@ -697,17 +728,21 @@ def digit_0(grid: Grid) -> GlyphRes2:
     p.L(cu.L())
     return [p.d()], []
 
+def digit_1(grid: Grid):
+    # 1 = vertical stem + quarter-circle arc to the top-right
+    # (cap is ONE circle LOWER than before)
+    cap = grid.circle(1, BASE_ROW)  # ✅ was BASE_ROW-1
 
-def digit_1(grid: Grid) -> GlyphRes2:
-    cu = grid.circle(1, BASE_ROW)
-    x = cu.cx
-    y_top = cu.T()[1]
+    x = cap.R()[0]
     y_base = baseline(grid)
 
-    hook = SvgPath().M(cu.T()).A(cu.r, 0, 0, cu.L()).d()
-    stem = SvgPath().M((x, y_top)).L((x, y_base)).d()
-    return [hook, stem], []
+    # stem goes up to where it meets the arc (cap.R)
+    stem = SvgPath().M((x, y_base)).L(cap.R()).d()
 
+    # quarter arc at top-right: R -> T
+    arc = SvgPath().M(cap.R()).A(cap.r, 0, 0, cap.T()).d()
+
+    return [stem, arc], []
 
 def digit_2(grid: Grid) -> GlyphRes2:
     # connected like S via tangency G
@@ -845,16 +880,32 @@ def digit_9(grid: Grid) -> GlyphRes2:
 # -----------------------------
 # Uppercase extras
 # -----------------------------
-def glyph_H(grid: Grid) -> GlyphRes2:
-    xL = grid.x_tan(0); xR = grid.x_tan(1)
-    yT = ascender_top(grid); yB = baseline(grid)
-    yM = grid.circle(1, BASE_ROW + 1).cy
-    return [
-        SvgPath().M((xL, yT)).L((xL, yB)).d(),
-        SvgPath().M((xR, yT)).L((xR, yB)).d(),
-        SvgPath().M((xL, yM)).L((xR, yM)).d(),
-    ], []
+def glyph_H(grid: Grid):
+    """
+    H = like K, but the right side is a single straight stem (same as left stem).
+    Keep K's middle structure (lower arch + upper quarter connector),
+    and flip the quarter connector so it bends the other way.
+    """
+    xL = grid.x_tan(0)
+    xR = grid.x_tan(1)
 
+    y_top = ascender_top(grid)
+    y_base = baseline(grid)
+
+    cu = grid.circle(1, BASE_ROW)
+    cl = grid.circle(1, BASE_ROW + 1)
+    G = grid.tangency_vertical(1, BASE_ROW)
+
+    # left stem (full height)
+    stem_left = SvgPath().M((xL, y_top)).L((xL, y_base)).d()
+
+    # K-like middle arch (lower circle)
+    arch = SvgPath().M(cl.L()).A(cl.r, 0, 1, cl.T()).A(cl.r, 0, 1, cl.R()).d()
+
+    # right stem: one straight stem, full height
+    stem_right = SvgPath().M((xR, y_top)).L((xR, y_base)).d()
+
+    return [stem_left, arch, stem_right], [("G", G)]
 
 def glyph_K(grid: Grid) -> GlyphRes2:
     return glyph_k(grid)
@@ -983,6 +1034,7 @@ BUILDERS: Dict[str, GlyphFn] = {
     "K": glyph_K,
     "M": glyph_M,
     "N": glyph_N,
+    "W": glyph_W,
     "X": glyph_X,
 }
 
@@ -991,15 +1043,14 @@ BUILDERS: Dict[str, GlyphFn] = {
 # SVG rendering (variable width)
 # -----------------------------
 def glyph_view_width(ch: str) -> int:
-    if ch == "I":
+    if ch in ("I", "."):
         return VIEW_W_NARROW
-    return VIEW_W_WIDE if ch in ("m", "M", "w") else VIEW_W_DEFAULT
+    return VIEW_W_WIDE if ch in ("m", "M", "w", "W") else VIEW_W_DEFAULT
 
 def glyph_grid_cols(ch: str) -> int:
-    if ch == "I":
+    if ch in ("I", "."):
         return GRID_COLS_NARROW
-    return GRID_COLS_WIDE if ch in ("m", "M", "w") else GRID_COLS_DEFAULT
-
+    return GRID_COLS_WIDE if ch in ("m", "M", "w", "W") else GRID_COLS_DEFAULT
 
 def svg_glyph_doc(
     glyph_name: str,

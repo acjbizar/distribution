@@ -39,11 +39,6 @@ def _parse_number(s: str) -> float:
 
 
 def read_glyph_svg(svg_path: Path) -> Tuple[str, int, int]:
-    """
-    Returns:
-      inner_svg: content INSIDE the <svg> ... </svg> wrapper (no outer tag)
-      w, h: extracted from viewBox (preferred) or width/height fallback
-    """
     raw = strip_xml_prolog(svg_path.read_text(encoding="utf-8"))
 
     m_open = SVG_OPEN_RE.search(raw)
@@ -67,9 +62,7 @@ def read_glyph_svg(svg_path: Path) -> Tuple[str, int, int]:
             w = int(round(_parse_number(m_w.group(1))))
             h = int(round(_parse_number(m_h.group(1))))
         else:
-            # Fallback (your generator is typically 240×320 or 320×320)
-            w = 240
-            h = 320
+            w, h = 240, 320  # fallback for your generator
 
     start = raw.find(">", m_open.start())
     end = raw.rfind("</svg>")
@@ -81,9 +74,6 @@ def read_glyph_svg(svg_path: Path) -> Tuple[str, int, int]:
 
 
 def list_glyph_files(svg_dir: Path) -> List[Tuple[int, Path]]:
-    """
-    Find src/character-u{hex}.svg files and return sorted list of (codepoint_int, path).
-    """
     items: List[Tuple[int, Path]] = []
     for p in svg_dir.iterdir():
         if not p.is_file():
@@ -105,10 +95,14 @@ def main() -> None:
     ap.add_argument("--out", default="src/sheet.svg", help="Output sheet svg path (default: src/sheet.svg)")
     ap.add_argument("--cols", type=int, default=10, help="Number of columns in sheet (default: 10)")
     ap.add_argument("--gap-x", type=int, default=0, help="Horizontal gap between glyphs (default: 0)")
-    ap.add_argument("--gap-y", type=int, default=0, help="Vertical gap between glyphs (default: 0)")
+    ap.add_argument("--gap-y", type=int, default=0, help="Vertical gap between glyph rows (default: 0)")
     ap.add_argument("--padding", type=int, default=0, help="Outer padding around sheet (default: 0)")
     ap.add_argument("--bg", default="#fff", help="Background fill (default: #fff). Use 'none' for transparent.")
     ap.add_argument("--labels", action="store_true", help="Draw small labels under each glyph (debug)")
+    ap.add_argument("--label-pad-y", type=int, default=22, help="Extra vertical space reserved for labels (default: 22)")
+    ap.add_argument("--label-offset-y", type=int, default=16, help="Label baseline below glyph box (default: 16)")
+    ap.add_argument("--border", action="store_true", help="Draw a thin border around each glyph viewBox")
+    ap.add_argument("--border-width", type=float, default=1.0, help="Border stroke width (default: 1.0)")
     args = ap.parse_args()
 
     svg_dir = Path(args.svg_dir)
@@ -118,14 +112,12 @@ def main() -> None:
     if not glyph_files:
         raise SystemExit(f"No glyph files found in {svg_dir.resolve()} matching character-uXXXX.svg")
 
-    # Preload glyphs
     glyphs: List[Dict[str, object]] = []
     for cp, path in glyph_files:
         inner, w, h = read_glyph_svg(path)
         glyphs.append(
             {
                 "cp": cp,
-                "path": path,
                 "inner": inner,
                 "w": w,
                 "h": h,
@@ -135,14 +127,13 @@ def main() -> None:
 
     cols = max(1, args.cols)
 
-    # Grid rows
     rows: List[List[Dict[str, object]]] = []
     for i in range(0, len(glyphs), cols):
         rows.append(glyphs[i : i + cols])
 
-    # Compute row heights + widths
     row_heights: List[int] = []
     row_widths: List[int] = []
+
     for row in rows:
         rh = 0
         rw = 0
@@ -151,32 +142,45 @@ def main() -> None:
             if j > 0:
                 rw += args.gap_x
             rw += int(g["w"])  # type: ignore[arg-type]
+        if args.labels:
+            rh += args.label_pad_y
         row_heights.append(rh)
         row_widths.append(rw)
 
     sheet_w = args.padding * 2 + (max(row_widths) if row_widths else 0)
     sheet_h = args.padding * 2 + sum(row_heights) + args.gap_y * max(0, (len(rows) - 1))
 
-    bg = args.bg
     bg_rect = ""
-    if bg.lower() != "none":
-        bg_rect = f'<rect x="0" y="0" width="100%" height="100%" fill="{bg}"/>\n'
+    if args.bg.lower() != "none":
+        bg_rect = f'<rect x="0" y="0" width="100%" height="100%" fill="{args.bg}"/>\n'
 
     out: List[str] = []
     out.append('<?xml version="1.0" encoding="UTF-8"?>')
-    # ✅ no width/height attributes; only viewBox
     out.append(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {sheet_w} {sheet_h}">')
     out.append("<desc>Glyph sheet composed from src/character-u{codepoint}.svg files</desc>")
     if bg_rect:
         out.append(bg_rect.rstrip())
 
+    label_nodes: List[str] = []
+
+    # Minimal styles
+    styles: List[str] = []
     if args.labels:
-        out.append("<style>.lbl{font:12px monospace; fill:#333;}</style>")
+        styles.append(".lbl{font:12px monospace; fill:#333;}")
+    if args.border:
+        styles.append(f".gbox{{fill:none; stroke:#888; stroke-width:{args.border_width};}}")
+        # crisper border in many renderers (optional but helps)
+        styles.append(".gbox{shape-rendering:crispEdges;}")
+    if styles:
+        out.append("<style>" + "".join(styles) + "</style>")
 
     cur_y = args.padding
     for row_idx, row in enumerate(rows):
         cur_x = args.padding
-        row_h = row_heights[row_idx]
+
+        base_row_glyph_h = 0
+        for g in row:
+            base_row_glyph_h = max(base_row_glyph_h, int(g["h"]))  # type: ignore[arg-type]
 
         for g in row:
             cp = int(g["cp"])  # type: ignore[arg-type]
@@ -186,15 +190,28 @@ def main() -> None:
             h = int(g["h"])  # type: ignore[arg-type]
 
             out.append(f'<g transform="translate({cur_x} {cur_y})">')
+
+            # ✅ border around the glyph's own viewBox (0..w, 0..h)
+            if args.border:
+                # Put it behind content: draw first
+                out.append(f'<rect class="gbox" x="0" y="0" width="{w}" height="{h}"/>')
+
             out.append(inner.rstrip())
+            out.append("</g>")
 
             if args.labels:
-                out.append(f'<text class="lbl" x="0" y="{h + 16}">{ch} U+{cp:04X}</text>')
+                lx = cur_x
+                ly = cur_y + base_row_glyph_h + args.label_offset_y
+                label_nodes.append(f'<text class="lbl" x="{lx}" y="{ly}">{ch} U+{cp:04X}</text>')
 
-            out.append("</g>")
-            cur_x += w + args.gap_x  # gap defaults to 0
+            cur_x += w + args.gap_x
 
-        cur_y += row_h + args.gap_y  # gap defaults to 0
+        cur_y += row_heights[row_idx] + args.gap_y
+
+    if args.labels and label_nodes:
+        out.append('<g id="labels">')
+        out.extend(label_nodes)
+        out.append("</g>")
 
     out.append("</svg>")
     out.append("")

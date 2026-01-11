@@ -1,7 +1,6 @@
 
 # TODO
 
-- [ ] Improve character shapes
 - [ ] Generate fonts
 - [ ] Publish type system on ``detype.nl``
 - [ ] host fonts on ``hetcdn.nl``
@@ -13,3 +12,4 @@
 - [x] Generate SVGs for alphabet
 - [x] Generate templates
 - [x] Generate images
+- [x] Improve character shapes

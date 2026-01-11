@@ -48,9 +48,10 @@ if (!$hasAria) {
 <circle cx="200" cy="280" r="40" />
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 120 80 A 40 40 0 0 1 160 120 A 40 40 0 0 1 120 160" />
-<path d="M 120 160 L 120 200" />
-<path d="['M 207.2 280 A 7.2 7.2 0 0 1 200 287.2 A 7.2 7.2 0 0 1 192.8 280 A 7.2 7.2 0 0 1 200 272.8 A 7.2 7.2 0 0 1 207.2 280']" />
+<path d="M 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120 A 40 40 0 0 1 120 160 A 40 40 0 0 0 82.412 186.319" />
+</g>
+<g fill="#000" stroke="#000" stroke-width="9">
+<circle cx="80" cy="240" r="1" />
 </g>
 </svg>
 
