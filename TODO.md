@@ -4,7 +4,6 @@
 - [ ] Generate fonts
 - [ ] Publish type system on ``detype.nl``
 - [ ] host fonts on ``hetcdn.nl``
-- [ ] Add composer file
 
 ## Done
 
@@ -13,3 +12,4 @@
 - [x] Generate templates
 - [x] Generate images
 - [x] Improve character shapes
+- [x] Add composer file

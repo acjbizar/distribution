@@ -1,0 +1,9 @@
+{
+  "name": "acj/distribution",
+  "type": "cakephp-plugin",
+  "autoload": {
+    "psr-4": {
+      "Distribution\\": "src/"
+    }
+  }
+}
