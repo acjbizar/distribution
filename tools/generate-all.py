@@ -33,6 +33,7 @@ def main() -> None:
         ("generate-sheet.py", ["--border", "--labels"]),
         ("generate-templates.py", []),
         ("generate-images.py", []),
+        ("generate-fonts.py", []),
     ]
 
     # Use the same Python interpreter that runs this script.
