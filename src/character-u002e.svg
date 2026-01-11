@@ -17,6 +17,8 @@
 <circle cx="200" cy="280" r="40" />
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 207.2 280 A 7.2 7.2 0 0 1 200 287.2 A 7.2 7.2 0 0 1 192.8 280 A 7.2 7.2 0 0 1 200 272.8 A 7.2 7.2 0 0 1 207.2 280" />
+</g>
+<g fill="#000" stroke="#000" stroke-width="9">
+<circle cx="200" cy="280" r="1" />
 </g>
 </svg>

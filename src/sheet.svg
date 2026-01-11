@@ -21,7 +21,9 @@
 <circle cx="200" cy="280" r="40" />
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 207.2 280 A 7.2 7.2 0 0 1 200 287.2 A 7.2 7.2 0 0 1 192.8 280 A 7.2 7.2 0 0 1 200 272.8 A 7.2 7.2 0 0 1 207.2 280" />
+</g>
+<g fill="#000" stroke="#000" stroke-width="9">
+<circle cx="200" cy="280" r="1" />
 </g>
 <text class="lbl" x="0" y="336">. U+002E</text>
 </g>
@@ -113,7 +115,7 @@
 <circle cx="200" cy="280" r="40" />
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120 A 40 40 0 0 1 120 160 L 120 160 L 120 160 A 40 40 0 0 1 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200" />
+<path d="M 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200" />
 </g>
 <text class="lbl" x="0" y="336">3 U+0033</text>
 </g>
@@ -278,9 +280,10 @@
 <circle cx="200" cy="280" r="40" />
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 120 80 A 40 40 0 0 1 160 120 A 40 40 0 0 1 120 160" />
-<path d="M 120 160 L 120 200" />
-<path d="['M 207.2 280 A 7.2 7.2 0 0 1 200 287.2 A 7.2 7.2 0 0 1 192.8 280 A 7.2 7.2 0 0 1 200 272.8 A 7.2 7.2 0 0 1 207.2 280']" />
+<path d="M 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120 A 40 40 0 0 1 120 160 A 40 40 0 0 0 82.412 186.319" />
+</g>
+<g fill="#000" stroke="#000" stroke-width="9">
+<circle cx="80" cy="240" r="1" />
 </g>
 <text class="lbl" x="0" y="336">? U+003F</text>
 </g>
@@ -612,9 +615,9 @@
 <circle cx="200" cy="280" r="40" />
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 80 200 L 80 160" />
-<path d="M 80 200 A 40 40 0 0 0 120 240 A 40 40 0 0 0 160 200" />
-<path d="M 160 200 L 160 160" />
+<path d="M 80 160 L 80 160" />
+<path d="M 160 160 L 160 160" />
+<path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200" />
 </g>
 <text class="lbl" x="0" y="336">U U+0055</text>
 </g>
@@ -1155,8 +1158,8 @@
 <circle cx="200" cy="280" r="40" />
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 126.4 102 A 6.4 6.4 0 0 1 120 108.4 A 6.4 6.4 0 0 1 113.6 102 A 6.4 6.4 0 0 1 120 95.6 A 6.4 6.4 0 0 1 126.4 102" />
-<path d="M 206.4 102 A 6.4 6.4 0 0 1 200 108.4 A 6.4 6.4 0 0 1 193.6 102 A 6.4 6.4 0 0 1 200 95.6 A 6.4 6.4 0 0 1 206.4 102" />
+<path d="M 120 142 A 40 40 0 0 0 160 102" />
+<path d="M 200 142 A 40 40 0 0 0 240 102" />
 </g>
 <text class="lbl" x="0" y="336">” U+201D</text>
 </g>
@@ -1178,8 +1181,8 @@
 <circle cx="200" cy="280" r="40" />
 </g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M 126.4 282 A 6.4 6.4 0 0 1 120 288.4 A 6.4 6.4 0 0 1 113.6 282 A 6.4 6.4 0 0 1 120 275.6 A 6.4 6.4 0 0 1 126.4 282" />
-<path d="M 206.4 282 A 6.4 6.4 0 0 1 200 288.4 A 6.4 6.4 0 0 1 193.6 282 A 6.4 6.4 0 0 1 200 275.6 A 6.4 6.4 0 0 1 206.4 282" />
+<path d="M 120 320 A 40 40 0 0 0 160 280" />
+<path d="M 200 320 A 40 40 0 0 0 240 280" />
 </g>
 <text class="lbl" x="0" y="336">„ U+201E</text>
 </g>
