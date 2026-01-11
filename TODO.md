@@ -1,9 +1,6 @@
 
 # TODO
 
-- [ ] Publish type system on ``detype.nl``
-- [ ] host fonts on ``hetcdn.nl``
-
 ## Done
 
 - [x] Add grid
@@ -13,3 +10,5 @@
 - [x] Improve character shapes
 - [x] Add composer file
 - [x] Generate fonts
+- [x] Publish type system on ``detype.nl``
+- [x] host fonts on ``hetcdn.nl``
