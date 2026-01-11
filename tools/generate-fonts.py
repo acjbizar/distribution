@@ -707,6 +707,7 @@ def build_variable_font(
 # -----------------------------
 def main() -> None:
     ap = argparse.ArgumentParser()
+    ap.add_argument("--build-dir", default="build/fonts", help="Intermediate build folder (default: build/fonts)")
     ap.add_argument("--src-dir", default="src", help="Input SVG folder (default: src)")
     ap.add_argument("--out-dir", default="dist/fonts", help="Output folder (default: dist/fonts)")
     ap.add_argument("--family", default="Distribution", help="Font family name (default: Distribution)")
@@ -733,7 +734,7 @@ def main() -> None:
     ascent = int(round((SVG_BASELINE_Y - 0.0) * scale))
     descent = -int(round((SVG_VIEW_H - SVG_BASELINE_Y) * scale))
 
-    build_tmp = out_dir / "_build_temp"
+    build_tmp = Path(args.build_dir)
     build_tmp.mkdir(parents=True, exist_ok=True)
 
     master_min = build_tmp / f"{args.basename}-master-min.ttf"
@@ -792,6 +793,7 @@ def main() -> None:
     )
 
     out_var_ttf = out_dir / f"{args.basename}.ttf"
+    out_var_woff = out_dir / f"{args.basename}.woff"
     out_var_woff2 = out_dir / f"{args.basename}.woff2"
 
     print(f"Building variable font: {out_var_ttf}")
@@ -801,6 +803,16 @@ def main() -> None:
         master_max_path=master_max,
         out_var_path=out_var_ttf,
     )
+
+    # WOFF (WOFF1)
+    try:
+        tt = TTFont(out_var_ttf)
+        tt.flavor = "woff"
+        tt.save(out_var_woff)
+        print(f"Wrote {out_var_woff}")
+    except Exception as e:
+        print("Could not write WOFF (environment may lack woff support).")
+        print(f"Error: {e}")
 
     # WOFF2
     try:
