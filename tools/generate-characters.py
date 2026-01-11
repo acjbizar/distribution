@@ -9,19 +9,6 @@ from dataclasses import dataclass
 from pathlib import Path as FSPath
 from typing import Callable, Dict, List, Tuple, Any
 
-
-# -----------------------------
-# Character set (exact)
-# -----------------------------
-SHEET_ROWS = [
-    "AbCdEfghIJ",
-    "kLmnopqrStUvwxyZ.„”?",
-    "0123456789",
-    "AcGHKMNWX",
-]
-REQUESTED = "".join(SHEET_ROWS)
-
-
 # -----------------------------
 # Grid (circles touch; rows/cols)
 # - Circle radius R
@@ -390,6 +377,18 @@ def glyph_h(grid: Grid) -> GlyphRes2:
     leg = SvgPath().M(c.R()).L((c.R()[0], y_base)).d()
     return [stem, arch, leg], []
 
+def glyph_i(grid: Grid):
+    # i = short stem (1 circle high) + dot (like period) one circle above the stem
+    x = grid.x_tan(0)
+
+    y_base = baseline(grid)
+    y_top = xheight_top(grid)              # exactly 1 circle (80px) above baseline
+    stem = SvgPath().M((x, y_base)).L((x, y_top)).d()
+
+    dot_y = y_top - DY                     # one circle above the stem
+    dots = [(x, dot_y, DOT_R)]             # DOT_R is 1.0 in your script
+
+    return [stem], [], dots
 
 def glyph_I(grid: Grid) -> GlyphRes2:
     x = grid.x_tan(0)
@@ -465,6 +464,33 @@ def glyph_p(grid: Grid) -> GlyphRes2:
     stem = SvgPath().M((x, y_bot)).L((x, y_join)).d()
     return [stem, circle_full(bowl)], []
 
+def glyph_P(grid: Grid):
+    # P = high left stem + top half-bowl connected with two horizontals
+    xL = grid.x_tan(0)
+    y_top = ascender_top(grid)
+
+    cu = grid.circle(1, BASE_ROW)  # use the upper circle for the bowl
+    y_mid = cu.B()[1]              # bottom of the half-circle (middle join)
+
+    # left stem (high)
+    stem = SvgPath().M((xL, baseline(grid))).L((xL, y_top)).d()
+
+    # top horizontal: left stem -> bowl start
+    top_bar = SvgPath().M((xL, y_top)).L(cu.T()).d()
+
+    # right half-circle: T -> R -> B
+    bowl = (
+        SvgPath()
+        .M(cu.T())
+        .A(cu.r, 0, 1, cu.R())
+        .A(cu.r, 0, 1, cu.B())
+        .d()
+    )
+
+    # middle horizontal: bowl end -> left stem
+    mid_bar = SvgPath().M(cu.B()).L((xL, y_mid)).d()
+
+    return [stem, top_bar, bowl, mid_bar], []
 
 def glyph_q(grid: Grid) -> GlyphRes2:
     # mirrored p: long descender stem on the right, STOP at bowl join
@@ -485,6 +511,36 @@ def glyph_r(grid: Grid) -> GlyphRes2:
     shoulder = SvgPath().M(c.L()).A(c.r, 0, 1, c.T()).d()
     return [stem, shoulder], []
 
+def glyph_R(grid: Grid):
+    # R = P + K-like bendy bottom-right leg
+    xL = grid.x_tan(0)
+    y_top = ascender_top(grid)
+    y_base = baseline(grid)
+
+    cu = grid.circle(1, BASE_ROW)        # upper circle for P-bowl
+    cl = grid.circle(1, BASE_ROW + 1)    # lower circle for the leg
+
+    # --- P part ---
+    stem = SvgPath().M((xL, y_base)).L((xL, y_top)).d()
+    top_bar = SvgPath().M((xL, y_top)).L(cu.T()).d()
+
+    bowl = (
+        SvgPath()
+        .M(cu.T())
+        .A(cu.r, 0, 1, cu.R())
+        .A(cu.r, 0, 1, cu.B())
+        .d()
+    )
+
+    mid_bar = SvgPath().M(cu.B()).L((xL, cu.B()[1])).d()
+
+    # --- K-like bendy leg ---
+    # start at the P “middle join” (cu.B), curve into the lower circle’s right side,
+    # then drop vertically to baseline (like the k right stem behavior).
+    leg_arc = SvgPath().M(cu.B()).A(cl.r, 0, 1, cl.R()).d()
+    leg_stem = SvgPath().M(cl.R()).L((cl.R()[0], y_base)).d()
+
+    return [stem, top_bar, bowl, mid_bar, leg_arc, leg_stem], []
 
 def glyph_S(grid: Grid) -> GlyphRes2:
     cu = grid.circle(1, BASE_ROW)
@@ -987,6 +1043,7 @@ BUILDERS: Dict[str, GlyphFn] = {
     "E": glyph_E,
     "G": glyph_G,
     "k": glyph_k,
+    "R": glyph_R,
 
     # rest
     "c": glyph_c,
@@ -995,9 +1052,7 @@ BUILDERS: Dict[str, GlyphFn] = {
     "f": glyph_f,
     "g": glyph_g,
     "h": glyph_h,
-    "I": glyph_I,
-    "J": glyph_J,
-    "L": glyph_L,
+    "i": glyph_i,
     "m": glyph_m,
     "n": glyph_n,
     "o": glyph_o,
@@ -1031,9 +1086,13 @@ BUILDERS: Dict[str, GlyphFn] = {
 
     # extra uppercase set
     "H": glyph_H,
+    "I": glyph_I,
+    "J": glyph_J,
+    "L": glyph_L,
     "K": glyph_K,
     "M": glyph_M,
     "N": glyph_N,
+    "P": glyph_P,
     "W": glyph_W,
     "X": glyph_X,
 }
@@ -1043,12 +1102,12 @@ BUILDERS: Dict[str, GlyphFn] = {
 # SVG rendering (variable width)
 # -----------------------------
 def glyph_view_width(ch: str) -> int:
-    if ch in ("I", "."):
+    if ch in ("I", ".", "i", "j"):
         return VIEW_W_NARROW
     return VIEW_W_WIDE if ch in ("m", "M", "w", "W") else VIEW_W_DEFAULT
 
 def glyph_grid_cols(ch: str) -> int:
-    if ch in ("I", "."):
+    if ch in ("I", ".", "i", "j"):
         return GRID_COLS_NARROW
     return GRID_COLS_WIDE if ch in ("m", "M", "w", "W") else GRID_COLS_DEFAULT
 
@@ -1118,11 +1177,8 @@ def main() -> None:
     missing: List[str] = []
     written = 0
 
-    for ch in uniq(REQUESTED):
-        fn = BUILDERS.get(ch)
-        if fn is None:
-            missing.append(ch)
-            continue
+    for ch in sorted(BUILDERS.keys(), key=lambda c: ord(c)):
+        fn = BUILDERS[ch]
 
         res = fn(grid)
         if isinstance(res, tuple) and len(res) == 3:
@@ -1152,6 +1208,7 @@ def main() -> None:
         print(f"✓ {ch} -> {out_name}")
 
     print(f"\nDone. Wrote {written} glyph(s) into {out_dir.resolve()}")
+
     if missing:
         print("No builder yet for:", "".join(missing))
 
