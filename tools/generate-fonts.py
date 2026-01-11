@@ -135,6 +135,25 @@ def ensure_direction(pts: List[Tuple[int, int]], clockwise: bool) -> List[Tuple[
         pts = list(reversed(pts))
     return pts
 
+def rotate_to_seed(pts: List[Tuple[float, float]], seed: Tuple[float, float]) -> List[Tuple[float, float]]:
+    """Rotate a ring point list so it starts at the point closest to seed (both in same coord space)."""
+    if not pts:
+        return pts
+    sx, sy = seed
+    i0 = min(range(len(pts)), key=lambda i: (pts[i][0] - sx) ** 2 + (pts[i][1] - sy) ** 2)
+    return pts[i0:] + pts[:i0]
+
+
+def ensure_direction_f(pts: List[Tuple[float, float]], clockwise: bool) -> List[Tuple[float, float]]:
+    """Ensure ring winding direction (float version)."""
+    a = signed_area(pts)
+    is_ccw = a > 0
+    if clockwise and is_ccw:
+        pts = list(reversed(pts))
+    if (not clockwise) and (not is_ccw):
+        pts = list(reversed(pts))
+    return pts
+
 
 def svg_to_font_xy(x: float, y: float, scale: float) -> Tuple[float, float]:
     # flip y and set baseline
@@ -355,30 +374,40 @@ def polygon_to_contours_fixed(
     exterior_pts: int,
     hole_pts: int,
     scale: float,
+    seed_font: Optional[Tuple[float, float]] = None,
 ) -> List[List[Tuple[int, int]]]:
     contours: List[List[Tuple[int, int]]] = []
 
-    # Exterior
+    # Exterior (float points in FONT coords)
     ext_coords = list(poly.exterior.coords)
-    ext = resample_closed_ring(ext_coords, exterior_pts)
-    ext_font = [svg_to_font_xy(x, y, scale) for (x, y) in ext]
-    ext_int = [(int(round(x)), int(round(y))) for (x, y) in ext_font]
-    ext_int = rotate_to_min_xy(ext_int)
-    ext_int = ensure_direction(ext_int, clockwise=True)
+    ext_svg = resample_closed_ring(ext_coords, exterior_pts)  # returns N points (not closed)
+    ext_font_f = [svg_to_font_xy(x, y, scale) for (x, y) in ext_svg]
+
+    # Make the start point stable across masters
+    if seed_font is not None:
+        ext_font_f = rotate_to_seed(ext_font_f, seed_font)
+    else:
+        # fallback if you ever call without seed
+        # (avoid min-xy as primary strategy)
+        pass
+
+    ext_font_f = ensure_direction_f(ext_font_f, clockwise=True)
+
+    # Round to ints after rotation + direction fixing
+    ext_int = [(int(round(x)), int(round(y))) for (x, y) in ext_font_f]
     contours.append(ext_int)
 
-    # Holes
+    # Holes: usually not the problem; keep deterministic but simple
     for interior in poly.interiors:
         hole_coords = list(interior.coords)
-        hole = resample_closed_ring(hole_coords, hole_pts)
-        hole_font = [svg_to_font_xy(x, y, scale) for (x, y) in hole]
-        hole_int = [(int(round(x)), int(round(y))) for (x, y) in hole_font]
-        hole_int = rotate_to_min_xy(hole_int)
-        hole_int = ensure_direction(hole_int, clockwise=False)
+        hole_svg = resample_closed_ring(hole_coords, hole_pts)
+        hole_font_f = [svg_to_font_xy(x, y, scale) for (x, y) in hole_svg]
+        # If you want: rotate holes too, but with their own seed (centroid). Not necessary for your case.
+        hole_font_f = ensure_direction_f(hole_font_f, clockwise=False)
+        hole_int = [(int(round(x)), int(round(y))) for (x, y) in hole_font_f]
         contours.append(hole_int)
 
     return contours
-
 
 def build_glyph_tt(
     spec: GlyphSpec,
@@ -395,7 +424,12 @@ def build_glyph_tt(
     # - dots in SVG order
     for cl in spec.centerlines:
         poly = buffer_centerline_to_polygon(cl, radius=radius)
-        contours = polygon_to_contours_fixed(poly, exterior_pts, hole_pts, scale)
+
+        # Seed: first point of the ORIGINAL centerline, in FONT coords
+        seed_font = svg_to_font_xy(cl.pts[0][0], cl.pts[0][1], scale)
+
+        contours = polygon_to_contours_fixed(poly, exterior_pts, hole_pts, scale, seed_font=seed_font)
+
         for ring in contours:
             if len(ring) < 3:
                 continue
