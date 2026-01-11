@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" width="320" height="320">
+<desc>glyph: M U+004D</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff" />
+<g fill="none" stroke-linecap="round" stroke-linejoin="round"><g stroke="#333" stroke-width="12"><path d="M 80 240 L 80 120" /><path d="M 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120" /><path d="M 160 240 L 160 120" /><path d="M 160 120 A 40 40 0 0 1 200 80 A 40 40 0 0 1 240 120" /><path d="M 240 240 L 240 120" /></g><g stroke="#fff" stroke-width="3" stroke-dasharray="10 12"><path d="M 80 240 L 80 120" /><path d="M 80 120 A 40 40 0 0 1 120 80 A 40 40 0 0 1 160 120" /><path d="M 160 240 L 160 120" /><path d="M 160 120 A 40 40 0 0 1 200 80 A 40 40 0 0 1 240 120" /><path d="M 240 240 L 240 120" /></g></g></svg>

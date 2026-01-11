@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 320" width="240" height="320">
+<desc>glyph: Z U+005A</desc>
+<rect x="0" y="0" width="100%" height="100%" fill="#fff" />
+<g fill="none" stroke-linecap="round" stroke-linejoin="round"><g stroke="#333" stroke-width="12"><path d="M 80 160 L 160 160" /><path d="M 160 160 L 80 240" /><path d="M 80 240 L 160 240" /></g><g stroke="#fff" stroke-width="3" stroke-dasharray="10 12"><path d="M 80 160 L 160 160" /><path d="M 160 160 L 80 240" /><path d="M 80 240 L 160 240" /></g></g></svg>
