@@ -3,8 +3,14 @@
 """
 tools/generate-fonts.py
 
-Build a variable font from your generated SVG glyphs (centerline strokes).
-Axis: wght (mapped to stroke thickness).
+Variable font builder for centerline SVG glyphs.
+Axis: wght (mapped to stroke width).
+
+Key goals:
+- In-between weights should look like SVG stroke-width is being adjusted.
+- Fix wiggles/pinches by:
+  1) building MANY masters (default 9: wght 100..900 step 100)
+  2) landmark-anchored ring resampling (minX/maxX/minY/maxY + seed projection)
 
 Input:
   src/character-uXXXX.svg
@@ -13,15 +19,6 @@ Output:
   dist/fonts/distribution.ttf
   dist/fonts/distribution.woff
   dist/fonts/distribution.woff2
-
-Interpolation stability fixes:
-- Arc-length resampling with a canonical phase for EVERY ring (outer + holes).
-- Deterministic hole ordering (centroid + area) so varLib matches the right hole to the right hole.
-- Polygon normalization via buffer(0) to stabilize self-touching/invalid outlines.
-
-Dots:
-- Dots scale with weight: effective disk radius = dot_r + stroke/2.
-- Dot-only duplicate-point nudging to avoid degenerate tiny contours at thin weights.
 
 Dependencies:
   pip install shapely fonttools brotli
@@ -58,28 +55,26 @@ except Exception:
     raise
 
 # -----------------------------
-# SVG -> font mapping config (from your glyph generator)
+# SVG -> font mapping config
 # -----------------------------
 SVG_VIEW_H = 320.0
-SVG_BASELINE_Y = 240.0  # baseline at bottom tangent of row BASE_ROW+1 circle in your SVG
+SVG_BASELINE_Y = 240.0  # baseline at y=0 in font coords
 
 DEFAULT_UPM = 1000
 
-# Resampling point counts (contours are straight-segment approximations)
-DEFAULT_EXTERIOR_PTS = 128
-DEFAULT_HOLE_PTS = 64
-DEFAULT_DOT_PTS = 32
+# Point counts (keep fixed across masters)
+DEFAULT_EXTERIOR_PTS = 160
+DEFAULT_HOLE_PTS = 96
+DEFAULT_DOT_PTS = 40
 
-# Dense sampling used ONLY to choose a stable start point ("phase") on rings
-DEFAULT_PHASE_SAMPLES = 2048
+# Dense sampling for stable landmarks
+DEFAULT_LANDMARK_SAMPLES = 2048
 
-# Arc approximation for centerlines (SVG A command sampling)
+# Arc sampling for SVG A command
 ARC_SEGMENTS_PER_CIRCLE = 64
 
-# Input file pattern
 SVG_FILE_RE = re.compile(r"^character-u([0-9a-fA-F]{4,6})\.svg$")
 NUM_RE = re.compile(r"[-+]?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?")
-
 
 # -----------------------------
 # Data structures
@@ -94,7 +89,7 @@ class CenterlinePath:
 class DotSpec:
     cx: float
     cy: float
-    r: float  # SVG circle radius from file (your DOT_R is 1)
+    r: float
 
 
 @dataclass
@@ -104,10 +99,12 @@ class GlyphSpec:
     adv_w_svg: float
     centerlines: List[CenterlinePath]
     dots: List[DotSpec]
+    linecap: str = "round"
+    linejoin: str = "round"
 
 
 # -----------------------------
-# General helpers
+# Helpers
 # -----------------------------
 def glyph_name_from_cp(cp: int) -> str:
     if cp == 0x20:
@@ -144,25 +141,39 @@ def ensure_direction_f(pts: List[Tuple[float, float]], clockwise: bool) -> List[
 
 
 def svg_to_font_xy(x: float, y: float, scale: float) -> Tuple[float, float]:
-    # SVG y grows downward; fonts use y up. Baseline at y=0.
     return (x * scale, (SVG_BASELINE_Y - y) * scale)
 
 
-def centroid_of_pts(pts: List[Tuple[float, float]]) -> Tuple[float, float]:
-    if not pts:
-        return (0.0, 0.0)
-    sx = sum(p[0] for p in pts)
-    sy = sum(p[1] for p in pts)
-    n = float(len(pts))
-    return (sx / n, sy / n)
+def round_half_away_from_zero(x: float) -> int:
+    # More stable for symmetric shapes than bankers rounding
+    if x >= 0:
+        return int(math.floor(x + 0.5))
+    return int(math.ceil(x - 0.5))
+
+
+def cap_style_from_svg(linecap: str) -> int:
+    # Shapely cap_style: 1 round, 2 flat, 3 square
+    lc = (linecap or "").strip().lower()
+    if lc in ("butt", "flat"):
+        return 2
+    if lc in ("square",):
+        return 3
+    return 1
+
+
+def join_style_from_svg(linejoin: str) -> int:
+    # Shapely join_style: 1 round, 2 mitre, 3 bevel
+    lj = (linejoin or "").strip().lower()
+    if lj in ("miter", "mitre"):
+        return 2
+    if lj in ("bevel",):
+        return 3
+    return 1
 
 
 def nudge_consecutive_duplicates(ring: List[Tuple[int, int]]) -> List[Tuple[int, int]]:
     """
-    Dot-only safety: if rounding creates consecutive identical points,
-    nudge the later point by ±1 deterministically so point count stays fixed.
-
-    Do NOT apply this to normal glyph outlines.
+    Dot-only safety: prevent degenerate contours when rounding collapses points.
     """
     if len(ring) < 3:
         return ring
@@ -187,7 +198,7 @@ def nudge_consecutive_duplicates(ring: List[Tuple[int, int]]) -> List[Tuple[int,
 
 
 # -----------------------------
-# SVG path parsing (only M, L, A as used by your generator)
+# SVG path parsing (M, L, A only)
 # -----------------------------
 def tokenize_path(d: str) -> List[str]:
     out: List[str] = []
@@ -218,16 +229,9 @@ def arc_center_parameterization(
     large: int,
     sweep: int,
 ) -> Tuple[float, float, float, float]:
-    """
-    SVG circular arc conversion specialized for:
-      - rx == ry == r
-      - xAxisRotation == 0
-    Returns (cx, cy, theta1, delta_theta) in SVG coordinates (y down).
-    """
     dx2 = (x1 - x2) / 2.0
     dy2 = (y1 - y2) / 2.0
-    x1p = dx2
-    y1p = dy2
+    x1p, y1p = dx2, dy2
 
     lam = (x1p * x1p + y1p * y1p) / (r * r)
     if lam > 1.0:
@@ -303,39 +307,27 @@ def path_d_to_centerline(d: str) -> CenterlinePath:
         i += 1
 
         if cmd == "M":
-            x = parse_float(toks[i])
-            y = parse_float(toks[i + 1])
-            i += 2
+            x = parse_float(toks[i]); y = parse_float(toks[i + 1]); i += 2
             cur = (x, y)
             pts.append(cur)
 
         elif cmd == "L":
             if cur is None:
                 raise ValueError("L without current point")
-            x = parse_float(toks[i])
-            y = parse_float(toks[i + 1])
-            i += 2
+            x = parse_float(toks[i]); y = parse_float(toks[i + 1]); i += 2
             cur = (x, y)
             pts.append(cur)
 
         elif cmd == "A":
             if cur is None:
                 raise ValueError("A without current point")
-            rx = parse_float(toks[i])
-            ry = parse_float(toks[i + 1])
-            i += 2
-            _rot = parse_float(toks[i])
-            i += 1
-            large = int(float(toks[i]))
-            sweep = int(float(toks[i + 1]))
-            i += 2
-            x2 = parse_float(toks[i])
-            y2 = parse_float(toks[i + 1])
-            i += 2
+            rx = parse_float(toks[i]); ry = parse_float(toks[i + 1]); i += 2
+            _rot = parse_float(toks[i]); i += 1
+            large = int(float(toks[i])); sweep = int(float(toks[i + 1])); i += 2
+            x2 = parse_float(toks[i]); y2 = parse_float(toks[i + 1]); i += 2
 
             if abs(rx - ry) > 1e-6:
-                raise ValueError("Only circular arcs (rx==ry) supported for this glyph set.")
-
+                raise ValueError("Only circular arcs (rx==ry) supported.")
             pts.extend(sample_arc(cur[0], cur[1], x2, y2, rx, large, sweep))
             cur = (x2, y2)
 
@@ -351,13 +343,9 @@ def path_d_to_centerline(d: str) -> CenterlinePath:
 
 
 # -----------------------------
-# Stable closed-boundary resampling + canonical phase
+# Landmark-anchored ring resampling
 # -----------------------------
 def resample_linestring_closed(ls: LineString, n: int, start_d: float = 0.0) -> List[Tuple[float, float]]:
-    """
-    Sample a *closed* LineString at N evenly spaced points, starting at arc-length start_d.
-    Returns N points (not explicitly closed).
-    """
     L = ls.length
     if L <= 1e-9:
         p = ls.coords[0]
@@ -374,29 +362,126 @@ def resample_linestring_closed(ls: LineString, n: int, start_d: float = 0.0) -> 
     return out
 
 
-def canonical_start_d(ls: LineString, phase_samples: int) -> float:
+def _landmark_distances(ls: LineString, samples: int) -> List[float]:
     """
-    Choose a stable "phase" for a closed ring by taking the boundary point that is
-    rightmost (max x), then highest (max y) in SVG coords (y down), among dense samples.
+    Compute stable landmark distances along the ring:
+    points at minX, maxX, minY, maxY from a dense sampling.
     """
-    pts = resample_linestring_closed(ls, phase_samples, start_d=0.0)
-    bx, by = max(pts, key=lambda p: (p[0], -p[1]))  # rightmost, then topmost (smaller y)
-    return ls.project(Point(bx, by))
+    L = ls.length
+    if L <= 1e-9:
+        return [0.0]
+
+    dense = resample_linestring_closed(ls, samples, start_d=0.0)
+    xs = [p[0] for p in dense]
+    ys = [p[1] for p in dense]
+
+    idx_minx = min(range(len(dense)), key=lambda i: xs[i])
+    idx_maxx = max(range(len(dense)), key=lambda i: xs[i])
+    idx_miny = min(range(len(dense)), key=lambda i: ys[i])
+    idx_maxy = max(range(len(dense)), key=lambda i: ys[i])
+
+    cand_pts = [dense[idx_minx], dense[idx_maxx], dense[idx_miny], dense[idx_maxy]]
+    ds = []
+    for (x, y) in cand_pts:
+        ds.append(ls.project(Point(x, y)))
+
+    # de-dupe close distances
+    ds2: List[float] = []
+    eps = max(1e-6, L * 1e-6)
+    for d in sorted(ds):
+        if not ds2 or abs(d - ds2[-1]) > eps:
+            ds2.append(d)
+    return ds2 if ds2 else [0.0]
+
+
+def resample_ring_with_landmarks(
+    ls: LineString,
+    n: int,
+    seed_svg: Tuple[float, float],
+    landmark_samples: int,
+) -> List[Tuple[float, float]]:
+    """
+    Resample a closed ring with stable point correspondence:
+    - Start at seed projection
+    - Split the ring at landmark extrema distances
+    - Allocate points per segment proportional to segment length
+    """
+    L = ls.length
+    if L <= 1e-9:
+        p = ls.coords[0]
+        return [(float(p[0]), float(p[1])) for _ in range(n)]
+
+    seed_d = ls.project(Point(seed_svg[0], seed_svg[1])) % L
+    lm = _landmark_distances(ls, landmark_samples)
+
+    # shift landmarks relative to seed_d -> [0, L)
+    rel = sorted(((d - seed_d) % L) for d in lm)
+    # ensure 0 boundary exists as segment start
+    if not rel or rel[0] > 1e-9:
+        rel = [0.0] + rel
+    # also ensure end boundary at L
+    if rel[-1] < L - 1e-9:
+        rel = rel + [L]
+
+    # segment lengths
+    seg_lens = [rel[i + 1] - rel[i] for i in range(len(rel) - 1)]
+    total = sum(seg_lens) if seg_lens else L
+
+    # allocate points to segments (at least 1 each)
+    seg_counts = [max(1, int(round(n * (sl / total)))) for sl in seg_lens]
+    # adjust to exact n
+    while sum(seg_counts) > n:
+        i = max(range(len(seg_counts)), key=lambda k: seg_counts[k])
+        if seg_counts[i] > 1:
+            seg_counts[i] -= 1
+        else:
+            break
+    while sum(seg_counts) < n:
+        i = max(range(len(seg_counts)), key=lambda k: seg_lens[k])
+        seg_counts[i] += 1
+
+    out: List[Tuple[float, float]] = []
+    for i, cnt in enumerate(seg_counts):
+        if cnt <= 0:
+            continue
+        a = rel[i]
+        b = rel[i + 1]
+        seg_len = max(1e-12, b - a)
+        # sample cnt points within [a,b), evenly
+        for k in range(cnt):
+            t = (k / cnt)
+            d = seed_d + a + t * seg_len
+            p = ls.interpolate(d % L)
+            out.append((p.x, p.y))
+
+    # Ensure exact n
+    if len(out) > n:
+        out = out[:n]
+    elif len(out) < n:
+        # pad with last point
+        while len(out) < n:
+            out.append(out[-1])
+
+    return out
 
 
 # -----------------------------
-# Centerline buffer -> polygon -> contours
+# Centerline buffer -> polygon
 # -----------------------------
-def buffer_centerline_to_polygon(center: CenterlinePath, radius: float) -> Polygon:
-    # round caps and joins (matches your SVG round caps/joins)
+def buffer_centerline_to_polygon(
+    center: CenterlinePath,
+    radius: float,
+    cap_style: int,
+    join_style: int,
+) -> Polygon:
     if center.closed:
         ring = LinearRing(center.pts)
-        geom = ring.buffer(radius, cap_style=1, join_style=1, resolution=16)
+        geom = ring.buffer(radius, cap_style=1, join_style=join_style, resolution=16)
     else:
         ls = LineString(center.pts)
-        geom = ls.buffer(radius, cap_style=1, join_style=1, resolution=16)
+        geom = ls.buffer(radius, cap_style=cap_style, join_style=join_style, resolution=16)
 
-    # Normalize self-touching cases to stabilize interiors/exterior classification
+    # normalize to stabilize rings
     try:
         geom = geom.buffer(0)
     except Exception:
@@ -406,10 +491,22 @@ def buffer_centerline_to_polygon(center: CenterlinePath, radius: float) -> Polyg
         return geom
     if isinstance(geom, MultiPolygon):
         raise RuntimeError(
-            "Buffer produced a MultiPolygon (disconnected outline). "
-            "Reduce stroke range (e.g. lower --stroke-max) or simplify paths."
+            "Buffer produced MultiPolygon (disconnected outline). "
+            "Reduce stroke range or simplify paths."
         )
     raise RuntimeError(f"Unexpected buffered geometry type: {type(geom)}")
+
+
+def ring_sort_key_simple(ring: LinearRing) -> Tuple[float, float, float]:
+    # deterministic hole order
+    coords = list(ring.coords)
+    xs = [p[0] for p in coords]
+    ys = [p[1] for p in coords]
+    minx, maxx = min(xs), max(xs)
+    miny, maxy = min(ys), max(ys)
+    # approximate area
+    a = abs(signed_area([(float(x), float(y)) for (x, y) in coords[: min(256, len(coords))]]))
+    return (miny + maxy, minx + maxx, -a)
 
 
 def polygon_to_contours_fixed(
@@ -417,54 +514,33 @@ def polygon_to_contours_fixed(
     exterior_pts: int,
     hole_pts: int,
     scale: float,
-    phase_samples: int,
+    seed_svg: Tuple[float, float],
+    landmark_samples: int,
     do_nudge: bool = False,  # dots only
 ) -> List[List[Tuple[int, int]]]:
-    """
-    Convert polygon to integer contours with fixed point counts.
-
-    Critical:
-    - Canonical phase anchoring for OUTER + EVERY HOLE ring.
-    - Deterministic ordering of holes (centroid+area) so interpolation is stable.
-    """
     contours: List[List[Tuple[int, int]]] = []
 
-    # --- Exterior ---
+    # exterior
     ext_ring = LinearRing(poly.exterior.coords)
     ext_ls = LineString(ext_ring.coords)
-    start_d_ext = canonical_start_d(ext_ls, phase_samples)
-
-    ext_svg = resample_linestring_closed(ext_ls, exterior_pts, start_d=start_d_ext)
+    ext_svg = resample_ring_with_landmarks(ext_ls, exterior_pts, seed_svg, landmark_samples)
     ext_font_f = [svg_to_font_xy(x, y, scale) for (x, y) in ext_svg]
     ext_font_f = ensure_direction_f(ext_font_f, clockwise=True)
-
-    ext_int = [(int(round(x)), int(round(y))) for (x, y) in ext_font_f]
+    ext_int = [(round_half_away_from_zero(x), round_half_away_from_zero(y)) for (x, y) in ext_font_f]
     if do_nudge:
         ext_int = nudge_consecutive_duplicates(ext_int)
     contours.append(ext_int)
 
-    # --- Holes (sorted deterministically) ---
-    holes: List[Tuple[float, float, float, LinearRing]] = []
-    for interior in poly.interiors:
-        ring = LinearRing(interior.coords)
-        ls = LineString(ring.coords)
-        sd = canonical_start_d(ls, phase_samples)
-        pts = resample_linestring_closed(ls, hole_pts, start_d=sd)
-        cx, cy = centroid_of_pts(pts)
-        a = abs(signed_area(pts))
-        holes.append((cy, cx, -a, ring))  # top-to-bottom (SVG y down), then left-to-right, then larger first
+    # holes: stable order, same landmark sampling
+    holes = [LinearRing(r.coords) for r in poly.interiors]
+    holes.sort(key=ring_sort_key_simple)
 
-    holes.sort(key=lambda t: (t[0], t[1], t[2]))
-
-    for _, _, _, ring in holes:
-        hole_ls = LineString(ring.coords)
-        start_d_h = canonical_start_d(hole_ls, phase_samples)
-
-        hole_svg = resample_linestring_closed(hole_ls, hole_pts, start_d=start_d_h)
+    for hr in holes:
+        hole_ls = LineString(hr.coords)
+        hole_svg = resample_ring_with_landmarks(hole_ls, hole_pts, seed_svg, landmark_samples)
         hole_font_f = [svg_to_font_xy(x, y, scale) for (x, y) in hole_svg]
-        hole_font_f = ensure_direction_f(hole_font_f, clockwise=False)  # opposite winding
-
-        hole_int = [(int(round(x)), int(round(y))) for (x, y) in hole_font_f]
+        hole_font_f = ensure_direction_f(hole_font_f, clockwise=False)
+        hole_int = [(round_half_away_from_zero(x), round_half_away_from_zero(y)) for (x, y) in hole_font_f]
         if do_nudge:
             hole_int = nudge_consecutive_duplicates(hole_int)
         contours.append(hole_int)
@@ -482,21 +558,25 @@ def build_glyph_tt(
     exterior_pts: int,
     hole_pts: int,
     dot_pts: int,
-    phase_samples: int,
+    cap_style: int,
+    join_style: int,
+    landmark_samples: int,
 ) -> Tuple[object, int]:
     pen = TTGlyphPen(None)
     radius = stroke_width_svg / 2.0
 
-    # Centerline components (NO nudging)
+    # Centerlines in SVG path order
     for cl in spec.centerlines:
-        poly = buffer_centerline_to_polygon(cl, radius=radius)
+        poly = buffer_centerline_to_polygon(cl, radius, cap_style=cap_style, join_style=join_style)
+        seed_svg = (cl.pts[0][0], cl.pts[0][1])
 
         contours = polygon_to_contours_fixed(
             poly=poly,
             exterior_pts=exterior_pts,
             hole_pts=hole_pts,
             scale=scale,
-            phase_samples=phase_samples,
+            seed_svg=seed_svg,
+            landmark_samples=landmark_samples,
             do_nudge=False,
         )
 
@@ -508,19 +588,20 @@ def build_glyph_tt(
                 pen.lineTo(p)
             pen.closePath()
 
-    # Dots scale with weight:
-    # Effective filled disk radius = dot_r + stroke/2.
+    # Dots: effective disk radius = dot_r + stroke/2 (filled+stroked circle)
     for d in spec.dots:
         rr = d.r + radius
         poly = Point(d.cx, d.cy).buffer(rr, resolution=32)
+        seed_svg = (d.cx + rr, d.cy)
 
         contours = polygon_to_contours_fixed(
             poly=poly,
             exterior_pts=dot_pts,
             hole_pts=hole_pts,
             scale=scale,
-            phase_samples=phase_samples,
-            do_nudge=True,  # dot-only
+            seed_svg=seed_svg,
+            landmark_samples=landmark_samples,
+            do_nudge=True,
         )
 
         for ring in contours:
@@ -537,8 +618,30 @@ def build_glyph_tt(
 
 
 # -----------------------------
-# SVG loading
+# SVG loading (read stroke-linecap/linejoin)
 # -----------------------------
+def _find_main_stroke_style(root: ET.Element) -> Tuple[str, str]:
+    best_linecap = "round"
+    best_linejoin = "round"
+
+    for el in root.iter():
+        tag = el.tag.split("}")[-1]
+        if tag not in ("g", "path"):
+            continue
+        stroke = (el.attrib.get("stroke") or "").strip().lower()
+        sw = (el.attrib.get("stroke-width") or "").strip()
+        if stroke in ("#000", "#000000", "black") and sw:
+            lc = (el.attrib.get("stroke-linecap") or "").strip().lower()
+            lj = (el.attrib.get("stroke-linejoin") or "").strip().lower()
+            if lc:
+                best_linecap = lc
+            if lj:
+                best_linejoin = lj
+            return best_linecap, best_linejoin
+
+    return best_linecap, best_linejoin
+
+
 def parse_svg_glyph(svg_path: Path) -> GlyphSpec:
     m = SVG_FILE_RE.match(svg_path.name)
     if not m:
@@ -548,7 +651,7 @@ def parse_svg_glyph(svg_path: Path) -> GlyphSpec:
     tree = ET.parse(svg_path)
     root = tree.getroot()
 
-    vb = root.attrib.get("viewBox", "").strip()
+    vb = (root.attrib.get("viewBox") or "").strip()
     if not vb:
         raise ValueError(f"Missing viewBox in {svg_path}")
     parts = vb.split()
@@ -559,7 +662,8 @@ def parse_svg_glyph(svg_path: Path) -> GlyphSpec:
     if abs(h - SVG_VIEW_H) > 1e-3:
         print(f"Warning: {svg_path.name} viewBox height={h}, expected {SVG_VIEW_H}")
 
-    # Centerline <path> elements
+    linecap, linejoin = _find_main_stroke_style(root)
+
     centerlines: List[CenterlinePath] = []
     for el in root.iter():
         if el.tag.endswith("path"):
@@ -567,25 +671,16 @@ def parse_svg_glyph(svg_path: Path) -> GlyphSpec:
             if d:
                 centerlines.append(path_d_to_centerline(d))
 
-    # Dots (tiny <circle> with r <= 2)
     dots: List[DotSpec] = []
     for el in root.iter():
         if el.tag.endswith("circle"):
             try:
                 r = float(el.attrib.get("r", "0"))
-                if r <= 0:
-                    continue
-                # ignore grid circles (r~40), keep only DOT_R-ish circles
-                if r > 2.0:
+                if r <= 0 or r > 2.0:
                     continue
                 cx = float(el.attrib["cx"])
                 cy = float(el.attrib["cy"])
-
-                fill = (el.attrib.get("fill") or "").lower()
-                stroke = (el.attrib.get("stroke") or "").lower()
-
-                if ("#000" in fill) or ("#000" in stroke) or (fill == ""):
-                    dots.append(DotSpec(cx=cx, cy=cy, r=r))
+                dots.append(DotSpec(cx=cx, cy=cy, r=r))
             except Exception:
                 continue
 
@@ -595,6 +690,8 @@ def parse_svg_glyph(svg_path: Path) -> GlyphSpec:
         adv_w_svg=adv_w,
         centerlines=centerlines,
         dots=dots,
+        linecap=linecap,
+        linejoin=linejoin,
     )
 
 
@@ -621,7 +718,9 @@ def build_master_ttf(
     exterior_pts: int,
     hole_pts: int,
     dot_pts: int,
-    phase_samples: int,
+    cap_style: int,
+    join_style: int,
+    landmark_samples: int,
 ) -> None:
     glyph_order = [".notdef", "space"] + [s.glyph_name for s in specs]
     fb = FontBuilder(upm, isTTF=True)
@@ -630,7 +729,7 @@ def build_master_ttf(
     glyf: Dict[str, object] = {}
     hmtx: Dict[str, Tuple[int, int]] = {}
 
-    # .notdef (simple rectangle)
+    # .notdef rectangle
     pen = TTGlyphPen(None)
     x0, y0 = 50, descent + 50
     x1, y1 = 450, ascent - 50
@@ -654,7 +753,9 @@ def build_master_ttf(
             exterior_pts=exterior_pts,
             hole_pts=hole_pts,
             dot_pts=dot_pts,
-            phase_samples=phase_samples,
+            cap_style=cap_style,
+            join_style=join_style,
+            landmark_samples=landmark_samples,
         )
         glyf[s.glyph_name] = g
         hmtx[s.glyph_name] = (aw, 0)
@@ -662,15 +763,11 @@ def build_master_ttf(
     fb.setupGlyf(glyf)
     fb.setupHorizontalMetrics(hmtx)
 
-    # cmap (plus optional ASCII quote alias)
     cmap: Dict[int, str] = {0x20: "space"}
     for s in specs:
         cmap[s.codepoint] = s.glyph_name
-
-    # Map ASCII " to U+201D if present
     if 0x201D in cmap and 0x0022 not in cmap:
         cmap[0x0022] = cmap[0x201D]
-
     fb.setupCharacterMap(cmap)
 
     fb.setupHorizontalHeader(ascent=ascent, descent=descent)
@@ -697,18 +794,12 @@ def build_master_ttf(
 
 
 # -----------------------------
-# Variable font builder
+# Variable font builder (multi-master)
 # -----------------------------
 def build_variable_font(
-    master_min_path: Path,
-    master_reg_path: Path,
-    master_max_path: Path,
+    sources: List[Tuple[int, Path]],  # (wght, ttf_path)
     out_var_path: Path,
 ) -> None:
-    """
-    Build variable TTF using an in-memory designspace.
-    Source locations are keyed by AXIS NAME ("Weight"), not axis tag ("wght").
-    """
     from fontTools.designspaceLib import DesignSpaceDocument, AxisDescriptor, SourceDescriptor
 
     doc = DesignSpaceDocument()
@@ -721,27 +812,33 @@ def build_variable_font(
     axis.maximum = 900
     doc.addAxis(axis)
 
-    s_min = SourceDescriptor()
-    s_min.path = str(master_min_path)
-    s_min.name = "master_min"
-    s_min.location = {"Weight": 100}
-    doc.addSource(s_min)
-
-    s_reg = SourceDescriptor()
-    s_reg.path = str(master_reg_path)
-    s_reg.name = "master_reg"
-    s_reg.location = {"Weight": 400}
-    doc.addSource(s_reg)
-
-    s_max = SourceDescriptor()
-    s_max.path = str(master_max_path)
-    s_max.name = "master_max"
-    s_max.location = {"Weight": 900}
-    doc.addSource(s_max)
+    # IMPORTANT: exactly one source at default location (wght=400)
+    for wght, p in sources:
+        sd = SourceDescriptor()
+        sd.path = str(p)
+        sd.name = f"master_{wght}"
+        sd.location = {"Weight": wght}
+        doc.addSource(sd)
 
     out_var_path.parent.mkdir(parents=True, exist_ok=True)
     varfont, _, _ = var_build(doc)
     varfont.save(out_var_path)
+
+
+# -----------------------------
+# Stroke mapping (wght -> stroke width)
+# -----------------------------
+def stroke_for_wght(w: int, stroke_min: float, stroke_reg: float, stroke_max: float) -> float:
+    """
+    Piecewise-linear mapping:
+      100..400 : stroke_min -> stroke_reg
+      400..900 : stroke_reg -> stroke_max
+    """
+    if w <= 400:
+        t = (w - 100) / (400 - 100)
+        return stroke_min + t * (stroke_reg - stroke_min)
+    t = (w - 400) / (900 - 400)
+    return stroke_reg + t * (stroke_max - stroke_reg)
 
 
 # -----------------------------
@@ -754,89 +851,84 @@ def main() -> None:
     ap.add_argument("--out-dir", default="dist/fonts", help="Output folder (default: dist/fonts)")
     ap.add_argument("--family", default="Distribution", help="Font family name (default: Distribution)")
     ap.add_argument("--basename", default="distribution", help="Output base filename (default: distribution)")
-    ap.add_argument("--upm", type=int, default=DEFAULT_UPM, help="Units per em (default: 1000)")
+    ap.add_argument("--upm", type=int, default=DEFAULT_UPM)
 
-    ap.add_argument("--stroke-min", type=float, default=2.5, help="Min stroke width in SVG units (default: 2.5)")
-    ap.add_argument("--stroke-reg", type=float, default=9.0, help="Regular stroke width in SVG units (default: 9.0)")
-    ap.add_argument("--stroke-max", type=float, default=26.0, help="Max stroke width in SVG units (default: 26.0)")
+    ap.add_argument("--stroke-min", type=float, default=2.5)
+    ap.add_argument("--stroke-reg", type=float, default=9.0)
+    ap.add_argument("--stroke-max", type=float, default=26.0)
 
-    ap.add_argument("--exterior-pts", type=int, default=DEFAULT_EXTERIOR_PTS, help="Points per exterior contour (default: 128)")
-    ap.add_argument("--hole-pts", type=int, default=DEFAULT_HOLE_PTS, help="Points per hole contour (default: 64)")
-    ap.add_argument("--dot-pts", type=int, default=DEFAULT_DOT_PTS, help="Points per dot contour (default: 32)")
-    ap.add_argument("--phase-samples", type=int, default=DEFAULT_PHASE_SAMPLES, help="Canonical phase samples (default: 2048)")
+    ap.add_argument("--masters", type=int, default=9,
+                    help="Number of masters across 100..900 (odd recommended). Default 9 => 100,200,...,900")
+
+    ap.add_argument("--exterior-pts", type=int, default=DEFAULT_EXTERIOR_PTS)
+    ap.add_argument("--hole-pts", type=int, default=DEFAULT_HOLE_PTS)
+    ap.add_argument("--dot-pts", type=int, default=DEFAULT_DOT_PTS)
+    ap.add_argument("--landmark-samples", type=int, default=DEFAULT_LANDMARK_SAMPLES)
+
+    ap.add_argument("--linecap", default="", help="Override: round|butt|square (default: read from SVG)")
+    ap.add_argument("--linejoin", default="", help="Override: round|miter|bevel (default: read from SVG)")
     args = ap.parse_args()
 
     src_dir = Path(args.src_dir)
     out_dir = Path(args.out_dir)
+    build_tmp = Path(args.build_dir)
+    build_tmp.mkdir(parents=True, exist_ok=True)
 
     specs = load_glyphs_from_src(src_dir)
+
+    # Determine cap/join style
+    base_cap = (args.linecap.strip().lower() or specs[0].linecap.strip().lower() or "round")
+    base_join = (args.linejoin.strip().lower() or specs[0].linejoin.strip().lower() or "round")
+    cap_style = cap_style_from_svg(base_cap)
+    join_style = join_style_from_svg(base_join)
 
     # Scale so 320 SVG units == UPM
     scale = args.upm / SVG_VIEW_H
     ascent = int(round((SVG_BASELINE_Y - 0.0) * scale))
     descent = -int(round((SVG_VIEW_H - SVG_BASELINE_Y) * scale))
 
-    build_tmp = Path(args.build_dir)
-    build_tmp.mkdir(parents=True, exist_ok=True)
-
-    master_min = build_tmp / f"{args.basename}-master-min.ttf"
-    master_reg = build_tmp / f"{args.basename}-master-reg.ttf"
-    master_max = build_tmp / f"{args.basename}-master-max.ttf"
+    # Pick master weights (always include 100,400,900)
+    m = max(3, int(args.masters))
+    # build evenly spaced integers; then force include 400
+    ws = sorted({int(round(100 + i * (800 / (m - 1)))) for i in range(m)} | {100, 400, 900})
+    # clamp
+    ws = [min(900, max(100, w)) for w in ws]
+    ws = sorted(set(ws))
+    if 400 not in ws:
+        ws.append(400)
+        ws = sorted(ws)
 
     print(f"Loading {len(specs)} glyph(s) from {src_dir}…")
-    print("Building masters:")
-    print(f" - {master_min.name} (stroke={args.stroke_min})")
-    print(f" - {master_reg.name} (stroke={args.stroke_reg:.3f})")
-    print(f" - {master_max.name} (stroke={args.stroke_max})")
-    print("Interpolation: canonical phase for ALL rings + deterministic hole ordering.")
+    print("Style:")
+    print(f" - stroke-linecap: {base_cap} (cap_style={cap_style})")
+    print(f" - stroke-linejoin: {base_join} (join_style={join_style})")
+    print(f"Masters: {ws}")
 
-    build_master_ttf(
-        specs=specs,
-        out_path=master_min,
-        family=args.family,
-        style="MasterMin",
-        upm=args.upm,
-        ascent=ascent,
-        descent=descent,
-        stroke_width_svg=args.stroke_min,
-        scale=scale,
-        exterior_pts=args.exterior_pts,
-        hole_pts=args.hole_pts,
-        dot_pts=args.dot_pts,
-        phase_samples=args.phase_samples,
-    )
+    sources: List[Tuple[int, Path]] = []
 
-    build_master_ttf(
-        specs=specs,
-        out_path=master_reg,
-        family=args.family,
-        style="MasterReg",
-        upm=args.upm,
-        ascent=ascent,
-        descent=descent,
-        stroke_width_svg=args.stroke_reg,
-        scale=scale,
-        exterior_pts=args.exterior_pts,
-        hole_pts=args.hole_pts,
-        dot_pts=args.dot_pts,
-        phase_samples=args.phase_samples,
-    )
+    for w in ws:
+        sw = stroke_for_wght(w, args.stroke_min, args.stroke_reg, args.stroke_max)
+        master_path = build_tmp / f"{args.basename}-master-{w}.ttf"
+        print(f" - building {master_path.name} (wght={w}, stroke={sw:.3f})")
 
-    build_master_ttf(
-        specs=specs,
-        out_path=master_max,
-        family=args.family,
-        style="MasterMax",
-        upm=args.upm,
-        ascent=ascent,
-        descent=descent,
-        stroke_width_svg=args.stroke_max,
-        scale=scale,
-        exterior_pts=args.exterior_pts,
-        hole_pts=args.hole_pts,
-        dot_pts=args.dot_pts,
-        phase_samples=args.phase_samples,
-    )
+        build_master_ttf(
+            specs=specs,
+            out_path=master_path,
+            family=args.family,
+            style=f"Master{w}",
+            upm=args.upm,
+            ascent=ascent,
+            descent=descent,
+            stroke_width_svg=sw,
+            scale=scale,
+            exterior_pts=args.exterior_pts,
+            hole_pts=args.hole_pts,
+            dot_pts=args.dot_pts,
+            cap_style=cap_style,
+            join_style=join_style,
+            landmark_samples=args.landmark_samples,
+        )
+        sources.append((w, master_path))
 
     out_dir.mkdir(parents=True, exist_ok=True)
     out_var_ttf = out_dir / f"{args.basename}.ttf"
@@ -844,12 +936,7 @@ def main() -> None:
     out_var_woff2 = out_dir / f"{args.basename}.woff2"
 
     print(f"Building variable font: {out_var_ttf}")
-    build_variable_font(
-        master_min_path=master_min,
-        master_reg_path=master_reg,
-        master_max_path=master_max,
-        out_var_path=out_var_ttf,
-    )
+    build_variable_font(sources=sources, out_var_path=out_var_ttf)
 
     # WOFF (WOFF1)
     try:
@@ -858,7 +945,7 @@ def main() -> None:
         tt.save(out_var_woff)
         print(f"Wrote {out_var_woff}")
     except Exception as e:
-        print("Could not write WOFF (environment may lack woff support).")
+        print("Could not write WOFF.")
         print(f"Error: {e}")
 
     # WOFF2
@@ -868,8 +955,7 @@ def main() -> None:
         tt.save(out_var_woff2)
         print(f"Wrote {out_var_woff2}")
     except Exception as e:
-        print("Could not write WOFF2 (environment may lack woff2 support).")
-        print("Try: pip install brotli")
+        print("Could not write WOFF2 (try: pip install brotli).")
         print(f"Error: {e}")
 
     print("Done.")
