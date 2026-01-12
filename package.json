@@ -1,0 +1,28 @@
+{
+  "name": "distribution",
+  "version": "1.0.0",
+  "description": "Distribution type system.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "build:css": "node tools/generate-stylesheet.mjs --style compressed",
+    "watch:css": "node tools/generate-stylesheet.mjs --style expanded --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/acjbizar/distribution.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/acjbizar/distribution/issues"
+  },
+  "homepage": "https://github.com/acjbizar/distribution#readme",
+  "devDependencies": {
+    "sass": "^1.97.2"
+  }
+}
