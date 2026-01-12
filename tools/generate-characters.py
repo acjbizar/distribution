@@ -1138,7 +1138,7 @@ def svg_glyph_doc(
 
     out.append(
         f'<g fill="none" stroke="#000" stroke-width="{fmt(STROKE)}" '
-        f'stroke-linecap="round" stroke-linejoin="round">'
+        f'stroke-linecap="butt" stroke-linejoin="round">'
     )
     for d in paths_d:
         out.append(f'<path d="{d}" />')

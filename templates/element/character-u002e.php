@@ -43,7 +43,7 @@ if (!$hasAria) {
 <circle cx="40" cy="280" r="40" />
 <circle cx="120" cy="280" r="40" />
 </g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="butt" stroke-linejoin="round">
 </g>
 <g fill="#000" stroke="#000" stroke-width="9">
 <circle cx="80" cy="240" r="1" />

@@ -51,7 +51,7 @@ if (!$hasAria) {
 <circle cx="200" cy="280" r="40" />
 <circle cx="280" cy="280" r="40" />
 </g>
-<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="butt" stroke-linejoin="round">
 <path d="M 80 80 L 80 200" />
 <path d="M 160 80 L 160 200" />
 <path d="M 240 80 L 240 200" />
