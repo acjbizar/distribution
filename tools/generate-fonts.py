@@ -11,14 +11,20 @@ Input:
 
 Output:
   dist/fonts/distribution.ttf
+  dist/fonts/distribution.woff
   dist/fonts/distribution.woff2
 
-Fixes included:
-- Stable interpolation between masters using arc-length–anchored resampling.
+Key interpolation fix:
+- Stable interpolation between masters using arc-length resampling with a CANONICAL PHASE
+  for BOTH the outer contour and ALL inner holes:
+  we choose a stable start position by finding the "rightmost, then highest" point
+  on each ring (via dense sampling), then sample from that arc-length.
+
+Dots:
 - Dots scale with weight: effective disk radius = dot_r + stroke/2.
-- Prevent varLib "incompatible masters; skipping" for dot glyphs by:
-  - using fewer points for dot contours (default 32)
-  - nudging consecutive duplicate integer points so contours don't collapse
+- Dots avoid varLib incompatibility at thin weights via:
+  - fewer points for dot contours
+  - dot-only duplicate-point nudging (never touch normal glyph outlines)
 
 Dependencies:
   pip install shapely fonttools brotli
@@ -67,6 +73,7 @@ DEFAULT_UPM = 1000
 DEFAULT_EXTERIOR_PTS = 128
 DEFAULT_HOLE_PTS = 64
 DEFAULT_DOT_PTS = 32  # fewer points -> avoids tiny dot collapsing at thin weights
+DEFAULT_PHASE_SAMPLES = 2048  # dense sampling to find stable canonical phase
 
 # Arc approximation for centerlines (SVG A command sampling)
 ARC_SEGMENTS_PER_CIRCLE = 64
@@ -145,10 +152,10 @@ def svg_to_font_xy(x: float, y: float, scale: float) -> Tuple[float, float]:
 
 def nudge_consecutive_duplicates(ring: List[Tuple[int, int]]) -> List[Tuple[int, int]]:
     """
-    Prevent degenerate contours: if rounding creates consecutive identical points,
-    nudge the later point by ±1 in a deterministic pattern so the point count stays fixed.
+    Dot-only safety: if rounding creates consecutive identical points,
+    nudge the later point by ±1 deterministically so point count stays fixed.
 
-    This is crucial for tiny dots at thin weights (otherwise varLib can see incompatible masters).
+    Do NOT apply this to normal glyph outlines (it can break correspondence).
     """
     if len(ring) < 3:
         return ring
@@ -165,7 +172,6 @@ def nudge_consecutive_duplicates(ring: List[Tuple[int, int]]) -> List[Tuple[int,
             x, y = x2, y2
         out.append((x, y))
 
-    # Also avoid last == first (zero-length closing segment)
     if out[-1] == out[0]:
         x, y = out[-1]
         out[-1] = (x + 1, y)
@@ -338,7 +344,7 @@ def path_d_to_centerline(d: str) -> CenterlinePath:
 
 
 # -----------------------------
-# Stable closed-boundary resampling (prevents broken in-betweens)
+# Stable closed-boundary resampling (canonical phase)
 # -----------------------------
 def resample_linestring_closed(ls: LineString, n: int, start_d: float = 0.0) -> List[Tuple[float, float]]:
     """
@@ -359,6 +365,16 @@ def resample_linestring_closed(ls: LineString, n: int, start_d: float = 0.0) -> 
         p = ls.interpolate(d)
         out.append((p.x, p.y))
     return out
+
+
+def canonical_start_d(ls: LineString, phase_samples: int) -> float:
+    """
+    Find a stable start position for a closed boundary by choosing the boundary point
+    with maximal (x, then y) among a dense set of samples, and returning its arc-length.
+    """
+    pts = resample_linestring_closed(ls, phase_samples, start_d=0.0)
+    bx, by = max(pts, key=lambda p: (p[0], p[1]))
+    return ls.project(Point(bx, by))
 
 
 # -----------------------------
@@ -388,41 +404,40 @@ def polygon_to_contours_fixed(
     exterior_pts: int,
     hole_pts: int,
     scale: float,
-    seed_svg: Optional[Tuple[float, float]] = None,  # seed in SVG coordinates
+    phase_samples: int,
+    do_nudge: bool = False,  # dots only
 ) -> List[List[Tuple[int, int]]]:
     """
-    Convert polygon to a list of integer contours with fixed point counts.
-    Exterior start point is anchored by projecting seed onto boundary and
-    sampling from that arc-length position (stable across masters).
+    Convert polygon to integer contours with fixed point counts.
+    Canonical phase anchoring is applied to BOTH exterior and interior rings.
     """
     contours: List[List[Tuple[int, int]]] = []
 
     # Exterior boundary
     ext_ring = LinearRing(poly.exterior.coords)
     ext_ls = LineString(ext_ring.coords)
+    start_d_ext = canonical_start_d(ext_ls, phase_samples)
 
-    start_d = 0.0
-    if seed_svg is not None:
-        sp = Point(seed_svg[0], seed_svg[1])
-        start_d = ext_ls.project(sp)
-
-    ext_svg = resample_linestring_closed(ext_ls, exterior_pts, start_d=start_d)
+    ext_svg = resample_linestring_closed(ext_ls, exterior_pts, start_d=start_d_ext)
     ext_font_f = [svg_to_font_xy(x, y, scale) for (x, y) in ext_svg]
     ext_font_f = ensure_direction_f(ext_font_f, clockwise=True)
     ext_int = [(int(round(x)), int(round(y))) for (x, y) in ext_font_f]
-    ext_int = nudge_consecutive_duplicates(ext_int)
+    if do_nudge:
+        ext_int = nudge_consecutive_duplicates(ext_int)
     contours.append(ext_int)
 
-    # Holes (interiors)
+    # Holes (interiors) — ALSO phase-anchored (this is the crucial fix)
     for interior in poly.interiors:
         hole_ring = LinearRing(interior.coords)
         hole_ls = LineString(hole_ring.coords)
+        start_d_hole = canonical_start_d(hole_ls, phase_samples)
 
-        hole_svg = resample_linestring_closed(hole_ls, hole_pts, start_d=0.0)
+        hole_svg = resample_linestring_closed(hole_ls, hole_pts, start_d=start_d_hole)
         hole_font_f = [svg_to_font_xy(x, y, scale) for (x, y) in hole_svg]
         hole_font_f = ensure_direction_f(hole_font_f, clockwise=False)
         hole_int = [(int(round(x)), int(round(y))) for (x, y) in hole_font_f]
-        hole_int = nudge_consecutive_duplicates(hole_int)
+        if do_nudge:
+            hole_int = nudge_consecutive_duplicates(hole_int)
         contours.append(hole_int)
 
     return contours
@@ -438,22 +453,24 @@ def build_glyph_tt(
     exterior_pts: int,
     hole_pts: int,
     dot_pts: int,
+    phase_samples: int,
 ) -> Tuple[object, int]:
     pen = TTGlyphPen(None)
     radius = stroke_width_svg / 2.0
 
-    # Deterministic contour order:
-    #  - centerline components in SVG <path> order
-    #  - then dots in SVG <circle> order
+    # Centerline components (NO nudging)
     for cl in spec.centerlines:
         poly = buffer_centerline_to_polygon(cl, radius=radius)
 
-        # Seed: first point of the ORIGINAL centerline path (SVG coords)
-        seed_svg = (cl.pts[0][0], cl.pts[0][1])
-
         contours = polygon_to_contours_fixed(
-            poly, exterior_pts=exterior_pts, hole_pts=hole_pts, scale=scale, seed_svg=seed_svg
+            poly=poly,
+            exterior_pts=exterior_pts,
+            hole_pts=hole_pts,
+            scale=scale,
+            phase_samples=phase_samples,
+            do_nudge=False,
         )
+
         for ring in contours:
             if len(ring) < 3:
                 continue
@@ -463,22 +480,21 @@ def build_glyph_tt(
             pen.closePath()
 
     # Dots scale with weight:
-    # SVG draws dots as a filled circle with the same stroke-width as the glyph strokes.
-    # Filled+stroked circle => effective filled disk radius = dot_r + stroke/2.
+    # SVG dot is a filled circle with same stroke-width as glyph strokes.
+    # Effective filled disk radius = dot_r + stroke/2.
     for d in spec.dots:
         rr = d.r + radius
         poly = Point(d.cx, d.cy).buffer(rr, resolution=32)
 
-        # Seed on the right-most point of the circle (stable)
-        seed_svg = (d.cx + rr, d.cy)
-
         contours = polygon_to_contours_fixed(
-            poly,
-            exterior_pts=dot_pts,   # <-- fewer points for tiny dots
+            poly=poly,
+            exterior_pts=dot_pts,     # dot fewer points
             hole_pts=hole_pts,
             scale=scale,
-            seed_svg=seed_svg,
+            phase_samples=phase_samples,
+            do_nudge=True,            # dot-only nudging
         )
+
         for ring in contours:
             if len(ring) < 3:
                 continue
@@ -540,7 +556,6 @@ def parse_svg_glyph(svg_path: Path) -> GlyphSpec:
                 fill = (el.attrib.get("fill") or "").lower()
                 stroke = (el.attrib.get("stroke") or "").lower()
 
-                # Accept dot circles that are black-ish (or not explicitly styled)
                 if ("#000" in fill) or ("#000" in stroke) or (fill == ""):
                     dots.append(DotSpec(cx=cx, cy=cy, r=r))
             except Exception:
@@ -578,6 +593,7 @@ def build_master_ttf(
     exterior_pts: int,
     hole_pts: int,
     dot_pts: int,
+    phase_samples: int,
 ) -> None:
     glyph_order = [".notdef", "space"] + [s.glyph_name for s in specs]
     fb = FontBuilder(upm, isTTF=True)
@@ -604,12 +620,13 @@ def build_master_ttf(
 
     for s in specs:
         g, aw = build_glyph_tt(
-            s,
+            spec=s,
             stroke_width_svg=stroke_width_svg,
             scale=scale,
             exterior_pts=exterior_pts,
             hole_pts=hole_pts,
             dot_pts=dot_pts,
+            phase_samples=phase_samples,
         )
         glyf[s.glyph_name] = g
         hmtx[s.glyph_name] = (aw, 0)
@@ -622,8 +639,7 @@ def build_master_ttf(
     for s in specs:
         cmap[s.codepoint] = s.glyph_name
 
-    # If you have curly right double quote U+201D, map ASCII " (U+0022) to it
-    # so "quotation marks" typed normally also scale.
+    # Map ASCII " to U+201D if present, so typing " uses your quote glyph.
     if 0x201D in cmap and 0x0022 not in cmap:
         cmap[0x0022] = cmap[0x201D]
 
@@ -722,6 +738,7 @@ def main() -> None:
     ap.add_argument("--exterior-pts", type=int, default=DEFAULT_EXTERIOR_PTS, help="Points per exterior contour (default: 128)")
     ap.add_argument("--hole-pts", type=int, default=DEFAULT_HOLE_PTS, help="Points per hole contour (default: 64)")
     ap.add_argument("--dot-pts", type=int, default=DEFAULT_DOT_PTS, help="Points per dot contour (default: 32)")
+    ap.add_argument("--phase-samples", type=int, default=DEFAULT_PHASE_SAMPLES, help="Samples used to find canonical contour phase (default: 2048)")
     args = ap.parse_args()
 
     src_dir = Path(args.src_dir)
@@ -746,6 +763,7 @@ def main() -> None:
     print(f" - {master_min.name} (stroke={args.stroke_min})")
     print(f" - {master_reg.name} (stroke={args.stroke_reg:.3f})")
     print(f" - {master_max.name} (stroke={args.stroke_max})")
+    print("Interpolation: canonical phase for exterior + holes (stable).")
 
     build_master_ttf(
         specs=specs,
@@ -760,6 +778,7 @@ def main() -> None:
         exterior_pts=args.exterior_pts,
         hole_pts=args.hole_pts,
         dot_pts=args.dot_pts,
+        phase_samples=args.phase_samples,
     )
 
     build_master_ttf(
@@ -775,6 +794,7 @@ def main() -> None:
         exterior_pts=args.exterior_pts,
         hole_pts=args.hole_pts,
         dot_pts=args.dot_pts,
+        phase_samples=args.phase_samples,
     )
 
     build_master_ttf(
@@ -790,8 +810,10 @@ def main() -> None:
         exterior_pts=args.exterior_pts,
         hole_pts=args.hole_pts,
         dot_pts=args.dot_pts,
+        phase_samples=args.phase_samples,
     )
 
+    out_dir.mkdir(parents=True, exist_ok=True)
     out_var_ttf = out_dir / f"{args.basename}.ttf"
     out_var_woff = out_dir / f"{args.basename}.woff"
     out_var_woff2 = out_dir / f"{args.basename}.woff2"
