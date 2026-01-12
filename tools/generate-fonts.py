@@ -6,26 +6,14 @@ tools/generate-fonts.py
 Variable font builder for centerline SVG glyphs.
 Axis: wght (mapped to stroke width).
 
-Fixes (requested):
-1) Dots (e.g. i, ?) now properly participate in wght:
-   - Dots are treated as their own "component" and are buffered with (dot_r + stroke/2).
-   - Components are kept separate (stem vs dot) so topology does NOT change across weights.
-2) U+201D (”) no longer “flips” across weights:
-   - Contour start points are canonicalized (rotate to min (y,x) in font coords).
-   - Components are ordered deterministically by their source geometry bounds.
-   - MultiPolygons are ordered spatially (not by area).
-3) Gaps/wiggles at joins reduced:
-   - Arcs/lines/dots within the SAME connected component are buffered then unary_union’d
-     BEFORE contour sampling (shape simplification per component).
-   - Buffer resolution increased a bit for stability.
+Fixes:
+1) Dots (i, ?) participate in wght correctly.
+2) U+201D (”) no longer flips (stable contour anchoring).
+3) Arc/line join gaps reduced by unioning buffered shapes per component.
 
-Input:
-  src/character-uXXXX.svg
-
-Output:
-  dist/fonts/distribution.ttf
-  dist/fonts/distribution.woff
-  dist/fonts/distribution.woff2
+Key change vs previous version:
+- Contour start points are anchored to a deterministic seed point (from source geometry),
+  NOT to "min y/x". This fixes unstable interpolation for x/w/W.
 
 Deps:
   pip install shapely fonttools brotli
@@ -67,22 +55,16 @@ except Exception:
 # -----------------------------
 SVG_VIEW_H = 320.0
 SVG_BASELINE_Y = 240.0  # baseline at y=0 in font coords
-
 DEFAULT_UPM = 1000
 
-# Point counts (must be fixed across masters)
 DEFAULT_EXTERIOR_PTS = 180
 DEFAULT_HOLE_PTS = 110
-DEFAULT_DOT_PTS = 72  # a bit smoother for dot components
-
-# Dense sampling for stable landmarks
+DEFAULT_DOT_PTS = 72
 DEFAULT_LANDMARK_SAMPLES = 4096
 
-# Arc sampling for SVG A command
-ARC_SEGMENTS_PER_CIRCLE = 80  # slightly higher than before
+ARC_SEGMENTS_PER_CIRCLE = 80
 
-# Connectivity epsilon (in SVG units) for grouping centerlines into components.
-# This is based on the *source* geometry (not buffered), so it stays stable across weights.
+# for grouping *source* geometries into connected components (stable across weights)
 CONNECT_EPS = 1e-4
 
 SVG_FILE_RE = re.compile(r"^character-u([0-9a-fA-F]{4,6})\.svg$")
@@ -163,7 +145,6 @@ def round_half_away_from_zero(x: float) -> int:
 
 
 def cap_style_from_svg(linecap: str) -> int:
-    # Shapely cap_style: 1 round, 2 flat, 3 square
     lc = (linecap or "").strip().lower()
     if lc in ("butt", "flat"):
         return 2
@@ -173,7 +154,6 @@ def cap_style_from_svg(linecap: str) -> int:
 
 
 def join_style_from_svg(linejoin: str) -> int:
-    # Shapely join_style: 1 round, 2 mitre, 3 bevel
     lj = (linejoin or "").strip().lower()
     if lj in ("miter", "mitre"):
         return 2
@@ -182,11 +162,15 @@ def join_style_from_svg(linejoin: str) -> int:
     return 1
 
 
-def rotate_to_min_yx(pts: List[Tuple[float, float]]) -> List[Tuple[float, float]]:
-    """Canonicalize start point to avoid phase flips across masters (esp. symmetric rings)."""
+def rotate_to_seed_point(pts: List[Tuple[float, float]], seed: Tuple[float, float]) -> List[Tuple[float, float]]:
+    """
+    Rotate closed ring points so index 0 is the point nearest to `seed`.
+    This is much more stable across weights than choosing min-y/min-x.
+    """
     if not pts:
         return pts
-    idx = min(range(len(pts)), key=lambda i: (pts[i][1], pts[i][0]))
+    sx, sy = seed
+    idx = min(range(len(pts)), key=lambda i: (pts[i][0] - sx) ** 2 + (pts[i][1] - sy) ** 2)
     return pts[idx:] + pts[:idx]
 
 
@@ -442,9 +426,7 @@ def buffer_centerline(
     cap_style: int,
     join_style: int,
 ) -> Polygon:
-    # Slightly higher buffer resolution helps reduce tiny seam artifacts
     resolution = 32
-
     if center.closed:
         ring = LinearRing(center.pts)
         geom = ring.buffer(radius, cap_style=1, join_style=join_style, resolution=resolution)
@@ -490,14 +472,14 @@ def geometry_to_contours_fixed(
     landmark_samples: int,
 ) -> List[List[Tuple[int, int]]]:
     """
-    Convert a Polygon or MultiPolygon into a deterministic list of contours.
-
-    Determinism:
-    - If MultiPolygon: sort polygons by spatial bounds (NOT by area).
-    - For each polygon: exterior first, then holes sorted.
-    - Canonicalize contour start points to avoid “flips” across masters.
+    Deterministic conversion to contours:
+    - MultiPolygon sorted spatially
+    - holes sorted
+    - contour start point anchored to seed point (stable across masters)
     """
     contours: List[List[Tuple[int, int]]] = []
+
+    seed_font = svg_to_font_xy(seed_svg[0], seed_svg[1], scale)
 
     polys: List[Polygon]
     if isinstance(geom, Polygon):
@@ -518,7 +500,7 @@ def geometry_to_contours_fixed(
         ext_svg = resample_ring_with_landmarks(ext_ls, exterior_pts, seed_svg, landmark_samples)
         ext_font_f = [svg_to_font_xy(x, y, scale) for (x, y) in ext_svg]
         ext_font_f = ensure_direction_f(ext_font_f, clockwise=True)
-        ext_font_f = rotate_to_min_yx(ext_font_f)
+        ext_font_f = rotate_to_seed_point(ext_font_f, seed_font)
         ext_int = [(round_half_away_from_zero(x), round_half_away_from_zero(y)) for (x, y) in ext_font_f]
         ext_int = nudge_consecutive_duplicates(ext_int)
         contours.append(ext_int)
@@ -532,7 +514,7 @@ def geometry_to_contours_fixed(
             hole_svg = resample_ring_with_landmarks(hole_ls, hole_pts, seed_svg, landmark_samples)
             hole_font_f = [svg_to_font_xy(x, y, scale) for (x, y) in hole_svg]
             hole_font_f = ensure_direction_f(hole_font_f, clockwise=False)
-            hole_font_f = rotate_to_min_yx(hole_font_f)
+            hole_font_f = rotate_to_seed_point(hole_font_f, seed_font)
             hole_int = [(round_half_away_from_zero(x), round_half_away_from_zero(y)) for (x, y) in hole_font_f]
             hole_int = nudge_consecutive_duplicates(hole_int)
             contours.append(hole_int)
@@ -552,10 +534,9 @@ class _Item:
 
 
 def _seed_for_linestring(pts: List[Tuple[float, float]]) -> Tuple[float, float]:
-    # Pick a stable seed: the lexicographically smallest (y,x) point in SVG coords
     if not pts:
         return (0.0, 0.0)
-    idx = min(range(len(pts)), key=lambda i: (pts[i][1], pts[i][0]))
+    idx = min(range(len(pts)), key=lambda i: (pts[i][1], pts[i][0]))  # stable in SVG coords
     return (float(pts[idx][0]), float(pts[idx][1]))
 
 
@@ -564,7 +545,6 @@ def _build_items(spec: GlyphSpec) -> List[_Item]:
     for i, cl in enumerate(spec.centerlines):
         if cl.closed:
             g = LinearRing(cl.pts)
-            # LinearRing.distance works fine for connectivity checks
             seed = _seed_for_linestring(cl.pts)
         else:
             g = LineString(cl.pts)
@@ -573,7 +553,6 @@ def _build_items(spec: GlyphSpec) -> List[_Item]:
 
     for j, d in enumerate(spec.dots):
         g = Point(d.cx, d.cy)
-        # For dots, keep seed to the right edge (like your original), but stable:
         seed = (float(d.cx + d.r), float(d.cy))
         items.append(_Item(kind="dot", idx=j, geom=g, seed=seed))
 
@@ -608,14 +587,12 @@ def _group_items_into_components(items: List[_Item]) -> List[List[_Item]]:
         return []
     dsu = _DSU(n)
 
-    # Connectivity based on SOURCE geometry distance, with a tiny epsilon.
     for i in range(n):
         for j in range(i + 1, n):
             try:
                 if items[i].geom.distance(items[j].geom) <= CONNECT_EPS:
                     dsu.union(i, j)
             except Exception:
-                # In case a geometry is invalid, just don't connect them
                 pass
 
     groups: Dict[int, List[_Item]] = {}
@@ -625,7 +602,6 @@ def _group_items_into_components(items: List[_Item]) -> List[List[_Item]]:
 
     comps = list(groups.values())
 
-    # Deterministic component order: by bounds of the *source* geometries union
     def comp_key(comp: List[_Item]) -> Tuple[float, float, float, float]:
         ug = unary_union([it.geom for it in comp])
         return _bounds_key(ug)
@@ -635,7 +611,7 @@ def _group_items_into_components(items: List[_Item]) -> List[List[_Item]]:
 
 
 # -----------------------------
-# TT glyph construction (per-component union)
+# TT glyph construction
 # -----------------------------
 def build_glyph_tt(
     spec: GlyphSpec,
@@ -648,11 +624,6 @@ def build_glyph_tt(
     join_style: int,
     landmark_samples: int,
 ) -> Tuple[object, int]:
-    """
-    Build a TT glyph where:
-      - Each connected component (in *source* geometry) is unioned/simplified internally.
-      - Components remain separate (prevents topology flips across weights).
-    """
     pen = TTGlyphPen(None)
     radius = stroke_width_svg / 2.0
 
@@ -664,34 +635,27 @@ def build_glyph_tt(
         adv_w = int(round(spec.adv_w_svg * scale))
         return glyph, adv_w
 
-    # For each component:
-    #   buffer its members -> unary_union -> contours
     for comp in comps:
         shapes: List[Polygon] = []
 
-        # Determine seed for this component (stable across weights)
-        # Use min (y,x) among member seeds.
+        # stable seed per component (SVG coords)
         seed_svg = min((it.seed for it in comp), key=lambda p: (p[1], p[0]))
 
-        # Buffer members
         for it in comp:
             if it.kind == "path":
                 cl = spec.centerlines[it.idx]
                 shapes.append(buffer_centerline(cl, radius, cap_style=cap_style, join_style=join_style))
             else:
                 d = spec.dots[it.idx]
-                rr = d.r + radius  # dot grows with stroke/weight
+                rr = d.r + radius
                 shapes.append(Point(d.cx, d.cy).buffer(rr, resolution=64))
 
-        # Simplify/merge inside component
         merged = unary_union(shapes)
         try:
             merged = merged.buffer(0)
         except Exception:
             pass
 
-        # Choose sampling density:
-        # if this component is dot-only (no path members), use dot_pts for smoother circles
         has_path = any(it.kind == "path" for it in comp)
         use_ext_pts = exterior_pts if has_path else dot_pts
 
@@ -718,17 +682,12 @@ def build_glyph_tt(
 
 
 # -----------------------------
-# SVG loading (read stroke-linecap/linejoin)
+# SVG loading
 # -----------------------------
 def _find_main_stroke_style(root: ET.Element) -> Tuple[str, str]:
-    """
-    Find a representative stroke style.
-    Prefer a black-stroked path group with explicit stroke-width (and optionally cap/join).
-    """
     best_linecap = "round"
     best_linejoin = "round"
 
-    # First pass: look for a <g> that contains paths and defines stroke + stroke-width
     for el in root.iter():
         tag = el.tag.split("}")[-1]
         if tag != "g":
@@ -744,7 +703,6 @@ def _find_main_stroke_style(root: ET.Element) -> Tuple[str, str]:
                 best_linejoin = lj
             return best_linecap, best_linejoin
 
-    # Fallback: scan any element
     for el in root.iter():
         tag = el.tag.split("}")[-1]
         if tag not in ("g", "path", "circle"):
@@ -797,7 +755,6 @@ def parse_svg_glyph(svg_path: Path) -> GlyphSpec:
         if el.tag.endswith("circle"):
             try:
                 r = float(el.attrib.get("r", "0"))
-                # Only the small dot circles (your generator uses r=1.0)
                 if r <= 0 or r > 2.0:
                     continue
                 cx = float(el.attrib["cx"])
