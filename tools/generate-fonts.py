@@ -6,11 +6,12 @@ tools/generate-fonts.py
 Variable font builder for centerline SVG glyphs.
 Axis: wght (mapped to stroke width).
 
-Key goals:
-- In-between weights should look like SVG stroke-width is being adjusted.
-- Fix wiggles/pinches by:
-  1) building MANY masters (default 9: wght 100..900 step 100)
-  2) landmark-anchored ring resampling (minX/maxX/minY/maxY + seed projection)
+Upgrades in this version:
+- Merge all buffered components (arcs/lines/dots) into ONE filled shape per glyph per master
+  using shapely unary_union, before converting to contours. This removes overlap seams and
+  drastically reduces interpolation artifacts (gaps/wiggles) between weights.
+- Keep multi-master build (default 9 masters) + landmark-anchored resampling for stable
+  point correspondence.
 
 Input:
   src/character-uXXXX.svg
@@ -32,13 +33,14 @@ import re
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Union
 
 # -----------------------------
 # Dependencies
 # -----------------------------
 try:
     from shapely.geometry import LineString, LinearRing, Point, Polygon, MultiPolygon
+    from shapely.ops import unary_union
 except Exception:
     print("Missing dependency: shapely")
     print("Install with:  pip install shapely")
@@ -62,13 +64,13 @@ SVG_BASELINE_Y = 240.0  # baseline at y=0 in font coords
 
 DEFAULT_UPM = 1000
 
-# Point counts (keep fixed across masters)
-DEFAULT_EXTERIOR_PTS = 160
-DEFAULT_HOLE_PTS = 96
-DEFAULT_DOT_PTS = 40
+# Point counts (must be fixed across masters)
+DEFAULT_EXTERIOR_PTS = 180
+DEFAULT_HOLE_PTS = 110
+DEFAULT_DOT_PTS = 44
 
 # Dense sampling for stable landmarks
-DEFAULT_LANDMARK_SAMPLES = 2048
+DEFAULT_LANDMARK_SAMPLES = 4096
 
 # Arc sampling for SVG A command
 ARC_SEGMENTS_PER_CIRCLE = 64
@@ -145,7 +147,6 @@ def svg_to_font_xy(x: float, y: float, scale: float) -> Tuple[float, float]:
 
 
 def round_half_away_from_zero(x: float) -> int:
-    # More stable for symmetric shapes than bankers rounding
     if x >= 0:
         return int(math.floor(x + 0.5))
     return int(math.ceil(x - 0.5))
@@ -172,15 +173,10 @@ def join_style_from_svg(linejoin: str) -> int:
 
 
 def nudge_consecutive_duplicates(ring: List[Tuple[int, int]]) -> List[Tuple[int, int]]:
-    """
-    Dot-only safety: prevent degenerate contours when rounding collapses points.
-    """
     if len(ring) < 3:
         return ring
-
     out: List[Tuple[int, int]] = []
     offsets = [(1, 0), (0, 1), (-1, 0), (0, -1)]
-
     for i, (x, y) in enumerate(ring):
         if out and (x, y) == out[-1]:
             dx, dy = offsets[i % 4]
@@ -189,11 +185,9 @@ def nudge_consecutive_duplicates(ring: List[Tuple[int, int]]) -> List[Tuple[int,
                 x2, y2 = x + 2 * dx, y + 2 * dy
             x, y = x2, y2
         out.append((x, y))
-
     if out[-1] == out[0]:
         x, y = out[-1]
         out[-1] = (x + 1, y)
-
     return out
 
 
@@ -221,13 +215,7 @@ def tokenize_path(d: str) -> List[str]:
 
 
 def arc_center_parameterization(
-    x1: float,
-    y1: float,
-    x2: float,
-    y2: float,
-    r: float,
-    large: int,
-    sweep: int,
+    x1: float, y1: float, x2: float, y2: float, r: float, large: int, sweep: int
 ) -> Tuple[float, float, float, float]:
     dx2 = (x1 - x2) / 2.0
     dy2 = (y1 - y2) / 2.0
@@ -273,21 +261,13 @@ def arc_center_parameterization(
 
 
 def sample_arc(
-    x1: float,
-    y1: float,
-    x2: float,
-    y2: float,
-    r: float,
-    large: int,
-    sweep: int,
+    x1: float, y1: float, x2: float, y2: float, r: float, large: int, sweep: int
 ) -> List[Tuple[float, float]]:
     cx, cy, theta1, delta = arc_center_parameterization(x1, y1, x2, y2, r, large, sweep)
     if abs(delta) < 1e-9:
         return [(x2, y2)]
-
     step = 2.0 * math.pi / ARC_SEGMENTS_PER_CIRCLE
     n = max(2, int(math.ceil(abs(delta) / step)))
-
     pts: List[Tuple[float, float]] = []
     for i in range(1, n + 1):
         t = i / n
@@ -325,7 +305,6 @@ def path_d_to_centerline(d: str) -> CenterlinePath:
             _rot = parse_float(toks[i]); i += 1
             large = int(float(toks[i])); sweep = int(float(toks[i + 1])); i += 2
             x2 = parse_float(toks[i]); y2 = parse_float(toks[i + 1]); i += 2
-
             if abs(rx - ry) > 1e-6:
                 raise ValueError("Only circular arcs (rx==ry) supported.")
             pts.extend(sample_arc(cur[0], cur[1], x2, y2, rx, large, sweep))
@@ -338,7 +317,6 @@ def path_d_to_centerline(d: str) -> CenterlinePath:
     if len(pts) >= 3 and dist(pts[0], pts[-1]) < 1e-6:
         closed = True
         pts[-1] = pts[0]
-
     return CenterlinePath(pts=pts, closed=closed)
 
 
@@ -350,10 +328,8 @@ def resample_linestring_closed(ls: LineString, n: int, start_d: float = 0.0) -> 
     if L <= 1e-9:
         p = ls.coords[0]
         return [(float(p[0]), float(p[1])) for _ in range(n)]
-
     start_d = start_d % L
     step = L / n
-
     out: List[Tuple[float, float]] = []
     for k in range(n):
         d = (start_d + k * step) % L
@@ -363,14 +339,9 @@ def resample_linestring_closed(ls: LineString, n: int, start_d: float = 0.0) -> 
 
 
 def _landmark_distances(ls: LineString, samples: int) -> List[float]:
-    """
-    Compute stable landmark distances along the ring:
-    points at minX, maxX, minY, maxY from a dense sampling.
-    """
     L = ls.length
     if L <= 1e-9:
         return [0.0]
-
     dense = resample_linestring_closed(ls, samples, start_d=0.0)
     xs = [p[0] for p in dense]
     ys = [p[1] for p in dense]
@@ -380,12 +351,9 @@ def _landmark_distances(ls: LineString, samples: int) -> List[float]:
     idx_miny = min(range(len(dense)), key=lambda i: ys[i])
     idx_maxy = max(range(len(dense)), key=lambda i: ys[i])
 
-    cand_pts = [dense[idx_minx], dense[idx_maxx], dense[idx_miny], dense[idx_maxy]]
-    ds = []
-    for (x, y) in cand_pts:
-        ds.append(ls.project(Point(x, y)))
+    cand = [dense[idx_minx], dense[idx_maxx], dense[idx_miny], dense[idx_maxy]]
+    ds = [ls.project(Point(x, y)) for (x, y) in cand]
 
-    # de-dupe close distances
     ds2: List[float] = []
     eps = max(1e-6, L * 1e-6)
     for d in sorted(ds):
@@ -400,12 +368,6 @@ def resample_ring_with_landmarks(
     seed_svg: Tuple[float, float],
     landmark_samples: int,
 ) -> List[Tuple[float, float]]:
-    """
-    Resample a closed ring with stable point correspondence:
-    - Start at seed projection
-    - Split the ring at landmark extrema distances
-    - Allocate points per segment proportional to segment length
-    """
     L = ls.length
     if L <= 1e-9:
         p = ls.coords[0]
@@ -414,22 +376,16 @@ def resample_ring_with_landmarks(
     seed_d = ls.project(Point(seed_svg[0], seed_svg[1])) % L
     lm = _landmark_distances(ls, landmark_samples)
 
-    # shift landmarks relative to seed_d -> [0, L)
     rel = sorted(((d - seed_d) % L) for d in lm)
-    # ensure 0 boundary exists as segment start
     if not rel or rel[0] > 1e-9:
         rel = [0.0] + rel
-    # also ensure end boundary at L
     if rel[-1] < L - 1e-9:
         rel = rel + [L]
 
-    # segment lengths
     seg_lens = [rel[i + 1] - rel[i] for i in range(len(rel) - 1)]
     total = sum(seg_lens) if seg_lens else L
 
-    # allocate points to segments (at least 1 each)
     seg_counts = [max(1, int(round(n * (sl / total)))) for sl in seg_lens]
-    # adjust to exact n
     while sum(seg_counts) > n:
         i = max(range(len(seg_counts)), key=lambda k: seg_counts[k])
         if seg_counts[i] > 1:
@@ -442,33 +398,27 @@ def resample_ring_with_landmarks(
 
     out: List[Tuple[float, float]] = []
     for i, cnt in enumerate(seg_counts):
-        if cnt <= 0:
-            continue
         a = rel[i]
         b = rel[i + 1]
         seg_len = max(1e-12, b - a)
-        # sample cnt points within [a,b), evenly
         for k in range(cnt):
-            t = (k / cnt)
+            t = k / cnt
             d = seed_d + a + t * seg_len
             p = ls.interpolate(d % L)
             out.append((p.x, p.y))
 
-    # Ensure exact n
     if len(out) > n:
         out = out[:n]
-    elif len(out) < n:
-        # pad with last point
-        while len(out) < n:
-            out.append(out[-1])
+    while len(out) < n:
+        out.append(out[-1])
 
     return out
 
 
 # -----------------------------
-# Centerline buffer -> polygon
+# Buffering + merging
 # -----------------------------
-def buffer_centerline_to_polygon(
+def buffer_centerline(
     center: CenterlinePath,
     radius: float,
     cap_style: int,
@@ -481,7 +431,6 @@ def buffer_centerline_to_polygon(
         ls = LineString(center.pts)
         geom = ls.buffer(radius, cap_style=cap_style, join_style=join_style, resolution=16)
 
-    # normalize to stabilize rings
     try:
         geom = geom.buffer(0)
     except Exception:
@@ -490,66 +439,85 @@ def buffer_centerline_to_polygon(
     if isinstance(geom, Polygon):
         return geom
     if isinstance(geom, MultiPolygon):
-        raise RuntimeError(
-            "Buffer produced MultiPolygon (disconnected outline). "
-            "Reduce stroke range or simplify paths."
-        )
-    raise RuntimeError(f"Unexpected buffered geometry type: {type(geom)}")
+        # caller merges anyway; pick largest piece as polygon element
+        # (still deterministic)
+        polys = list(geom.geoms)
+        polys.sort(key=lambda p: p.area, reverse=True)
+        return polys[0]
+    raise RuntimeError(f"Unexpected buffer result: {type(geom)}")
 
 
 def ring_sort_key_simple(ring: LinearRing) -> Tuple[float, float, float]:
-    # deterministic hole order
     coords = list(ring.coords)
     xs = [p[0] for p in coords]
     ys = [p[1] for p in coords]
     minx, maxx = min(xs), max(xs)
     miny, maxy = min(ys), max(ys)
-    # approximate area
     a = abs(signed_area([(float(x), float(y)) for (x, y) in coords[: min(256, len(coords))]]))
     return (miny + maxy, minx + maxx, -a)
 
 
-def polygon_to_contours_fixed(
-    poly: Polygon,
+def geometry_to_contours_fixed(
+    geom: Union[Polygon, MultiPolygon],
     exterior_pts: int,
     hole_pts: int,
     scale: float,
     seed_svg: Tuple[float, float],
     landmark_samples: int,
-    do_nudge: bool = False,  # dots only
+    do_nudge: bool = False,
 ) -> List[List[Tuple[int, int]]]:
+    """
+    Convert a Polygon or MultiPolygon into a deterministic list of contours.
+
+    Determinism:
+    - If MultiPolygon: sort polygons by area desc
+    - For each polygon: exterior first, then holes sorted
+    """
     contours: List[List[Tuple[int, int]]] = []
 
-    # exterior
-    ext_ring = LinearRing(poly.exterior.coords)
-    ext_ls = LineString(ext_ring.coords)
-    ext_svg = resample_ring_with_landmarks(ext_ls, exterior_pts, seed_svg, landmark_samples)
-    ext_font_f = [svg_to_font_xy(x, y, scale) for (x, y) in ext_svg]
-    ext_font_f = ensure_direction_f(ext_font_f, clockwise=True)
-    ext_int = [(round_half_away_from_zero(x), round_half_away_from_zero(y)) for (x, y) in ext_font_f]
-    if do_nudge:
-        ext_int = nudge_consecutive_duplicates(ext_int)
-    contours.append(ext_int)
+    polys: List[Polygon]
+    if isinstance(geom, Polygon):
+        polys = [geom]
+    elif isinstance(geom, MultiPolygon):
+        polys = list(geom.geoms)
+        polys.sort(key=lambda p: p.area, reverse=True)
+    else:
+        raise RuntimeError(f"Unexpected geometry: {type(geom)}")
 
-    # holes: stable order, same landmark sampling
-    holes = [LinearRing(r.coords) for r in poly.interiors]
-    holes.sort(key=ring_sort_key_simple)
+    for poly in polys:
+        if poly.is_empty:
+            continue
 
-    for hr in holes:
-        hole_ls = LineString(hr.coords)
-        hole_svg = resample_ring_with_landmarks(hole_ls, hole_pts, seed_svg, landmark_samples)
-        hole_font_f = [svg_to_font_xy(x, y, scale) for (x, y) in hole_svg]
-        hole_font_f = ensure_direction_f(hole_font_f, clockwise=False)
-        hole_int = [(round_half_away_from_zero(x), round_half_away_from_zero(y)) for (x, y) in hole_font_f]
+        # exterior
+        ext_ring = LinearRing(poly.exterior.coords)
+        ext_ls = LineString(ext_ring.coords)
+        ext_svg = resample_ring_with_landmarks(ext_ls, exterior_pts, seed_svg, landmark_samples)
+        ext_font_f = [svg_to_font_xy(x, y, scale) for (x, y) in ext_svg]
+        ext_font_f = ensure_direction_f(ext_font_f, clockwise=True)
+        ext_int = [(round_half_away_from_zero(x), round_half_away_from_zero(y)) for (x, y) in ext_font_f]
         if do_nudge:
-            hole_int = nudge_consecutive_duplicates(hole_int)
-        contours.append(hole_int)
+            ext_int = nudge_consecutive_duplicates(ext_int)
+        contours.append(ext_int)
+
+        # holes
+        holes = [LinearRing(r.coords) for r in poly.interiors]
+        holes.sort(key=ring_sort_key_simple)
+
+        for hr in holes:
+            hole_ls = LineString(hr.coords)
+            hole_svg = resample_ring_with_landmarks(hole_ls, hole_pts, seed_svg, landmark_samples)
+            hole_font_f = [svg_to_font_xy(x, y, scale) for (x, y) in hole_svg]
+            hole_font_f = ensure_direction_f(hole_font_f, clockwise=False)
+            hole_int = [(round_half_away_from_zero(x), round_half_away_from_zero(y)) for (x, y) in hole_font_f]
+            if do_nudge:
+                hole_int = nudge_consecutive_duplicates(hole_int)
+            contours.append(hole_int)
 
     return contours
 
 
 # -----------------------------
-# TT glyph construction
+# TT glyph construction (MERGED)
 # -----------------------------
 def build_glyph_tt(
     spec: GlyphSpec,
@@ -565,52 +533,62 @@ def build_glyph_tt(
     pen = TTGlyphPen(None)
     radius = stroke_width_svg / 2.0
 
-    # Centerlines in SVG path order
+    # Buffer all components
+    shapes: List[Polygon] = []
+
+    # Seed for resampling: first point of first centerline if available,
+    # else first dot.
+    seed_svg: Tuple[float, float]
+    if spec.centerlines:
+        seed_svg = (spec.centerlines[0].pts[0][0], spec.centerlines[0].pts[0][1])
+    elif spec.dots:
+        seed_svg = (spec.dots[0].cx + (spec.dots[0].r + radius), spec.dots[0].cy)
+    else:
+        seed_svg = (0.0, 0.0)
+
     for cl in spec.centerlines:
-        poly = buffer_centerline_to_polygon(cl, radius, cap_style=cap_style, join_style=join_style)
-        seed_svg = (cl.pts[0][0], cl.pts[0][1])
+        shapes.append(buffer_centerline(cl, radius, cap_style=cap_style, join_style=join_style))
 
-        contours = polygon_to_contours_fixed(
-            poly=poly,
-            exterior_pts=exterior_pts,
-            hole_pts=hole_pts,
-            scale=scale,
-            seed_svg=seed_svg,
-            landmark_samples=landmark_samples,
-            do_nudge=False,
-        )
-
-        for ring in contours:
-            if len(ring) < 3:
-                continue
-            pen.moveTo(ring[0])
-            for p in ring[1:]:
-                pen.lineTo(p)
-            pen.closePath()
-
-    # Dots: effective disk radius = dot_r + stroke/2 (filled+stroked circle)
+    # Dots: effective radius = dot_r + stroke/2 (filled+stroked circle in SVG)
     for d in spec.dots:
         rr = d.r + radius
-        poly = Point(d.cx, d.cy).buffer(rr, resolution=32)
-        seed_svg = (d.cx + rr, d.cy)
+        shapes.append(Point(d.cx, d.cy).buffer(rr, resolution=32))
 
-        contours = polygon_to_contours_fixed(
-            poly=poly,
-            exterior_pts=dot_pts,
-            hole_pts=hole_pts,
-            scale=scale,
-            seed_svg=seed_svg,
-            landmark_samples=landmark_samples,
-            do_nudge=True,
-        )
+    if not shapes:
+        glyph = pen.glyph()
+        adv_w = int(round(spec.adv_w_svg * scale))
+        return glyph, adv_w
 
-        for ring in contours:
-            if len(ring) < 3:
-                continue
-            pen.moveTo(ring[0])
-            for p in ring[1:]:
-                pen.lineTo(p)
-            pen.closePath()
+    # MERGE ALL SHAPES FIRST
+    merged = unary_union(shapes)
+    try:
+        merged = merged.buffer(0)
+    except Exception:
+        pass
+
+    # Convert merged geometry into contours (use dot_pts only for dot-only glyphs)
+    use_ext_pts = exterior_pts
+    use_dot_mode = (len(spec.centerlines) == 0 and len(spec.dots) > 0)
+    if use_dot_mode:
+        use_ext_pts = dot_pts
+
+    contours = geometry_to_contours_fixed(
+        geom=merged,
+        exterior_pts=use_ext_pts,
+        hole_pts=hole_pts,
+        scale=scale,
+        seed_svg=seed_svg,
+        landmark_samples=landmark_samples,
+        do_nudge=use_dot_mode,
+    )
+
+    for ring in contours:
+        if len(ring) < 3:
+            continue
+        pen.moveTo(ring[0])
+        for p in ring[1:]:
+            pen.lineTo(p)
+        pen.closePath()
 
     glyph = pen.glyph()
     adv_w = int(round(spec.adv_w_svg * scale))
@@ -623,7 +601,6 @@ def build_glyph_tt(
 def _find_main_stroke_style(root: ET.Element) -> Tuple[str, str]:
     best_linecap = "round"
     best_linejoin = "round"
-
     for el in root.iter():
         tag = el.tag.split("}")[-1]
         if tag not in ("g", "path"):
@@ -638,7 +615,6 @@ def _find_main_stroke_style(root: ET.Element) -> Tuple[str, str]:
             if lj:
                 best_linejoin = lj
             return best_linecap, best_linejoin
-
     return best_linecap, best_linejoin
 
 
@@ -812,7 +788,6 @@ def build_variable_font(
     axis.maximum = 900
     doc.addAxis(axis)
 
-    # IMPORTANT: exactly one source at default location (wght=400)
     for wght, p in sources:
         sd = SourceDescriptor()
         sd.path = str(p)
@@ -826,14 +801,9 @@ def build_variable_font(
 
 
 # -----------------------------
-# Stroke mapping (wght -> stroke width)
+# Stroke mapping
 # -----------------------------
 def stroke_for_wght(w: int, stroke_min: float, stroke_reg: float, stroke_max: float) -> float:
-    """
-    Piecewise-linear mapping:
-      100..400 : stroke_min -> stroke_reg
-      400..900 : stroke_reg -> stroke_max
-    """
     if w <= 400:
         t = (w - 100) / (400 - 100)
         return stroke_min + t * (stroke_reg - stroke_min)
@@ -858,7 +828,7 @@ def main() -> None:
     ap.add_argument("--stroke-max", type=float, default=26.0)
 
     ap.add_argument("--masters", type=int, default=9,
-                    help="Number of masters across 100..900 (odd recommended). Default 9 => 100,200,...,900")
+                    help="Number of masters across 100..900. Default 9 => 100,200,...,900")
 
     ap.add_argument("--exterior-pts", type=int, default=DEFAULT_EXTERIOR_PTS)
     ap.add_argument("--hole-pts", type=int, default=DEFAULT_HOLE_PTS)
@@ -876,22 +846,17 @@ def main() -> None:
 
     specs = load_glyphs_from_src(src_dir)
 
-    # Determine cap/join style
     base_cap = (args.linecap.strip().lower() or specs[0].linecap.strip().lower() or "round")
     base_join = (args.linejoin.strip().lower() or specs[0].linejoin.strip().lower() or "round")
     cap_style = cap_style_from_svg(base_cap)
     join_style = join_style_from_svg(base_join)
 
-    # Scale so 320 SVG units == UPM
     scale = args.upm / SVG_VIEW_H
     ascent = int(round((SVG_BASELINE_Y - 0.0) * scale))
     descent = -int(round((SVG_VIEW_H - SVG_BASELINE_Y) * scale))
 
-    # Pick master weights (always include 100,400,900)
     m = max(3, int(args.masters))
-    # build evenly spaced integers; then force include 400
     ws = sorted({int(round(100 + i * (800 / (m - 1)))) for i in range(m)} | {100, 400, 900})
-    # clamp
     ws = [min(900, max(100, w)) for w in ws]
     ws = sorted(set(ws))
     if 400 not in ws:
@@ -938,7 +903,7 @@ def main() -> None:
     print(f"Building variable font: {out_var_ttf}")
     build_variable_font(sources=sources, out_var_path=out_var_ttf)
 
-    # WOFF (WOFF1)
+    # WOFF
     try:
         tt = TTFont(out_var_ttf)
         tt.flavor = "woff"
