@@ -32,6 +32,7 @@ def main() -> None:
         ("generate-characters.py", ["--debug"]),
         ("generate-sheet.py", ["--border", "--labels"]),
         ("generate-templates.py", []),
+        ("generate-characters-styles.py", []),
         ("generate-images.py", []),
         ("generate-fonts.py", []),
         ("generate-markdown.py", []),
