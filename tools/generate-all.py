@@ -33,6 +33,7 @@ def main() -> None:
         ("generate-sheet.py", ["--border", "--labels"]),
         ("generate-templates.py", []),
         ("generate-characters-styles.py", []),
+        ("generate-style-sheets.py", []),
         ("generate-images.py", []),
         ("generate-fonts.py", []),
         ("generate-markdown.py", []),
