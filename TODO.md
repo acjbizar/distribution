@@ -1,6 +1,8 @@
 
 # TODO
 
+- [ ] Add missing letters
+
 ## Done
 
 - [x] Add grid
