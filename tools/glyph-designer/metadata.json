@@ -1,0 +1,5 @@
+{
+  "name": "GlyphForge: Typeface Designer",
+  "description": "An interactive tool for creating custom typeface glyphs based on a grid of circles and line segments, with real-time Python code generation compatible with the GlyphForge generator script.",
+  "requestFramePermissions": []
+}
