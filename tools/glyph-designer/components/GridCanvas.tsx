@@ -2,8 +2,7 @@
 import React, { useState } from 'react';
 import { 
   R, DX, DY, X0, Y0, 
-  GRID_COLS, GRID_ROWS, 
-  VIEW_W, VIEW_H, STROKE 
+  STROKE, PADDING
 } from '../constants';
 import { GridState, ToolType } from '../types';
 import { getCircleCenter } from '../utils';
@@ -12,38 +11,56 @@ interface GridCanvasProps {
   state: GridState;
   tool: ToolType;
   onChange: (newState: GridState) => void;
+  rows: number;
+  cols: number;
 }
 
-const GridCanvas: React.FC<GridCanvasProps> = ({ state, tool, onChange }) => {
+const GridCanvas: React.FC<GridCanvasProps> = ({ state, tool, onChange, rows, cols }) => {
   const [hovered, setHovered] = useState<string | null>(null);
+
+  const viewW = (cols - 1) * DX + (R * 2) + (PADDING * 2);
+  const viewH = (rows - 1) * DY + (R * 2) + (PADDING * 2);
 
   const toggleItem = (type: ToolType, key: string) => {
     const newState = { ...state };
-    const targetSet = 
-      type === ToolType.Circle ? newState.circles :
-      type === ToolType.Arc ? newState.arcs :
-      type === ToolType.Segment && key.startsWith('v') ? newState.vSegments :
-      type === ToolType.Segment && key.startsWith('h') ? newState.hSegments :
-      newState.dots;
+    let targetSet: Set<string>;
+    let targetKey: string = key;
 
-    const actualKey = key.includes('-') && (key.startsWith('v') || key.startsWith('h')) ? key.split('-').slice(1).join('-') : key;
+    if (type === ToolType.Circle) targetSet = newState.circles;
+    else if (type === ToolType.Arc) targetSet = newState.arcs;
+    else if (type === ToolType.Segment && key.startsWith('v')) {
+      targetSet = newState.vSegments;
+      targetKey = key.split('-').slice(1).join('-');
+    } else if (type === ToolType.Segment && key.startsWith('h')) {
+      targetSet = newState.hSegments;
+      targetKey = key.split('-').slice(1).join('-');
+    } else targetSet = newState.dots;
 
-    if (targetSet.has(actualKey)) {
-      targetSet.delete(actualKey);
+    // CRITICAL: Clone the set to ensure React detects the state change
+    const newSet = new Set(targetSet);
+    if (newSet.has(targetKey)) {
+      newSet.delete(targetKey);
     } else {
-      targetSet.add(actualKey);
+      newSet.add(targetKey);
     }
+
+    // Assign back to the correct property
+    if (type === ToolType.Circle) newState.circles = newSet;
+    else if (type === ToolType.Arc) newState.arcs = newSet;
+    else if (type === ToolType.Segment && key.startsWith('v')) newState.vSegments = newSet;
+    else if (type === ToolType.Segment && key.startsWith('h')) newState.hSegments = newSet;
+    else newState.dots = newSet;
+
     onChange(newState);
   };
 
   const renderCircles = () => {
     const circles = [];
-    for (let r = 0; r < GRID_ROWS; r++) {
-      for (let c = 0; c < GRID_COLS; c++) {
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
         const [cx, cy] = getCircleCenter(c, r);
         const key = `${c}-${r}`;
         const isActive = state.circles.has(key);
-        const isHovered = hovered === `circle-${key}` && tool === ToolType.Circle;
 
         circles.push(
           <circle
@@ -52,25 +69,9 @@ const GridCanvas: React.FC<GridCanvasProps> = ({ state, tool, onChange }) => {
             cy={cy}
             r={R}
             fill="none"
-            stroke={isActive ? "black" : "#e5e7eb"}
+            stroke={isActive ? "black" : "#f1f5f9"}
             strokeWidth={isActive ? STROKE : 1}
             className="transition-all duration-200 cursor-pointer"
-            onMouseEnter={() => setHovered(`circle-${key}`)}
-            onMouseLeave={() => setHovered(null)}
-            onClick={() => toggleItem(ToolType.Circle, key)}
-            opacity={isHovered && !isActive ? 0.3 : 1}
-          />
-        );
-
-        // Center point for tool selection
-        circles.push(
-          <circle
-            key={`center-${key}`}
-            cx={cx}
-            cy={cy}
-            r={6}
-            fill={isActive ? "black" : "transparent"}
-            className="cursor-pointer"
             onMouseEnter={() => setHovered(`circle-${key}`)}
             onMouseLeave={() => setHovered(null)}
             onClick={() => toggleItem(ToolType.Circle, key)}
@@ -83,18 +84,14 @@ const GridCanvas: React.FC<GridCanvasProps> = ({ state, tool, onChange }) => {
 
   const renderArcs = () => {
     const arcs = [];
-    for (let r = 0; r < GRID_ROWS; r++) {
-      for (let c = 0; c < GRID_COLS; c++) {
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
         const [cx, cy] = getCircleCenter(c, r);
-        
-        // 4 quadrants: 0:TR, 1:BR, 2:BL, 3:TL
-        // Paths: 
-        // TR: M(cx+r, cy) A(r, r, 0, 0, 0, cx, cy-r) -> sweep 0
         const paths = [
-          `M ${cx + R} ${cy} A ${R} ${R} 0 0 0 ${cx} ${cy - R}`, // TR
-          `M ${cx} ${cy + R} A ${R} ${R} 0 0 0 ${cx + R} ${cy}`, // BR
-          `M ${cx - R} ${cy} A ${R} ${R} 0 0 0 ${cx} ${cy + R}`, // BL
-          `M ${cx} ${cy - R} A ${R} ${R} 0 0 0 ${cx - R} ${cy}`, // TL
+          `M ${cx + R} ${cy} A ${R} ${R} 0 0 0 ${cx} ${cy - R}`, // TR (0)
+          `M ${cx} ${cy + R} A ${R} ${R} 0 0 0 ${cx + R} ${cy}`, // BR (1)
+          `M ${cx - R} ${cy} A ${R} ${R} 0 0 0 ${cx} ${cy + R}`, // BL (2)
+          `M ${cx} ${cy - R} A ${R} ${R} 0 0 0 ${cx - R} ${cy}`, // TL (3)
         ];
 
         paths.forEach((d, q) => {
@@ -110,22 +107,17 @@ const GridCanvas: React.FC<GridCanvasProps> = ({ state, tool, onChange }) => {
               stroke={isActive ? "black" : "transparent"}
               strokeWidth={STROKE}
               strokeLinecap="round"
-              className="transition-all duration-200 cursor-pointer"
-              onMouseEnter={() => setHovered(`arc-${key}`)}
-              onMouseLeave={() => setHovered(null)}
-              onClick={() => toggleItem(ToolType.Arc, key)}
-              pointerEvents="stroke"
+              className="transition-all duration-200 pointer-events-none"
             />
           );
 
-          // Invisible wider path for better clicking
           arcs.push(
              <path
               key={`arc-hit-${key}`}
               d={d}
               fill="none"
               stroke={isHovered ? "rgba(59, 130, 246, 0.2)" : "transparent"}
-              strokeWidth={STROKE * 2}
+              strokeWidth={STROKE * 3}
               strokeLinecap="round"
               className="cursor-pointer"
               onMouseEnter={() => setHovered(`arc-${key}`)}
@@ -141,105 +133,94 @@ const GridCanvas: React.FC<GridCanvasProps> = ({ state, tool, onChange }) => {
 
   const renderSegments = () => {
     const segments = [];
+    
     // Vertical segments
-    for (let r = 0; r < GRID_ROWS - 1; r++) {
-      for (let c = 0; c < GRID_COLS; c++) {
-        const [cx, cy] = getCircleCenter(c, r);
-        const [_, cyNext] = getCircleCenter(c, r + 1);
+    for (let c = 0; c < (cols - 1) * 2 + 1; c++) {
+      const x = c * 0.5;
+      for (let r = 0; r < (rows - 1) * 2; r++) {
+        const yStart = r * 0.5;
+        const cx = X0 + x * DX;
+        const cyStart = Y0 + yStart * DY;
+        const cyEnd = cyStart + 0.5 * DY;
 
-        // Two sides: Left (0) and Right (1)
-        [0, 1].forEach(s => {
-          const xOffset = s === 0 ? -R : R;
-          const key = `${c}-${r}-${s}`;
-          const isActive = state.vSegments.has(key);
-          const isHovered = hovered === `vseg-${key}` && tool === ToolType.Segment;
+        const key = `${x.toFixed(1)}-${yStart.toFixed(1)}`;
+        const isActive = state.vSegments.has(key);
+        const isHovered = hovered === `vseg-${key}` && tool === ToolType.Segment;
 
-          segments.push(
-            <line
-              key={`vseg-${key}`}
-              x1={cx + xOffset}
-              y1={cy}
-              x2={cx + xOffset}
-              y2={cyNext}
-              stroke={isActive ? "black" : "transparent"}
-              strokeWidth={STROKE}
-              strokeLinecap="butt"
-              className="transition-all duration-200 cursor-pointer"
-              onMouseEnter={() => setHovered(`vseg-${key}`)}
-              onMouseLeave={() => setHovered(null)}
-              onClick={() => toggleItem(ToolType.Segment, `v-${key}`)}
-              pointerEvents="stroke"
-            />
-          );
+        segments.push(
+          <line
+            key={`vseg-${key}`}
+            x1={cx}
+            y1={cyStart}
+            x2={cx}
+            y2={cyEnd}
+            stroke={isActive ? "black" : "transparent"}
+            strokeWidth={STROKE}
+            strokeLinecap="round"
+            className="pointer-events-none transition-all"
+          />
+        );
 
-          // Hit area
-          segments.push(
-            <line
-              key={`vseg-hit-${key}`}
-              x1={cx + xOffset}
-              y1={cy}
-              x2={cx + xOffset}
-              y2={cyNext}
-              stroke={isHovered ? "rgba(59, 130, 246, 0.2)" : "transparent"}
-              strokeWidth={STROKE * 2}
-              className="cursor-pointer"
-              onMouseEnter={() => setHovered(`vseg-${key}`)}
-              onMouseLeave={() => setHovered(null)}
-              onClick={() => toggleItem(ToolType.Segment, `v-${key}`)}
-            />
-          );
-        });
+        segments.push(
+          <line
+            key={`vseg-hit-${key}`}
+            x1={cx}
+            y1={cyStart}
+            x2={cx}
+            y2={cyEnd}
+            stroke={isHovered ? "rgba(59, 130, 246, 0.2)" : "transparent"}
+            strokeWidth={STROKE * 3.5}
+            className="cursor-pointer"
+            onMouseEnter={() => setHovered(`vseg-${key}`)}
+            onMouseLeave={() => setHovered(null)}
+            onClick={() => toggleItem(ToolType.Segment, `v-${key}`)}
+          />
+        );
       }
     }
 
     // Horizontal segments
-    for (let r = 0; r < GRID_ROWS; r++) {
-      for (let c = 0; c < GRID_COLS - 1; c++) {
-        const [cx, cy] = getCircleCenter(c, r);
-        const [cxNext, _] = getCircleCenter(c + 1, r);
+    for (let r = 0; r < (rows - 1) * 2 + 1; r++) {
+      const y = r * 0.5;
+      for (let c = 0; c < (cols - 1) * 2; c++) {
+        const xStart = c * 0.5;
+        const cxStart = X0 + xStart * DX;
+        const cxEnd = cxStart + 0.5 * DX;
+        const cy = Y0 + y * DY;
 
-        // Two sides: Top (0) and Bottom (1)
-        [0, 1].forEach(s => {
-          const yOffset = s === 0 ? -R : R;
-          const key = `${c}-${r}-${s}`;
-          const isActive = state.hSegments.has(key);
-          const isHovered = hovered === `hseg-${key}` && tool === ToolType.Segment;
+        const key = `${xStart.toFixed(1)}-${y.toFixed(1)}`;
+        const isActive = state.hSegments.has(key);
+        const isHovered = hovered === `hseg-${key}` && tool === ToolType.Segment;
 
-          segments.push(
-            <line
-              key={`hseg-${key}`}
-              x1={cx}
-              y1={cy + yOffset}
-              x2={cxNext}
-              y2={cy + yOffset}
-              stroke={isActive ? "black" : "transparent"}
-              strokeWidth={STROKE}
-              strokeLinecap="butt"
-              className="transition-all duration-200 cursor-pointer"
-              onMouseEnter={() => setHovered(`hseg-${key}`)}
-              onMouseLeave={() => setHovered(null)}
-              onClick={() => toggleItem(ToolType.Segment, `h-${key}`)}
-              pointerEvents="stroke"
-            />
-          );
+        segments.push(
+          <line
+            key={`hseg-${key}`}
+            x1={cxStart}
+            y1={cy}
+            x2={cxEnd}
+            y2={cy}
+            stroke={isActive ? "black" : "transparent"}
+            strokeWidth={STROKE}
+            strokeLinecap="round"
+            className="pointer-events-none transition-all"
+          />
+        );
 
-           // Hit area
-           segments.push(
-            <line
-              key={`hseg-hit-${key}`}
-              x1={cx}
-              y1={cy + yOffset}
-              x2={cxNext}
-              y2={cy + yOffset}
-              stroke={isHovered ? "rgba(59, 130, 246, 0.2)" : "transparent"}
-              strokeWidth={STROKE * 2}
-              className="cursor-pointer"
-              onMouseEnter={() => setHovered(`hseg-${key}`)}
-              onMouseLeave={() => setHovered(null)}
-              onClick={() => toggleItem(ToolType.Segment, `h-${key}`)}
-            />
-          );
-        });
+         segments.push(
+          <line
+            key={`hseg-hit-${key}`}
+            x1={cxStart}
+            y1={cy}
+            x2={cxEnd}
+            y2={cy}
+            stroke={isHovered ? "rgba(59, 130, 246, 0.2)" : "transparent"}
+            strokeWidth={STROKE * 3.5}
+            className="cursor-pointer"
+            onMouseEnter={() => setHovered(`hseg-${key}`)}
+            onMouseLeave={() => setHovered(null)}
+            onClick={() => toggleItem(ToolType.Segment, `h-${key}`)}
+          />
+        );
       }
     }
 
@@ -248,27 +229,29 @@ const GridCanvas: React.FC<GridCanvasProps> = ({ state, tool, onChange }) => {
 
   const renderDots = () => {
      const dots = [];
-     for (let r = 0; r < GRID_ROWS; r++) {
-       for (let c = 0; c < GRID_COLS; c++) {
-         const [cx, cy] = getCircleCenter(c, r);
-         const key = `${c}-${r}`;
+     for (let r = 0; r <= (rows - 1) * 2; r++) {
+       for (let c = 0; c <= (cols - 1) * 2; c++) {
+         const cxIdx = c / 2;
+         const cyIdx = r / 2;
+         const cx = X0 + cxIdx * DX;
+         const cy = Y0 + cyIdx * DY;
+         const key = `${cxIdx.toFixed(1)}-${cyIdx.toFixed(1)}`;
          const isActive = state.dots.has(key);
          const isHovered = hovered === `dot-${key}` && tool === ToolType.Dot;
+
+         const isCenter = Number.isInteger(cxIdx) && Number.isInteger(cyIdx);
 
          dots.push(
            <circle
              key={`dot-p-${key}`}
              cx={cx}
              cy={cy}
-             r={isActive ? 4 : 2}
-             fill={isActive ? "black" : "#d1d5db"}
-             stroke={isActive ? "black" : "transparent"}
-             strokeWidth={isActive ? STROKE : 0}
+             r={isActive ? 5 : (isCenter ? 3 : 2)}
+             fill={isActive ? "black" : (isHovered ? "#3b82f6" : (isCenter ? "#cbd5e1" : "#f1f5f9"))}
              className="transition-all duration-200 cursor-pointer"
              onMouseEnter={() => setHovered(`dot-${key}`)}
              onMouseLeave={() => setHovered(null)}
              onClick={() => toggleItem(ToolType.Dot, key)}
-             opacity={isHovered && !isActive ? 0.5 : 1}
            />
          );
        }
@@ -277,23 +260,22 @@ const GridCanvas: React.FC<GridCanvasProps> = ({ state, tool, onChange }) => {
   };
 
   return (
-    <div className="relative bg-white shadow-xl rounded-lg p-8 border border-gray-200 flex items-center justify-center">
+    <div className="relative bg-white shadow-2xl rounded-3xl p-12 border border-slate-200 flex items-center justify-center">
       <svg 
-        width={VIEW_W} 
-        height={VIEW_H} 
-        viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
+        width={viewW} 
+        height={viewH} 
+        viewBox={`0 0 ${viewW} ${viewH}`}
         className="select-none"
       >
         <rect width="100%" height="100%" fill="white" />
         
-        {/* Helper grid lines */}
-        <g stroke="#f3f4f6" strokeWidth="1">
-           {Array.from({length: GRID_ROWS}).map((_, i) => (
-             <line key={`gl-r-${i}`} x1={0} y1={Y0 + i*DY} x2={VIEW_W} y2={Y0 + i*DY} />
-           ))}
-           {Array.from({length: GRID_COLS}).map((_, i) => (
-             <line key={`gl-c-${i}`} x1={X0 + i*DX} y1={0} x2={X0 + i*DX} y2={VIEW_H} />
-           ))}
+        <g stroke="#f8fafc" strokeWidth="1" fill="none">
+          {Array.from({length: rows}).map((_, r) => 
+            Array.from({length: cols}).map((_, c) => {
+               const [cx, cy] = getCircleCenter(c, r);
+               return <circle key={`guide-${c}-${r}`} cx={cx} cy={cy} r={R} opacity="0.3" />;
+            })
+          )}
         </g>
 
         {renderCircles()}

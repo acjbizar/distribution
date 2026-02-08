@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Type, 
   Circle, 
@@ -9,7 +9,10 @@ import {
   Code as CodeIcon, 
   Download,
   Info,
-  LayoutGrid
+  LayoutGrid,
+  Settings2,
+  Undo,
+  Redo
 } from 'lucide-react';
 import GridCanvas from './components/GridCanvas';
 import { GridState, ToolType } from './types';
@@ -17,6 +20,7 @@ import { formatPythonCode } from './utils';
 import { CHARACTER_PRESETS, applyPreset } from './presets';
 
 const App: React.FC = () => {
+  const [gridSize, setGridSize] = useState({ rows: 4, cols: 4 });
   const [state, setState] = useState<GridState>({
     circles: new Set<string>(),
     vSegments: new Set<string>(),
@@ -25,6 +29,10 @@ const App: React.FC = () => {
     dots: new Set<string>()
   });
   
+  // Undo/Redo History
+  const [past, setPast] = useState<GridState[]>([]);
+  const [future, setFuture] = useState<GridState[]>([]);
+
   const [activeTool, setActiveTool] = useState<ToolType>(ToolType.Circle);
   const [pythonCode, setPythonCode] = useState<string>("");
 
@@ -32,9 +40,36 @@ const App: React.FC = () => {
     setPythonCode(formatPythonCode(state));
   }, [state]);
 
+  // Handle state updates with history tracking
+  const updateState = useCallback((newState: GridState) => {
+    setPast(prev => [...prev, state]);
+    setFuture([]);
+    setState(newState);
+  }, [state]);
+
+  const undo = () => {
+    if (past.length === 0) return;
+    const previous = past[past.length - 1];
+    const newPast = past.slice(0, past.length - 1);
+    
+    setFuture(prev => [state, ...prev]);
+    setPast(newPast);
+    setState(previous);
+  };
+
+  const redo = () => {
+    if (future.length === 0) return;
+    const next = future[0];
+    const newFuture = future.slice(1);
+
+    setPast(prev => [...prev, state]);
+    setFuture(newFuture);
+    setState(next);
+  };
+
   const clearCanvas = () => {
     if (confirm("Clear all elements?")) {
-      setState({
+      updateState({
         circles: new Set(),
         vSegments: new Set(),
         hSegments: new Set(),
@@ -47,7 +82,7 @@ const App: React.FC = () => {
   const loadCharacter = (presetName: string) => {
     const preset = CHARACTER_PRESETS.find(p => p.name === presetName);
     if (preset) {
-      setState(applyPreset(preset));
+      updateState(applyPreset(preset));
     }
   };
 
@@ -70,8 +105,27 @@ const App: React.FC = () => {
           </div>
         </div>
         
-        <div className="flex items-center gap-2">
-           <button 
+        <div className="flex items-center gap-4">
+          <div className="flex items-center border-r border-slate-200 pr-4 gap-1">
+            <button 
+              onClick={undo}
+              disabled={past.length === 0}
+              title="Undo"
+              className="p-2 text-slate-600 hover:bg-slate-100 disabled:opacity-30 disabled:hover:bg-transparent rounded-lg transition-all"
+            >
+              <Undo className="w-5 h-5" />
+            </button>
+            <button 
+              onClick={redo}
+              disabled={future.length === 0}
+              title="Redo"
+              className="p-2 text-slate-600 hover:bg-slate-100 disabled:opacity-30 disabled:hover:bg-transparent rounded-lg transition-all"
+            >
+              <Redo className="w-5 h-5" />
+            </button>
+          </div>
+
+          <button 
             onClick={clearCanvas}
             className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-red-500 hover:bg-red-50 rounded-lg transition-all"
           >
@@ -91,6 +145,38 @@ const App: React.FC = () => {
       <main className="flex-1 flex flex-col md:flex-row overflow-hidden">
         {/* Sidebar / Tools */}
         <aside className="w-full md:w-80 bg-white border-r border-slate-200 p-6 flex flex-col gap-8 order-2 md:order-1 overflow-y-auto">
+          
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Grid Config</h2>
+              <Settings2 className="w-3.5 h-3.5 text-slate-300" />
+            </div>
+            <div className="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
+              <div>
+                <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Rows</label>
+                <input 
+                  type="number" 
+                  min="2" 
+                  max="10" 
+                  value={gridSize.rows} 
+                  onChange={(e) => setGridSize(prev => ({ ...prev, rows: parseInt(e.target.value) || 2 }))}
+                  className="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-sm font-bold focus:ring-2 focus:ring-blue-500 outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Cols</label>
+                <input 
+                  type="number" 
+                  min="2" 
+                  max="10" 
+                  value={gridSize.cols} 
+                  onChange={(e) => setGridSize(prev => ({ ...prev, cols: parseInt(e.target.value) || 2 }))}
+                  className="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-sm font-bold focus:ring-2 focus:ring-blue-500 outline-none"
+                />
+              </div>
+            </div>
+          </div>
+
           <div>
             <h2 className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-4">Toolbar</h2>
             <div className="grid grid-cols-1 gap-2">
@@ -143,7 +229,7 @@ const App: React.FC = () => {
               Pro Tip
             </h3>
             <p className="text-[11px] text-slate-500 leading-normal">
-              Click elements to toggle. Arcs snap to the nearest grid quadrant. Use Tangents for smooth vertical or horizontal bridges.
+              Place dots "between" circles by clicking mid-way points. Use Tangents for smooth vertical or horizontal bridges.
             </p>
           </div>
         </aside>
@@ -154,7 +240,9 @@ const App: React.FC = () => {
           <GridCanvas 
             state={state} 
             tool={activeTool} 
-            onChange={setState} 
+            onChange={updateState} 
+            rows={gridSize.rows}
+            cols={gridSize.cols}
           />
         </section>
 
@@ -177,14 +265,14 @@ const App: React.FC = () => {
             </pre>
           </div>
           <div className="p-4 bg-black/40 border-t border-slate-800 text-slate-500 text-[10px] font-mono">
-            # Grid Context: R=40 | DX=80 | DY=80
+            # Grid: {gridSize.cols}x{gridSize.rows} | R=40 | DX=80 | DY=80
           </div>
         </section>
       </main>
 
       {/* Footer */}
       <footer className="bg-white border-t border-slate-200 py-3 px-6 text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest shrink-0">
-        Engineered for GlyphForge v2.0
+        Engineered for GlyphForge v2.5
       </footer>
     </div>
   );

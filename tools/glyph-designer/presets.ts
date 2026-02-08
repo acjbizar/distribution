@@ -13,72 +13,77 @@ export interface Preset {
 }
 
 /**
- * Character construction rules:
- * - Columns: 0, 1, 2
- * - Main Height: Rows 1, 2, 3
- * - Arcs: 0:TR, 1:BR, 2:BL, 3:TL
- * - vSegments side: 0:Left, 1:Right
- * - hSegments side: 0:Top, 1:Bottom
+ * Geometric Construction Plan (Unified Coordinates):
+ * 
+ * - "0": Verticals at x=0.5 and x=1.5 (y=1.0-2.0). Arcs 1-1-0, 1-1-3, 1-2-1, 1-2-2.
+ * - "1": Right side stem (x=1.5) from y=1.0 to 2.5. TR hook at 1-1-0.
+ * - "2": Matches snippet: h-segment y=2.5 (x=1.0 to 1.5). 
+ *        Arcs circle(1,1): TR(0), BR(1), TL(3). circle(1,2): BL(2), TL(3).
+ * - "C": Arcs TL, TR, BR, BL. Vertical line on the LEFT side (x=0.5).
+ * - "i": Matches snippet: x=0.5 verticals at y=1.5, 2.0, and 3.0. Dot at 0.5-0.5.
+ * - ".": Placed half a unit higher (y=2.5).
+ * - "a": Matches snippet: x=1.5 verticals at y=1.0, 1.5. 
+ *        Arcs circle(1,1): TR(0), BR(1), TL(3). circle(1,2): BR(1), BL(2), TL(3).
  */
 export const CHARACTER_PRESETS: Preset[] = [
   {
-    name: 'O',
+    name: '0',
     data: {
-      vSegments: ['0-1-0', '0-2-0', '2-1-1', '2-2-1'],
-      hSegments: ['0-1-0', '1-1-0', '0-3-1', '1-3-1'],
-      arcs: ['0-1-3', '2-1-0', '2-3-1', '0-3-2']
+      vSegments: ['0.5-1.0', '0.5-1.5', '1.5-1.0', '1.5-1.5'],
+      arcs: ['1-1-0', '1-1-3', '1-2-1', '1-2-2']
     }
   },
   {
-    name: 'H',
+    name: '1',
     data: {
-      vSegments: ['0-1-0', '0-2-0', '2-1-1', '2-2-1'],
-      hSegments: ['0-2-1', '1-2-1']
+      arcs: ['1-1-0'], 
+      vSegments: ['1.5-1.0', '1.5-1.5', '1.5-2.0'] 
     }
   },
   {
-    name: 'A',
+    name: '2',
     data: {
-      vSegments: ['0-1-0', '0-2-0', '2-1-1', '2-2-1'],
-      hSegments: ['0-1-0', '1-1-0', '0-2-1', '1-2-1'],
-      arcs: ['0-1-3', '2-1-0']
+      arcs: ['1-1-0', '1-1-1', '1-1-3', '1-2-2', '1-2-3'],
+      hSegments: ['1.0-2.5']
     }
   },
   {
-    name: 'U',
+    name: '3',
     data: {
-      vSegments: ['0-1-0', '0-2-0', '2-1-1', '2-2-1'],
-      hSegments: ['0-3-1', '1-3-1'],
-      arcs: ['0-3-2', '2-3-1']
+      arcs: ['1-1-3', '1-1-0', '1-1-1', '1-2-0', '1-2-1', '1-2-2']
     }
   },
   {
-    name: 'E',
+    name: '8',
     data: {
-      vSegments: ['0-1-0', '0-2-0'],
-      hSegments: ['0-1-0', '1-1-0', '0-2-1', '1-2-1', '0-3-1', '1-3-1']
+      circles: ['1-1', '1-2']
     }
   },
   {
-    name: 'L',
+    name: 'a',
     data: {
-      vSegments: ['0-1-0', '0-2-0'],
-      hSegments: ['0-3-1', '1-3-1']
+      vSegments: ['1.5-1.0', '1.5-1.5'],
+      arcs: ['1-1-0', '1-1-1', '1-1-3', '1-2-1', '1-2-2', '1-2-3']
     }
   },
   {
     name: 'C',
     data: {
-      vSegments: ['0-1-0', '0-2-0'],
-      hSegments: ['0-1-0', '1-1-0', '0-3-1', '1-3-1'],
-      arcs: ['0-1-3', '0-3-2']
+      arcs: ['1-1-3', '1-1-0', '1-2-1', '1-2-2'],
+      vSegments: ['0.5-1.0', '0.5-1.5'] // Vertical bar on the left side
     }
   },
   {
-    name: 'I',
+    name: 'i',
     data: {
-      vSegments: ['1-1-0', '1-2-0'],
-      dots: ['1-1', '1-3']
+      dots: ['0.5-0.5'], 
+      vSegments: ['0.5-1.5', '0.5-2.0', '0.5-3.0']
+    }
+  },
+  {
+    name: '.',
+    data: {
+      dots: ['0.5-2.5'] 
     }
   }
 ];
