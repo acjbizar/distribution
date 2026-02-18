@@ -1,0 +1,139 @@
+{
+  "manifestVersion": 1,
+  "generatedAt": "2026-02-18T11:36:21.261075+00:00",
+  "name": "distribution",
+  "metadata": {
+    "family": "Distribution",
+    "subfamily": "Master400",
+    "fullName": "Distribution Master400",
+    "postScriptName": "Distribution-Master400",
+    "unitsPerEm": 1000,
+    "glyphCount": 56
+  },
+  "files": [
+    {
+      "ext": "woff2",
+      "file": "distribution.woff2",
+      "recommendedFile": "distribution.woff2",
+      "bytes": 71800,
+      "sha256": "d39219cfde302bfe8c6d93856bdf3987b6097553694f510cb33cdb5598964fea"
+    },
+    {
+      "ext": "woff",
+      "file": "distribution.woff",
+      "recommendedFile": "distribution.woff",
+      "bytes": 92836,
+      "sha256": "d60c6edff55cc1fbd0c470a46886cc2dc1a69c1032f7fcec01f7415d15df0046"
+    },
+    {
+      "ext": "ttf",
+      "file": "distribution.ttf",
+      "recommendedFile": "distribution.ttf",
+      "bytes": 203292,
+      "sha256": "06e8da4b741c8ecfd2f01af76a86a8be8e468da1b062dfe3c1479c28edf50473"
+    }
+  ],
+  "unicodeRanges": [
+    [
+      32,
+      32
+    ],
+    [
+      34,
+      34
+    ],
+    [
+      46,
+      46
+    ],
+    [
+      48,
+      57
+    ],
+    [
+      63,
+      63
+    ],
+    [
+      65,
+      65
+    ],
+    [
+      67,
+      67
+    ],
+    [
+      69,
+      69
+    ],
+    [
+      71,
+      78
+    ],
+    [
+      80,
+      80
+    ],
+    [
+      82,
+      83
+    ],
+    [
+      85,
+      85
+    ],
+    [
+      87,
+      88
+    ],
+    [
+      90,
+      90
+    ],
+    [
+      97,
+      105
+    ],
+    [
+      107,
+      107
+    ],
+    [
+      109,
+      114
+    ],
+    [
+      116,
+      121
+    ],
+    [
+      8221,
+      8222
+    ]
+  ],
+  "counts": {
+    "codepointsTotal": 56,
+    "codepointsBMP": 56,
+    "codepointsAstral": 0
+  },
+  "features": {
+    "GSUB": [],
+    "GPOS": []
+  },
+  "hints": {
+    "commonBlocks": {
+      "basicLatin": true,
+      "latin1Supplement": false,
+      "latinExtendedA": false,
+      "latinExtendedB": false
+    },
+    "preferredLowercaseFilenames": true,
+    "hasCasingMismatches": false,
+    "notes": [
+      "unicodeRanges is derived from cmap.getBestCmap() across all parseable font files.",
+      "GSUB/GPOS feature tags are extracted when those tables exist.",
+      "Ligature contents are not enumerated here (by design); use shaping in your sample to demonstrate them.",
+      "If files[].file differs from files[].recommendedFile, consider renaming to the recommended lowercase filenames for portability (CDN/Linux)."
+    ]
+  }
+}
