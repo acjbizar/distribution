@@ -881,8 +881,7 @@
         }
 
         parts.push(`</svg>`);
-        return parts.join('
-');
+        return parts.join('\\n');
       }
 
       function getPreviewMarkup() {
@@ -1236,7 +1235,7 @@
             });
           }
 
-          if (Array.from(value).length === 1 && !/^[ -]$/.test(value)) {
+            if (Array.from(value).length === 1 && !/^[\\x00-\\x1F]$/.test(value)) {
             const char = value;
             const hex = getCodepointHex(char);
             map.set(char, { char, hex: `U+${hex}`, label: `${char} U+${hex}` });
