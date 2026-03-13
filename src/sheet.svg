@@ -376,6 +376,34 @@
 </g>
 <g transform="translate(1200 342)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
+<desc>glyph: D U+0044</desc>
+  <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+  <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
+  <circle cx="40" cy="40" r="40" />
+  <circle cx="120" cy="40" r="40" />
+  <circle cx="200" cy="40" r="40" />
+  <circle cx="40" cy="120" r="40" />
+  <circle cx="120" cy="120" r="40" />
+  <circle cx="200" cy="120" r="40" />
+  <circle cx="40" cy="200" r="40" />
+  <circle cx="120" cy="200" r="40" />
+  <circle cx="200" cy="200" r="40" />
+  <circle cx="40" cy="280" r="40" />
+  <circle cx="120" cy="280" r="40" />
+  <circle cx="200" cy="280" r="40" />
+  </g>
+  <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="butt" stroke-linejoin="round">
+  <path d="M 80 80 L 80 240" />
+  <path d="M 120 80 A 40 40 0 0 1 160 120" />
+  <path d="M 120 240 A 40 40 0 0 0 160 200" />
+  <path d="M 160 120 L 160 160" />
+  <path d="M 160 160 L 160 200" />
+  <path d="M 80 80 L 120 80" />
+  <path d="M 80 240 L 120 240" />
+  </g>
+</g>
+<g transform="translate(1440 342)">
+<rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: E U+0045</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
@@ -399,7 +427,7 @@
 <circle cx="120" cy="160" r="3.5" />
 </g>
 </g>
-<g transform="translate(1440 342)">
+<g transform="translate(1680 342)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: G U+0047</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -425,7 +453,7 @@
 <circle cx="120" cy="160" r="3.5" />
 </g>
 </g>
-<g transform="translate(1680 342)">
+<g transform="translate(1920 342)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: H U+0048</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -452,7 +480,7 @@
 <circle cx="120" cy="160" r="3.5" />
 </g>
 </g>
-<g transform="translate(1920 342)">
+<g transform="translate(2160 342)">
 <rect class="gbox" x="0" y="0" width="160" height="320"/>
 <desc>glyph: I U+0049</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -470,7 +498,7 @@
 <path d="M 80 80 L 80 240" />
 </g>
 </g>
-<g transform="translate(2080 342)">
+<g transform="translate(0 684)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: J U+004A</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -493,7 +521,7 @@
 <path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200" />
 </g>
 </g>
-<g transform="translate(0 684)">
+<g transform="translate(240 684)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: K U+004B</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -523,7 +551,7 @@
 <circle cx="160" cy="240" r="3.5" />
 </g>
 </g>
-<g transform="translate(240 684)">
+<g transform="translate(480 684)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: L U+004C</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -547,7 +575,7 @@
 <path d="M 120 240 L 160 240" />
 </g>
 </g>
-<g transform="translate(480 684)">
+<g transform="translate(720 684)">
 <rect class="gbox" x="0" y="0" width="320" height="320"/>
 <desc>glyph: M U+004D</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -577,7 +605,7 @@
 <path d="M 240 240 L 240 120" />
 </g>
 </g>
-<g transform="translate(800 684)">
+<g transform="translate(1040 684)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: N U+004E</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -601,7 +629,7 @@
 <path d="M 160 240 L 160 120" />
 </g>
 </g>
-<g transform="translate(1040 684)">
+<g transform="translate(1280 684)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: P U+0050</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -626,7 +654,7 @@
 <path d="M 120 160 L 80 160" />
 </g>
 </g>
-<g transform="translate(1280 684)">
+<g transform="translate(1520 684)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: R U+0052</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -653,7 +681,7 @@
 <path d="M 160 200 L 160 240" />
 </g>
 </g>
-<g transform="translate(1520 684)">
+<g transform="translate(1760 684)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: S U+0053</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -678,7 +706,7 @@
 <circle cx="120" cy="160" r="3.5" />
 </g>
 </g>
-<g transform="translate(1760 684)">
+<g transform="translate(2000 684)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: U U+0055</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -702,7 +730,7 @@
 <path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200" />
 </g>
 </g>
-<g transform="translate(2000 684)">
+<g transform="translate(2240 684)">
 <rect class="gbox" x="0" y="0" width="320" height="320"/>
 <desc>glyph: W U+0057</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -732,7 +760,7 @@
 <path d="M 240 200 A 40 40 0 0 1 200 240 A 40 40 0 0 1 160 200" />
 </g>
 </g>
-<g transform="translate(2320 684)">
+<g transform="translate(0 1026)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: X U+0058</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -759,7 +787,7 @@
 <path d="M 160 240 L 160 200" />
 </g>
 </g>
-<g transform="translate(0 1026)">
+<g transform="translate(240 1026)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: Z U+005A</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -783,7 +811,7 @@
 <path d="M 80 240 L 160 240" />
 </g>
 </g>
-<g transform="translate(240 1026)">
+<g transform="translate(480 1026)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: a U+0061</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -816,7 +844,7 @@
 <circle cx="120" cy="160" r="3.5" />
 </g>
 </g>
-<g transform="translate(480 1026)">
+<g transform="translate(720 1026)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: b U+0062</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -843,7 +871,7 @@
 <circle cx="80" cy="200" r="3.5" />
 </g>
 </g>
-<g transform="translate(720 1026)">
+<g transform="translate(960 1026)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: c U+0063</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -867,7 +895,7 @@
 <path d="M 120 240 L 160 240" />
 </g>
 </g>
-<g transform="translate(960 1026)">
+<g transform="translate(1200 1026)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: d U+0064</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -890,7 +918,7 @@
 <path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
 </g>
 </g>
-<g transform="translate(1200 1026)">
+<g transform="translate(1440 1026)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: e U+0065</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -915,7 +943,7 @@
 <circle cx="120" cy="160" r="3.5" />
 </g>
 </g>
-<g transform="translate(1440 1026)">
+<g transform="translate(1680 1026)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: f U+0066</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -939,7 +967,7 @@
 <path d="M 80 200 A 40 40 0 0 1 120 160" />
 </g>
 </g>
-<g transform="translate(1680 1026)">
+<g transform="translate(1920 1026)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: g U+0067</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -962,7 +990,7 @@
 <path d="M 120 160 A 40 40 0 0 1 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200" />
 </g>
 </g>
-<g transform="translate(1920 1026)">
+<g transform="translate(2160 1026)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: h U+0068</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -986,7 +1014,7 @@
 <path d="M 160 200 L 160 240" />
 </g>
 </g>
-<g transform="translate(2160 1026)">
+<g transform="translate(0 1368)">
 <rect class="gbox" x="0" y="0" width="160" height="320"/>
 <desc>glyph: i U+0069</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -1007,7 +1035,7 @@
 <circle cx="80" cy="80" r="1" />
 </g>
 </g>
-<g transform="translate(0 1368)">
+<g transform="translate(160 1368)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: k U+006B</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -1037,7 +1065,7 @@
 <circle cx="160" cy="240" r="3.5" />
 </g>
 </g>
-<g transform="translate(240 1368)">
+<g transform="translate(400 1368)">
 <rect class="gbox" x="0" y="0" width="320" height="320"/>
 <desc>glyph: m U+006D</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -1067,7 +1095,7 @@
 <path d="M 240 240 L 240 200" />
 </g>
 </g>
-<g transform="translate(560 1368)">
+<g transform="translate(720 1368)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: n U+006E</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -1091,7 +1119,7 @@
 <path d="M 160 240 L 160 200" />
 </g>
 </g>
-<g transform="translate(800 1368)">
+<g transform="translate(960 1368)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: o U+006F</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -1113,7 +1141,7 @@
 <path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
 </g>
 </g>
-<g transform="translate(1040 1368)">
+<g transform="translate(1200 1368)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: p U+0070</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -1136,7 +1164,7 @@
 <path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
 </g>
 </g>
-<g transform="translate(1280 1368)">
+<g transform="translate(1440 1368)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: q U+0071</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -1159,7 +1187,7 @@
 <path d="M 160 200 A 40 40 0 0 1 120 240 A 40 40 0 0 1 80 200 A 40 40 0 0 1 120 160 A 40 40 0 0 1 160 200" />
 </g>
 </g>
-<g transform="translate(1520 1368)">
+<g transform="translate(1680 1368)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: r U+0072</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -1182,7 +1210,7 @@
 <path d="M 80 200 A 40 40 0 0 1 120 160" />
 </g>
 </g>
-<g transform="translate(1760 1368)">
+<g transform="translate(1920 1368)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: t U+0074</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -1206,7 +1234,7 @@
 <path d="M 80 200 A 40 40 0 0 0 120 240 A 40 40 0 0 0 160 200" />
 </g>
 </g>
-<g transform="translate(2000 1368)">
+<g transform="translate(2160 1368)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: u U+0075</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -1230,7 +1258,7 @@
 <path d="M 160 200 L 160 160" />
 </g>
 </g>
-<g transform="translate(2240 1368)">
+<g transform="translate(0 1710)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: v U+0076</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -1252,7 +1280,7 @@
 <path d="M 80 160 L 120 240 L 160 160" />
 </g>
 </g>
-<g transform="translate(0 1710)">
+<g transform="translate(240 1710)">
 <rect class="gbox" x="0" y="0" width="320" height="320"/>
 <desc>glyph: w U+0077</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -1282,7 +1310,7 @@
 <path d="M 240 200 L 240 160" />
 </g>
 </g>
-<g transform="translate(320 1710)">
+<g transform="translate(560 1710)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: x U+0078</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -1305,7 +1333,7 @@
 <path d="M 160 160 A 40 40 0 0 0 160 240" />
 </g>
 </g>
-<g transform="translate(560 1710)">
+<g transform="translate(800 1710)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: y U+0079</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -1330,7 +1358,7 @@
 <path d="M 160 200 L 160 320" />
 </g>
 </g>
-<g transform="translate(800 1710)">
+<g transform="translate(1040 1710)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: ” U+201D</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -1353,7 +1381,7 @@
 <path d="M 200 80 A 40 40 0 0 0 240 40" />
 </g>
 </g>
-<g transform="translate(1040 1710)">
+<g transform="translate(1280 1710)">
 <rect class="gbox" x="0" y="0" width="240" height="320"/>
 <desc>glyph: „ U+201E</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
@@ -1392,45 +1420,46 @@
 <text class="lbl" x="480" y="678">A U+0041</text>
 <text class="lbl" x="720" y="678">B U+0042</text>
 <text class="lbl" x="960" y="678">C U+0043</text>
-<text class="lbl" x="1200" y="678">E U+0045</text>
-<text class="lbl" x="1440" y="678">G U+0047</text>
-<text class="lbl" x="1680" y="678">H U+0048</text>
-<text class="lbl" x="1920" y="678">I U+0049</text>
-<text class="lbl" x="2080" y="678">J U+004A</text>
-<text class="lbl" x="0" y="1020">K U+004B</text>
-<text class="lbl" x="240" y="1020">L U+004C</text>
-<text class="lbl" x="480" y="1020">M U+004D</text>
-<text class="lbl" x="800" y="1020">N U+004E</text>
-<text class="lbl" x="1040" y="1020">P U+0050</text>
-<text class="lbl" x="1280" y="1020">R U+0052</text>
-<text class="lbl" x="1520" y="1020">S U+0053</text>
-<text class="lbl" x="1760" y="1020">U U+0055</text>
-<text class="lbl" x="2000" y="1020">W U+0057</text>
-<text class="lbl" x="2320" y="1020">X U+0058</text>
-<text class="lbl" x="0" y="1362">Z U+005A</text>
-<text class="lbl" x="240" y="1362">a U+0061</text>
-<text class="lbl" x="480" y="1362">b U+0062</text>
-<text class="lbl" x="720" y="1362">c U+0063</text>
-<text class="lbl" x="960" y="1362">d U+0064</text>
-<text class="lbl" x="1200" y="1362">e U+0065</text>
-<text class="lbl" x="1440" y="1362">f U+0066</text>
-<text class="lbl" x="1680" y="1362">g U+0067</text>
-<text class="lbl" x="1920" y="1362">h U+0068</text>
-<text class="lbl" x="2160" y="1362">i U+0069</text>
-<text class="lbl" x="0" y="1704">k U+006B</text>
-<text class="lbl" x="240" y="1704">m U+006D</text>
-<text class="lbl" x="560" y="1704">n U+006E</text>
-<text class="lbl" x="800" y="1704">o U+006F</text>
-<text class="lbl" x="1040" y="1704">p U+0070</text>
-<text class="lbl" x="1280" y="1704">q U+0071</text>
-<text class="lbl" x="1520" y="1704">r U+0072</text>
-<text class="lbl" x="1760" y="1704">t U+0074</text>
-<text class="lbl" x="2000" y="1704">u U+0075</text>
-<text class="lbl" x="2240" y="1704">v U+0076</text>
-<text class="lbl" x="0" y="2046">w U+0077</text>
-<text class="lbl" x="320" y="2046">x U+0078</text>
-<text class="lbl" x="560" y="2046">y U+0079</text>
-<text class="lbl" x="800" y="2046">” U+201D</text>
-<text class="lbl" x="1040" y="2046">„ U+201E</text>
+<text class="lbl" x="1200" y="678">D U+0044</text>
+<text class="lbl" x="1440" y="678">E U+0045</text>
+<text class="lbl" x="1680" y="678">G U+0047</text>
+<text class="lbl" x="1920" y="678">H U+0048</text>
+<text class="lbl" x="2160" y="678">I U+0049</text>
+<text class="lbl" x="0" y="1020">J U+004A</text>
+<text class="lbl" x="240" y="1020">K U+004B</text>
+<text class="lbl" x="480" y="1020">L U+004C</text>
+<text class="lbl" x="720" y="1020">M U+004D</text>
+<text class="lbl" x="1040" y="1020">N U+004E</text>
+<text class="lbl" x="1280" y="1020">P U+0050</text>
+<text class="lbl" x="1520" y="1020">R U+0052</text>
+<text class="lbl" x="1760" y="1020">S U+0053</text>
+<text class="lbl" x="2000" y="1020">U U+0055</text>
+<text class="lbl" x="2240" y="1020">W U+0057</text>
+<text class="lbl" x="0" y="1362">X U+0058</text>
+<text class="lbl" x="240" y="1362">Z U+005A</text>
+<text class="lbl" x="480" y="1362">a U+0061</text>
+<text class="lbl" x="720" y="1362">b U+0062</text>
+<text class="lbl" x="960" y="1362">c U+0063</text>
+<text class="lbl" x="1200" y="1362">d U+0064</text>
+<text class="lbl" x="1440" y="1362">e U+0065</text>
+<text class="lbl" x="1680" y="1362">f U+0066</text>
+<text class="lbl" x="1920" y="1362">g U+0067</text>
+<text class="lbl" x="2160" y="1362">h U+0068</text>
+<text class="lbl" x="0" y="1704">i U+0069</text>
+<text class="lbl" x="160" y="1704">k U+006B</text>
+<text class="lbl" x="400" y="1704">m U+006D</text>
+<text class="lbl" x="720" y="1704">n U+006E</text>
+<text class="lbl" x="960" y="1704">o U+006F</text>
+<text class="lbl" x="1200" y="1704">p U+0070</text>
+<text class="lbl" x="1440" y="1704">q U+0071</text>
+<text class="lbl" x="1680" y="1704">r U+0072</text>
+<text class="lbl" x="1920" y="1704">t U+0074</text>
+<text class="lbl" x="2160" y="1704">u U+0075</text>
+<text class="lbl" x="0" y="2046">v U+0076</text>
+<text class="lbl" x="240" y="2046">w U+0077</text>
+<text class="lbl" x="560" y="2046">x U+0078</text>
+<text class="lbl" x="800" y="2046">y U+0079</text>
+<text class="lbl" x="1040" y="2046">” U+201D</text>
+<text class="lbl" x="1280" y="2046">„ U+201E</text>
 </g>
 </svg>
