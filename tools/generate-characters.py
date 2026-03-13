@@ -145,8 +145,6 @@ def svg_glyph_doc(
         out.append(
             f'<g fill="none" stroke="#bdbdbd" stroke-width="{fmt(GRID_STROKE)}" opacity="{fmt(GRID_OPACITY)}">'
         )
-        for row in range(guide_cols * 0, int(view_h // DY)):
-            pass
         rows = int(view_h // DY)
         for row in range(rows):
             for col in range(guide_cols):
@@ -203,13 +201,13 @@ def svg_glyph_doc(
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--data-file", default="data/glyphs.py", help="Path to glyph data file (default: data/glyphs.py)")
-    ap.add_argument("--out-dir", default="src", help="Output directory (default: src)")
-    ap.add_argument("--debug", action="store_true", help="Overlay grid + anchor dots")
+    ap.add_argument("--out-dir", default="src", help="Output directory for normal SVGs (default: src)")
     ap.add_argument("--only", default="", help="Only render these characters")
     args = ap.parse_args()
 
     data_file = FSPath(args.data_file)
     out_dir = FSPath(args.out_dir)
+    debug_dir = out_dir / "debug"
 
     if not data_file.exists():
         raise SystemExit(f"Data file not found: {data_file}")
@@ -227,7 +225,8 @@ def main() -> None:
 
     glyphs.sort(key=lambda g: int(g["codepoint"]))
 
-    written = 0
+    written_normal = 0
+    written_debug = 0
 
     for glyph in glyphs:
         ch = glyph["char"]
@@ -240,21 +239,38 @@ def main() -> None:
 
         out_name = glyph.get("filename") or f"character-u{codepoint:04x}.svg"
 
-        svg = svg_glyph_doc(
+        svg_normal = svg_glyph_doc(
             glyph_name=ch,
             codepoint=codepoint,
             shapes=shapes,
-            debug=args.debug,
+            debug=False,
             view_w=view_w,
             view_h=view_h,
             guide_cols=guide_cols,
         )
 
-        write_text_lf(out_dir / out_name, svg)
-        written += 1
-        print(f"✓ {ch} -> {out_name}")
+        svg_debug = svg_glyph_doc(
+            glyph_name=ch,
+            codepoint=codepoint,
+            shapes=shapes,
+            debug=True,
+            view_w=view_w,
+            view_h=view_h,
+            guide_cols=guide_cols,
+        )
 
-    print(f"\nDone. Wrote {written} glyph(s) into {out_dir.resolve()}")
+        write_text_lf(out_dir / out_name, svg_normal)
+        write_text_lf(debug_dir / out_name, svg_debug)
+
+        written_normal += 1
+        written_debug += 1
+        print(f"✓ {ch} -> {out_name}")
+        print(f"  ├─ normal: {(out_dir / out_name).as_posix()}")
+        print(f"  └─ debug : {(debug_dir / out_name).as_posix()}")
+
+    print(f"\nDone.")
+    print(f"Wrote {written_normal} normal glyph(s) into {out_dir.resolve()}")
+    print(f"Wrote {written_debug} debug glyph(s) into {debug_dir.resolve()}")
 
 
 if __name__ == "__main__":

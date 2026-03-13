@@ -33,24 +33,6 @@ if (!$hasAria) {
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" width="320" height="320" {% if attrs is defined and attrs %} { attrs|raw }{% endif %}>
 <desc>glyph: M U+004D</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="200" cy="40" r="40" />
-<circle cx="280" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="200" cy="120" r="40" />
-<circle cx="280" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="200" cy="200" r="40" />
-<circle cx="280" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-<circle cx="200" cy="280" r="40" />
-<circle cx="280" cy="280" r="40" />
-</g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="butt" stroke-linejoin="round">
 <path d="M 80 240 L 80 120" />
 <path d="M 80 120 A 40 40 0 0 1 120 80" />
@@ -59,16 +41,6 @@ if (!$hasAria) {
 <path d="M 160 120 A 40 40 0 0 1 200 80" />
 <path d="M 200 80 A 40 40 0 0 1 240 120" />
 <path d="M 240 240 L 240 120" />
-</g>
-<g fill="#1e6bff" stroke="none">
-<circle cx="80" cy="240" r="3.5" />
-<circle cx="80" cy="120" r="3.5" />
-<circle cx="120" cy="80" r="3.5" />
-<circle cx="160" cy="120" r="3.5" />
-<circle cx="160" cy="240" r="3.5" />
-<circle cx="200" cy="80" r="3.5" />
-<circle cx="240" cy="120" r="3.5" />
-<circle cx="240" cy="240" r="3.5" />
 </g>
 </svg>
 

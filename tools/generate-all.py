@@ -30,7 +30,7 @@ def main() -> None:
 
     scripts = [
         ("generate-data.py", []),
-        ("generate-characters.py", ["--debug"]),
+        ("generate-characters.py", []),
         ("generate-sheet.py", ["--border", "--labels"]),
         ("generate-templates.py", []),
         ("generate-characters-styles.py", []),

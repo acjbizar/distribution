@@ -33,16 +33,6 @@ if (!$hasAria) {
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 320" width="160" height="320" {% if attrs is defined and attrs %} { attrs|raw }{% endif %}>
 <desc>glyph: ! U+0021</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35">
-<circle cx="40" cy="40" r="40" />
-<circle cx="120" cy="40" r="40" />
-<circle cx="40" cy="120" r="40" />
-<circle cx="120" cy="120" r="40" />
-<circle cx="40" cy="200" r="40" />
-<circle cx="120" cy="200" r="40" />
-<circle cx="40" cy="280" r="40" />
-<circle cx="120" cy="280" r="40" />
-</g>
 <g fill="none" stroke="#000" stroke-width="9" stroke-linecap="butt" stroke-linejoin="round">
 <path d="M 80 80 L 80 120" />
 <path d="M 80 120 L 80 160" />
@@ -50,13 +40,6 @@ if (!$hasAria) {
 </g>
 <g fill="#000" stroke="#000" stroke-width="9">
 <circle cx="80" cy="240" r="1" />
-</g>
-<g fill="#1e6bff" stroke="none">
-<circle cx="80" cy="80" r="3.5" />
-<circle cx="80" cy="120" r="3.5" />
-<circle cx="80" cy="160" r="3.5" />
-<circle cx="80" cy="200" r="3.5" />
-<circle cx="80" cy="240" r="3.5" />
 </g>
 </svg>
 
