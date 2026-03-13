@@ -3,19 +3,20 @@
 """
 tools/generate-instagram-sheet.py
 
-Generate 1080×1080 PNG “sheets” showing all glyphs in a grid:
+Generate 1080×1080 PNG “sheets” showing glyphs in a grid.
 
-1) sheet.png
-   - renders SVG designs from src/character-uXXXX.svg
+Outputs:
+- dist/images/instagram/sheet.png                 (SVG designs from src/)
+- dist/images/instagram/sheet-wgth100.png         (from build/fonts/{basename}-master-100.ttf)
+- dist/images/instagram/sheet-wgth900.png         (from build/fonts/{basename}-master-900.ttf)
+- dist/images/instagram/sheet-snelweg.png         (SVG designs from src/snelweg/)
+- dist/images/instagram/sheet-spoorweg.png        (SVG designs from src/spoorweg/)
+- dist/images/instagram/sheet-waterweg.png        (SVG designs from src/waterweg/)
 
-2) sheet-wgth100.png / sheet-wgth900.png
-   - renders using built master fonts:
-       build/fonts/{basename}-master-100.ttf
-       build/fonts/{basename}-master-900.ttf
-
-Change vs previous version:
-- ✅ For font-based sheets, ALL glyphs use the SAME font size (per sheet),
-  so wide glyphs like W/M appear wider instead of being scaled down.
+Key change:
+- Font-based sheets use ONE shared font size per sheet
+- ✅ Horizontal centering uses ADVANCE WIDTH (textlength), not ink bbox,
+  so masters 100/900 don’t drift left/right vs the SVG-centered sheet.
 
 Deps:
   pip install pillow cairosvg
@@ -28,7 +29,7 @@ import io
 import math
 import re
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 from PIL import Image, ImageDraw, ImageFont
 
@@ -130,7 +131,6 @@ def build_sheet_from_svgs(
 
 
 def _max_glyph_height_at_size(font_path: Path, chars: List[str], size: int) -> int:
-    # Measure max bbox height across all chars at a given size
     font = ImageFont.truetype(str(font_path), size=size)
     tmp = Image.new("L", (10, 10), 0)
     d = ImageDraw.Draw(tmp)
@@ -144,10 +144,6 @@ def _max_glyph_height_at_size(font_path: Path, chars: List[str], size: int) -> i
 
 
 def pick_shared_font_size_for_height(font_path: Path, chars: List[str], max_h: int) -> ImageFont.FreeTypeFont:
-    """
-    Pick ONE font size for the whole sheet such that the *tallest* glyph fits max_h.
-    (We don’t constrain width on purpose—W/M will be wide, as requested.)
-    """
     lo, hi = 4, 2048
     best = 4
     while lo <= hi:
@@ -161,25 +157,37 @@ def pick_shared_font_size_for_height(font_path: Path, chars: List[str], max_h: i
     return ImageFont.truetype(str(font_path), size=best)
 
 
-def draw_font_glyph_fixed_size(
+def draw_font_glyph_fixed_size_advance_centered(
     canvas: Image.Image,
     box: Tuple[int, int, int, int],
     font: ImageFont.FreeTypeFont,
     ch: str,
 ) -> None:
+    """
+    ✅ Horizontally center by ADVANCE WIDTH (textlength), not ink bbox.
+    This matches the “SVG viewBox centering” feel and prevents weight-master drift.
+    """
     x0, y0, x1, y1 = box
     bw = x1 - x0
     bh = y1 - y0
 
     d = ImageDraw.Draw(canvas)
+
+    # Advance width in pixels at this font size
+    adv = d.textlength(ch, font=font)
+
+    # Ink bbox (used only for vertical centering)
     bbox = d.textbbox((0, 0), ch, font=font)
-    gw = bbox[2] - bbox[0]
     gh = bbox[3] - bbox[1]
 
-    cx = x0 + bw // 2
-    cy = y0 + bh // 2
-    tx = cx - gw // 2 - bbox[0]
-    ty = cy - gh // 2 - bbox[1]
+    cx = x0 + bw / 2.0
+    cy = y0 + bh / 2.0
+
+    # Place pen so advance box is centered
+    tx = cx - adv / 2.0
+
+    # Vertical center by bbox, adjusting for bbox origin
+    ty = cy - gh / 2.0 - bbox[1]
 
     d.text((tx, ty), ch, font=font, fill=(0, 0, 0, 255))
 
@@ -213,7 +221,7 @@ def build_sheet_from_font_fixed_size(
     inset = max(6, min(cell_w, cell_h) // 12)
     box_h = max(8, cell_h - 2 * inset)
 
-    # ✅ One font size for the whole sheet (height-constrained only)
+    # One font size for the whole sheet (height constrained only)
     font = pick_shared_font_size_for_height(font_path, chars, max_h=box_h)
 
     for idx, ch in enumerate(chars):
@@ -229,7 +237,7 @@ def build_sheet_from_font_fixed_size(
             draw.rectangle([x0, y0, x1, y1], outline=(0, 0, 0, 25), width=1)
 
         box = (x0 + inset, y0 + inset, x1 - inset, y1 - inset)
-        draw_font_glyph_fixed_size(canvas, box, font, ch)
+        draw_font_glyph_fixed_size_advance_centered(canvas, box, font, ch)
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     canvas.convert("RGB").save(out_path, "PNG")
@@ -246,19 +254,24 @@ def main() -> None:
     ap.add_argument("--padding", type=int, default=36)
     ap.add_argument("--gap", type=int, default=18)
     ap.add_argument("--draw-grid", action="store_true")
+    ap.add_argument(
+        "--themes",
+        default="snelweg,spoorweg,waterweg",
+        help="Comma-separated theme folders under src/ (default: snelweg,spoorweg,waterweg). Use empty to disable.",
+    )
     args = ap.parse_args()
 
     src_dir = Path(args.src_dir)
     build_dir = Path(args.build_dir)
     out_dir = Path(args.out_dir)
 
-    svgs = list_glyph_svgs(src_dir)
-    if not svgs:
+    svgs_base = list_glyph_svgs(src_dir)
+    if not svgs_base:
         raise SystemExit(f"No glyph SVGs found in {src_dir} (expected character-uXXXX.svg).")
 
-    # SVG design sheet
+    # Base SVG design sheet
     build_sheet_from_svgs(
-        svgs=svgs,
+        svgs=svgs_base,
         out_path=out_dir / "sheet.png",
         size=args.size,
         padding=args.padding,
@@ -266,12 +279,12 @@ def main() -> None:
         draw_grid=args.draw_grid,
     )
 
-    # Font sheets from master fonts (fixed size per sheet)
+    # Base font weight sheets (masters)
     font_100 = build_dir / f"{args.basename}-master-100.ttf"
     font_900 = build_dir / f"{args.basename}-master-900.ttf"
 
     build_sheet_from_font_fixed_size(
-        svgs=svgs,
+        svgs=svgs_base,
         out_path=out_dir / "sheet-wgth100.png",
         size=args.size,
         padding=args.padding,
@@ -281,7 +294,7 @@ def main() -> None:
     )
 
     build_sheet_from_font_fixed_size(
-        svgs=svgs,
+        svgs=svgs_base,
         out_path=out_dir / "sheet-wgth900.png",
         size=args.size,
         padding=args.padding,
@@ -289,6 +302,28 @@ def main() -> None:
         draw_grid=args.draw_grid,
         font_path=font_900,
     )
+
+    # Theme SVG sheets (no fonts required)
+    themes = [t.strip() for t in (args.themes or "").split(",") if t.strip()]
+    for theme in themes:
+        theme_dir = src_dir / theme
+        if not theme_dir.exists() or not theme_dir.is_dir():
+            print(f"! Theme folder not found, skipping: {theme_dir}")
+            continue
+
+        svgs_theme = list_glyph_svgs(theme_dir)
+        if not svgs_theme:
+            print(f"! No glyph SVGs in theme folder, skipping: {theme_dir}")
+            continue
+
+        build_sheet_from_svgs(
+            svgs=svgs_theme,
+            out_path=out_dir / f"sheet-{theme}.png",
+            size=args.size,
+            padding=args.padding,
+            gap=args.gap,
+            draw_grid=args.draw_grid,
+        )
 
 
 if __name__ == "__main__":
