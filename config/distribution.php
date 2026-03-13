@@ -6,14 +6,15 @@ declare(strict_types=1);
 
 return [
     'Distribution' => [
-        'glyphCount' => 58,
-        'chars' => 'ABCDEGHIJKLMNPRSUWXZabcdefghikmnopqrtuvwxy0123456789.?”„Ππ',
+        'glyphCount' => 59,
+        'chars' => 'ABCDEGHIJKLMNPRSUWXZabcdefghikmnopqrtuvwxy0123456789!.?”„Ππ',
         'uppercase' => 'ABCDEGHIJKLMNPRSUWXZ',
         'lowercase' => 'abcdefghikmnopqrtuvwxy',
         'digits' => '0123456789',
-        'punct' => '.?”„',
+        'punct' => '!.?”„',
         'other' => 'Ππ',
         'codepoints' => [
+            33,
             46,
             48,
             49,
@@ -74,6 +75,10 @@ return [
             8222,
         ],
         'unicodeRanges' => [
+            [
+                33,
+                33,
+            ],
             [
                 46,
                 46,
@@ -148,6 +153,7 @@ return [
         'hasDigits' => true,
         'hasPunct' => true,
         'charToHex' => [
+            '!' => '0021',
             '.' => '002e',
             '0' => '0030',
             '1' => '0031',
@@ -208,6 +214,13 @@ return [
             '„' => '201e',
         ],
         'glyphs' => [
+            'u0021' => [
+                'codepoint' => 33,
+                'char' => '!',
+                'hex' => '0021',
+                'symfonyTemplate' => '_character-u0021.svg.twig',
+                'cakeElement' => 'character-u0021',
+            ],
             'u002e' => [
                 'codepoint' => 46,
                 'char' => '.',

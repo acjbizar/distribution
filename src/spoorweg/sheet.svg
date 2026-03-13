@@ -1,8 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2560 1920">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2480 1920">
 <desc>Glyph sheet composed from src/spoorweg/character-u{codepoint}.svg</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <g transform="translate(0 0)">
+<desc>glyph: ! U+0021</desc>
+<defs><mask id="trackMask"><rect x="0" y="0" width="160" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 80 L 80 120" /><path d="M 80 120 L 80 160" /><path d="M 80 160 L 80 200" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
+<g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
+<circle cx="40" cy="40" r="40" />
+<circle cx="120" cy="40" r="40" />
+<circle cx="40" cy="120" r="40" />
+<circle cx="120" cy="120" r="40" />
+<circle cx="40" cy="200" r="40" />
+<circle cx="120" cy="200" r="40" />
+<circle cx="40" cy="280" r="40" />
+<circle cx="120" cy="280" r="40" />
+</g>
+<g fill="none" stroke="#2b2b2b" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 80 L 80 120" /><path d="M 80 120 L 80 160" /><path d="M 80 160 L 80 200" /></g><g fill="none" stroke-linecap="butt" stroke-linejoin="round" opacity="0.95"><g stroke="#b8b8b8" stroke-width="3.2" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 80 L 80 120" /><path d="M 80 120 L 80 160" /><path d="M 80 160 L 80 200" /></g><g stroke="#b8b8b8" stroke-width="3.2" opacity="0.75" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 80 L 80 120" /><path d="M 80 120 L 80 160" /><path d="M 80 160 L 80 200" /></g></g><g mask="url(#trackMask)" filter="url(#tieJitter)" opacity="0.9"><g fill="none" stroke="#7a4f2a" stroke-width="6" stroke-linecap="butt" stroke-dasharray="1 18"><path d="M 80 80 L 80 120" /><path d="M 80 120 L 80 160" /><path d="M 80 160 L 80 200" /></g><g fill="none" stroke="#6b4121" stroke-width="5" stroke-linecap="butt" stroke-dasharray="1 26" stroke-dashoffset="9" opacity="0.65"><path d="M 80 80 L 80 120" /><path d="M 80 120 L 80 160" /><path d="M 80 160 L 80 200" /></g></g><g fill="#2b2b2b" stroke="#2b2b2b" stroke-width="9" stroke-linecap="butt">
+<circle cx="80" cy="240" r="1" />
+</g>
+<g fill="#1e6bff" stroke="none" stroke-linecap="butt">
+<circle cx="80" cy="80" r="3.5" />
+<circle cx="80" cy="120" r="3.5" />
+<circle cx="80" cy="160" r="3.5" />
+<circle cx="80" cy="200" r="3.5" />
+<circle cx="80" cy="240" r="3.5" />
+</g>
+</g>
+<g transform="translate(160 0)">
 <desc>glyph: . U+002E</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -24,7 +48,7 @@
 <circle cx="80" cy="240" r="3.5" />
 </g>
 </g>
-<g transform="translate(160 0)">
+<g transform="translate(320 0)">
 <desc>glyph: 0 U+0030</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 120 A 40 40 0 0 1 120 80" /><path d="M 120 80 A 40 40 0 0 1 160 120" /><path d="M 160 120 L 160 200" /><path d="M 160 200 A 40 40 0 0 1 120 240" /><path d="M 120 240 A 40 40 0 0 1 80 200" /><path d="M 80 200 L 80 120" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -50,7 +74,7 @@
 <circle cx="80" cy="200" r="3.5" />
 </g>
 </g>
-<g transform="translate(400 0)">
+<g transform="translate(560 0)">
 <desc>glyph: 1 U+0031</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 160 240 L 160 120" /><path d="M 160 120 A 40 40 0 0 0 120 80" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -73,7 +97,7 @@
 <circle cx="120" cy="80" r="3.5" />
 </g>
 </g>
-<g transform="translate(640 0)">
+<g transform="translate(800 0)">
 <desc>glyph: 2 U+0032</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 120 A 40 40 0 0 1 120 80" /><path d="M 120 80 A 40 40 0 0 1 160 120" /><path d="M 160 120 A 40 40 0 0 1 120 160" /><path d="M 120 160 A 40 40 0 0 0 80 200" /><path d="M 80 200 A 40 40 0 0 0 120 240" /><path d="M 120 240 L 160 240" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -100,7 +124,7 @@
 <circle cx="160" cy="240" r="3.5" />
 </g>
 </g>
-<g transform="translate(880 0)">
+<g transform="translate(1040 0)">
 <desc>glyph: 3 U+0033</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 120 A 40 40 0 0 1 120 80" /><path d="M 120 80 A 40 40 0 0 1 160 120" /><path d="M 160 120 A 40 40 0 0 1 120 160" /><path d="M 120 160 A 40 40 0 0 1 160 200" /><path d="M 160 200 A 40 40 0 0 1 120 240" /><path d="M 120 240 A 40 40 0 0 1 80 200" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -127,7 +151,7 @@
 <circle cx="80" cy="200" r="3.5" />
 </g>
 </g>
-<g transform="translate(1120 0)">
+<g transform="translate(1280 0)">
 <desc>glyph: 4 U+0034</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 80 L 80 120" /><path d="M 80 120 A 40 40 0 0 0 120 160" /><path d="M 120 160 A 40 40 0 0 1 160 200" /><path d="M 160 80 L 160 240" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -153,7 +177,7 @@
 <circle cx="160" cy="240" r="3.5" />
 </g>
 </g>
-<g transform="translate(1360 0)">
+<g transform="translate(1520 0)">
 <desc>glyph: 5 U+0035</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 120 80 L 160 80" /><path d="M 120 80 A 40 40 0 0 0 80 120" /><path d="M 80 120 A 40 40 0 0 0 120 160" /><path d="M 120 160 A 40 40 0 0 1 160 200" /><path d="M 160 200 A 40 40 0 0 1 120 240" /><path d="M 120 240 A 40 40 0 0 1 80 200" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -180,7 +204,7 @@
 <circle cx="80" cy="200" r="3.5" />
 </g>
 </g>
-<g transform="translate(1600 0)">
+<g transform="translate(1760 0)">
 <desc>glyph: 6 U+0036</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 120 A 40 40 0 0 1 120 80" /><path d="M 120 80 A 40 40 0 0 1 160 120" /><path d="M 80 120 L 80 200" /><path d="M 160 200 A 40 40 0 0 1 120 240" /><path d="M 120 240 A 40 40 0 0 1 80 200" /><path d="M 80 200 A 40 40 0 0 1 120 160" /><path d="M 120 160 A 40 40 0 0 1 160 200" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -207,7 +231,7 @@
 <circle cx="120" cy="160" r="3.5" />
 </g>
 </g>
-<g transform="translate(1840 0)">
+<g transform="translate(2000 0)">
 <desc>glyph: 7 U+0037</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 80 L 120 80" /><path d="M 120 80 A 40 40 0 0 1 160 120" /><path d="M 160 120 L 160 240" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -231,7 +255,7 @@
 <circle cx="160" cy="240" r="3.5" />
 </g>
 </g>
-<g transform="translate(2080 0)">
+<g transform="translate(0 320)">
 <desc>glyph: 8 U+0038</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 160 120 A 40 40 0 0 1 120 160" /><path d="M 120 160 A 40 40 0 0 1 80 120" /><path d="M 80 120 A 40 40 0 0 1 120 80" /><path d="M 120 80 A 40 40 0 0 1 160 120" /><path d="M 160 200 A 40 40 0 0 1 120 240" /><path d="M 120 240 A 40 40 0 0 1 80 200" /><path d="M 80 200 A 40 40 0 0 1 120 160" /><path d="M 120 160 A 40 40 0 0 1 160 200" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -258,7 +282,7 @@
 <circle cx="80" cy="200" r="3.5" />
 </g>
 </g>
-<g transform="translate(0 320)">
+<g transform="translate(240 320)">
 <desc>glyph: 9 U+0039</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 160 120 A 40 40 0 0 1 120 160" /><path d="M 120 160 A 40 40 0 0 1 80 120" /><path d="M 80 120 A 40 40 0 0 1 120 80" /><path d="M 120 80 A 40 40 0 0 1 160 120" /><path d="M 160 120 L 160 200" /><path d="M 160 200 A 40 40 0 0 1 120 240" /><path d="M 120 240 A 40 40 0 0 1 80 200" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -285,7 +309,7 @@
 <circle cx="80" cy="200" r="3.5" />
 </g>
 </g>
-<g transform="translate(240 320)">
+<g transform="translate(480 320)">
 <desc>glyph: ? U+003F</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 120 A 40 40 0 0 1 120 80" /><path d="M 120 80 A 40 40 0 0 1 160 120" /><path d="M 160 120 A 40 40 0 0 1 120 160" /><path d="M 120 160 A 40 40 0 0 0 82.412 186.319" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -314,7 +338,7 @@
 <circle cx="80" cy="240" r="3.5" />
 </g>
 </g>
-<g transform="translate(480 320)">
+<g transform="translate(720 320)">
 <desc>glyph: A U+0041</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 120 A 40 40 0 0 1 120 80" /><path d="M 120 80 A 40 40 0 0 1 160 120" /><path d="M 160 120 L 160 200" /><path d="M 80 120 L 80 160" /><path d="M 80 160 L 80 200" /><path d="M 80 200 A 40 40 0 0 1 120 160" /><path d="M 120 160 A 40 40 0 0 1 160 200" /><path d="M 160 200 L 160 240" /><path d="M 80 200 L 80 240" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -343,7 +367,7 @@
 <circle cx="80" cy="240" r="3.5" />
 </g>
 </g>
-<g transform="translate(720 320)">
+<g transform="translate(960 320)">
 <desc>glyph: B U+0042</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 120 L 80 160" /><path d="M 80 120 A 40 40 0 0 1 120 80" /><path d="M 120 80 A 40 40 0 0 1 160 120" /><path d="M 80 160 L 80 200" /><path d="M 80 200 A 40 40 0 0 0 120 240" /><path d="M 120 240 A 40 40 0 0 0 160 200" /><path d="M 120 160 A 40 40 0 0 1 160 200" /><path d="M 120 160 A 40 40 0 0 0 160 120" /><path d="M 80 160 L 120 160" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -371,7 +395,7 @@
 <circle cx="120" cy="160" r="3.5" />
 </g>
 </g>
-<g transform="translate(960 320)">
+<g transform="translate(1200 320)">
 <desc>glyph: C U+0043</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 160 120 A 40 40 0 0 0 120 80" /><path d="M 120 80 A 40 40 0 0 0 80 120" /><path d="M 80 120 L 80 200" /><path d="M 80 200 A 40 40 0 0 0 120 240" /><path d="M 120 240 A 40 40 0 0 0 160 200" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -397,7 +421,7 @@
 <circle cx="160" cy="200" r="3.5" />
 </g>
 </g>
-<g transform="translate(1200 320)">
+<g transform="translate(1440 320)">
 <desc>glyph: D U+0044</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 80 L 80 240" /><path d="M 120 80 A 40 40 0 0 1 160 120" /><path d="M 120 240 A 40 40 0 0 0 160 200" /><path d="M 160 120 L 160 160" /><path d="M 160 160 L 160 200" /><path d="M 80 80 L 120 80" /><path d="M 80 240 L 120 240" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -424,7 +448,7 @@
 <circle cx="160" cy="160" r="3.5" />
 </g>
 </g>
-<g transform="translate(1440 320)">
+<g transform="translate(1680 320)">
 <desc>glyph: E U+0045</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 160 120 A 40 40 0 0 0 120 80" /><path d="M 120 80 A 40 40 0 0 0 80 120" /><path d="M 80 120 A 40 40 0 0 0 120 160" /><path d="M 120 160 A 40 40 0 0 0 80 200" /><path d="M 80 200 A 40 40 0 0 0 120 240" /><path d="M 120 240 A 40 40 0 0 0 160 200" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -451,7 +475,7 @@
 <circle cx="160" cy="200" r="3.5" />
 </g>
 </g>
-<g transform="translate(1680 320)">
+<g transform="translate(1920 320)">
 <desc>glyph: G U+0047</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 160 120 A 40 40 0 0 0 120 80" /><path d="M 120 80 A 40 40 0 0 0 80 120" /><path d="M 80 120 L 80 200" /><path d="M 80 200 A 40 40 0 0 0 120 240" /><path d="M 120 240 A 40 40 0 0 0 160 200" /><path d="M 160 200 A 40 40 0 0 0 120 160" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -478,7 +502,7 @@
 <circle cx="120" cy="160" r="3.5" />
 </g>
 </g>
-<g transform="translate(1920 320)">
+<g transform="translate(2160 320)">
 <desc>glyph: H U+0048</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 80 L 80 240" /><path d="M 80 200 A 40 40 0 0 1 120 160" /><path d="M 120 160 A 40 40 0 0 1 160 200" /><path d="M 160 80 L 160 240" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -505,7 +529,7 @@
 <circle cx="160" cy="240" r="3.5" />
 </g>
 </g>
-<g transform="translate(2160 320)">
+<g transform="translate(0 640)">
 <desc>glyph: I U+0049</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="160" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 80 L 80 240" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -523,7 +547,7 @@
 <circle cx="80" cy="240" r="3.5" />
 </g>
 </g>
-<g transform="translate(0 640)">
+<g transform="translate(160 640)">
 <desc>glyph: J U+004A</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 160 80 L 160 200" /><path d="M 160 200 A 40 40 0 0 1 120 240" /><path d="M 120 240 A 40 40 0 0 1 80 200" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -547,7 +571,7 @@
 <circle cx="80" cy="200" r="3.5" />
 </g>
 </g>
-<g transform="translate(240 640)">
+<g transform="translate(400 640)">
 <desc>glyph: K U+004B</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 80 L 80 240" /><path d="M 80 200 A 40 40 0 0 1 120 160" /><path d="M 120 160 A 40 40 0 0 1 160 200" /><path d="M 120 160 A 40 40 0 0 0 160 120" /><path d="M 160 200 L 160 240" /><path d="M 160 80 L 160 120" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -575,7 +599,7 @@
 <circle cx="160" cy="80" r="3.5" />
 </g>
 </g>
-<g transform="translate(480 640)">
+<g transform="translate(640 640)">
 <desc>glyph: L U+004C</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 80 L 80 200" /><path d="M 80 200 A 40 40 0 0 0 120 240" /><path d="M 120 240 L 160 240" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -599,7 +623,7 @@
 <circle cx="160" cy="240" r="3.5" />
 </g>
 </g>
-<g transform="translate(720 640)">
+<g transform="translate(880 640)">
 <desc>glyph: M U+004D</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="320" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 240 L 80 120" /><path d="M 80 120 A 40 40 0 0 1 120 80" /><path d="M 120 80 A 40 40 0 0 1 160 120" /><path d="M 160 240 L 160 120" /><path d="M 160 120 A 40 40 0 0 1 200 80" /><path d="M 200 80 A 40 40 0 0 1 240 120" /><path d="M 240 240 L 240 120" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -631,7 +655,7 @@
 <circle cx="240" cy="240" r="3.5" />
 </g>
 </g>
-<g transform="translate(1040 640)">
+<g transform="translate(1200 640)">
 <desc>glyph: N U+004E</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 240 L 80 120" /><path d="M 80 120 A 40 40 0 0 1 120 80" /><path d="M 120 80 A 40 40 0 0 1 160 120" /><path d="M 160 240 L 160 120" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -656,7 +680,7 @@
 <circle cx="160" cy="240" r="3.5" />
 </g>
 </g>
-<g transform="translate(1280 640)">
+<g transform="translate(1440 640)">
 <desc>glyph: P U+0050</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 240 L 80 80" /><path d="M 80 80 L 120 80" /><path d="M 120 80 A 40 40 0 0 1 160 120" /><path d="M 160 120 A 40 40 0 0 1 120 160" /><path d="M 120 160 L 80 160" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -682,7 +706,7 @@
 <circle cx="80" cy="160" r="3.5" />
 </g>
 </g>
-<g transform="translate(1520 640)">
+<g transform="translate(1680 640)">
 <desc>glyph: R U+0052</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 240 L 80 80" /><path d="M 80 80 L 120 80" /><path d="M 120 80 A 40 40 0 0 1 160 120" /><path d="M 160 120 A 40 40 0 0 1 120 160" /><path d="M 120 160 L 80 160" /><path d="M 120 160 A 40 40 0 0 1 160 200" /><path d="M 160 200 L 160 240" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -710,7 +734,7 @@
 <circle cx="160" cy="240" r="3.5" />
 </g>
 </g>
-<g transform="translate(1760 640)">
+<g transform="translate(1920 640)">
 <desc>glyph: S U+0053</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 160 120 A 40 40 0 0 0 120 80" /><path d="M 120 80 A 40 40 0 0 0 80 120" /><path d="M 80 120 A 40 40 0 0 0 120 160" /><path d="M 120 160 A 40 40 0 0 1 160 200" /><path d="M 160 200 A 40 40 0 0 1 120 240" /><path d="M 120 240 A 40 40 0 0 1 80 200" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -737,7 +761,7 @@
 <circle cx="80" cy="200" r="3.5" />
 </g>
 </g>
-<g transform="translate(2000 640)">
+<g transform="translate(2160 640)">
 <desc>glyph: U U+0055</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 80 L 80 200" /><path d="M 160 80 L 160 200" /><path d="M 160 200 A 40 40 0 0 1 120 240" /><path d="M 120 240 A 40 40 0 0 1 80 200" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -762,7 +786,7 @@
 <circle cx="120" cy="240" r="3.5" />
 </g>
 </g>
-<g transform="translate(2240 640)">
+<g transform="translate(0 960)">
 <desc>glyph: W U+0057</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="320" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 80 L 80 200" /><path d="M 160 80 L 160 200" /><path d="M 240 80 L 240 200" /><path d="M 160 200 A 40 40 0 0 1 120 240" /><path d="M 120 240 A 40 40 0 0 1 80 200" /><path d="M 240 200 A 40 40 0 0 1 200 240" /><path d="M 200 240 A 40 40 0 0 1 160 200" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -794,7 +818,7 @@
 <circle cx="200" cy="240" r="3.5" />
 </g>
 </g>
-<g transform="translate(0 960)">
+<g transform="translate(320 960)">
 <desc>glyph: X U+0058</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 120 L 80 80" /><path d="M 80 120 A 40 40 0 0 0 120 160" /><path d="M 120 160 A 40 40 0 0 0 160 120" /><path d="M 160 120 L 160 80" /><path d="M 80 240 L 80 200" /><path d="M 80 200 A 40 40 0 0 1 120 160" /><path d="M 120 160 A 40 40 0 0 1 160 200" /><path d="M 160 240 L 160 200" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -823,7 +847,7 @@
 <circle cx="160" cy="240" r="3.5" />
 </g>
 </g>
-<g transform="translate(240 960)">
+<g transform="translate(560 960)">
 <desc>glyph: Z U+005A</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 160 L 160 160" /><path d="M 160 160 L 80 240" /><path d="M 80 240 L 160 240" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -847,7 +871,7 @@
 <circle cx="160" cy="240" r="3.5" />
 </g>
 </g>
-<g transform="translate(480 960)">
+<g transform="translate(800 960)">
 <desc>glyph: a U+0061</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 120 A 40 40 0 0 1 120 80" /><path d="M 120 80 A 40 40 0 0 1 160 120" /><path d="M 160 120 L 160 200" /><path d="M 160 200 A 40 40 0 0 1 120 240" /><path d="M 120 240 A 40 40 0 0 1 80 200" /><path d="M 120 160 A 40 40 0 0 0 160 120" /><path d="M 120 160 A 40 40 0 0 0 80 200" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -874,7 +898,7 @@
 <circle cx="120" cy="160" r="3.5" />
 </g>
 </g>
-<g transform="translate(720 960)">
+<g transform="translate(1040 960)">
 <desc>glyph: b U+0062</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 80 L 80 200" /><path d="M 160 200 A 40 40 0 0 1 120 240" /><path d="M 120 240 A 40 40 0 0 1 80 200" /><path d="M 80 200 A 40 40 0 0 1 120 160" /><path d="M 120 160 A 40 40 0 0 1 160 200" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -899,7 +923,7 @@
 <circle cx="120" cy="160" r="3.5" />
 </g>
 </g>
-<g transform="translate(960 960)">
+<g transform="translate(1280 960)">
 <desc>glyph: c U+0063</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 120 160 L 160 160" /><path d="M 120 160 A 40 40 0 0 0 80 200" /><path d="M 80 200 A 40 40 0 0 0 120 240" /><path d="M 120 240 L 160 240" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -924,7 +948,7 @@
 <circle cx="160" cy="240" r="3.5" />
 </g>
 </g>
-<g transform="translate(1200 960)">
+<g transform="translate(1520 960)">
 <desc>glyph: d U+0064</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 160 80 L 160 200" /><path d="M 160 200 A 40 40 0 0 1 120 240" /><path d="M 120 240 A 40 40 0 0 1 80 200" /><path d="M 80 200 A 40 40 0 0 1 120 160" /><path d="M 120 160 A 40 40 0 0 1 160 200" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -949,7 +973,7 @@
 <circle cx="120" cy="160" r="3.5" />
 </g>
 </g>
-<g transform="translate(1440 960)">
+<g transform="translate(1760 960)">
 <desc>glyph: e U+0065</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 160 120 A 40 40 0 0 0 120 80" /><path d="M 120 80 A 40 40 0 0 0 80 120" /><path d="M 80 120 A 40 40 0 0 0 120 160" /><path d="M 120 160 A 40 40 0 0 0 80 200" /><path d="M 80 200 A 40 40 0 0 0 120 240" /><path d="M 120 240 A 40 40 0 0 0 160 200" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -976,7 +1000,7 @@
 <circle cx="160" cy="200" r="3.5" />
 </g>
 </g>
-<g transform="translate(1680 960)">
+<g transform="translate(2000 960)">
 <desc>glyph: f U+0066</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 240 L 80 120" /><path d="M 80 120 A 40 40 0 0 1 120 80" /><path d="M 120 80 A 40 40 0 0 1 160 120" /><path d="M 80 200 A 40 40 0 0 1 120 160" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -1002,7 +1026,7 @@
 <circle cx="120" cy="160" r="3.5" />
 </g>
 </g>
-<g transform="translate(1920 960)">
+<g transform="translate(2240 960)">
 <desc>glyph: g U+0067</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 160 120 A 40 40 0 0 1 120 160" /><path d="M 120 160 A 40 40 0 0 1 80 120" /><path d="M 80 120 A 40 40 0 0 1 120 80" /><path d="M 120 80 A 40 40 0 0 1 160 120" /><path d="M 120 160 A 40 40 0 0 1 160 200" /><path d="M 160 200 A 40 40 0 0 1 120 240" /><path d="M 120 240 A 40 40 0 0 1 80 200" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -1029,7 +1053,7 @@
 <circle cx="80" cy="200" r="3.5" />
 </g>
 </g>
-<g transform="translate(2160 960)">
+<g transform="translate(0 1280)">
 <desc>glyph: h U+0068</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 80 L 80 240" /><path d="M 80 200 A 40 40 0 0 1 120 160" /><path d="M 120 160 A 40 40 0 0 1 160 200" /><path d="M 160 200 L 160 240" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -1055,7 +1079,7 @@
 <circle cx="160" cy="240" r="3.5" />
 </g>
 </g>
-<g transform="translate(0 1280)">
+<g transform="translate(240 1280)">
 <desc>glyph: i U+0069</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="160" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 240 L 80 160" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -1077,7 +1101,7 @@
 <circle cx="80" cy="80" r="3.5" />
 </g>
 </g>
-<g transform="translate(160 1280)">
+<g transform="translate(400 1280)">
 <desc>glyph: k U+006B</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 80 L 80 240" /><path d="M 80 200 A 40 40 0 0 1 120 160" /><path d="M 120 160 A 40 40 0 0 1 160 200" /><path d="M 120 160 A 40 40 0 0 0 160 120" /><path d="M 160 200 L 160 240" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -1104,7 +1128,7 @@
 <circle cx="160" cy="240" r="3.5" />
 </g>
 </g>
-<g transform="translate(400 1280)">
+<g transform="translate(640 1280)">
 <desc>glyph: m U+006D</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="320" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 240 L 80 200" /><path d="M 80 200 A 40 40 0 0 1 120 160" /><path d="M 120 160 A 40 40 0 0 1 160 200" /><path d="M 160 240 L 160 200" /><path d="M 160 200 A 40 40 0 0 1 200 160" /><path d="M 200 160 A 40 40 0 0 1 240 200" /><path d="M 240 240 L 240 200" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -1136,7 +1160,7 @@
 <circle cx="240" cy="240" r="3.5" />
 </g>
 </g>
-<g transform="translate(720 1280)">
+<g transform="translate(960 1280)">
 <desc>glyph: n U+006E</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 240 L 80 200" /><path d="M 80 200 A 40 40 0 0 1 120 160" /><path d="M 120 160 A 40 40 0 0 1 160 200" /><path d="M 160 240 L 160 200" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -1161,7 +1185,7 @@
 <circle cx="160" cy="240" r="3.5" />
 </g>
 </g>
-<g transform="translate(960 1280)">
+<g transform="translate(1200 1280)">
 <desc>glyph: o U+006F</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 160 200 A 40 40 0 0 1 120 240" /><path d="M 120 240 A 40 40 0 0 1 80 200" /><path d="M 80 200 A 40 40 0 0 1 120 160" /><path d="M 120 160 A 40 40 0 0 1 160 200" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -1185,7 +1209,7 @@
 <circle cx="120" cy="160" r="3.5" />
 </g>
 </g>
-<g transform="translate(1200 1280)">
+<g transform="translate(1440 1280)">
 <desc>glyph: p U+0070</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 320 L 80 200" /><path d="M 160 200 A 40 40 0 0 1 120 240" /><path d="M 120 240 A 40 40 0 0 1 80 200" /><path d="M 80 200 A 40 40 0 0 1 120 160" /><path d="M 120 160 A 40 40 0 0 1 160 200" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -1210,7 +1234,7 @@
 <circle cx="120" cy="160" r="3.5" />
 </g>
 </g>
-<g transform="translate(1440 1280)">
+<g transform="translate(1680 1280)">
 <desc>glyph: q U+0071</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 160 320 L 160 200" /><path d="M 160 200 A 40 40 0 0 1 120 240" /><path d="M 120 240 A 40 40 0 0 1 80 200" /><path d="M 80 200 A 40 40 0 0 1 120 160" /><path d="M 120 160 A 40 40 0 0 1 160 200" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -1235,7 +1259,7 @@
 <circle cx="120" cy="160" r="3.5" />
 </g>
 </g>
-<g transform="translate(1680 1280)">
+<g transform="translate(1920 1280)">
 <desc>glyph: r U+0072</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 240 L 80 200" /><path d="M 80 200 A 40 40 0 0 1 120 160" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -1258,7 +1282,7 @@
 <circle cx="120" cy="160" r="3.5" />
 </g>
 </g>
-<g transform="translate(1920 1280)">
+<g transform="translate(2160 1280)">
 <desc>glyph: t U+0074</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 80 L 80 200" /><path d="M 80 120 A 40 40 0 0 0 120 160" /><path d="M 80 200 A 40 40 0 0 0 120 240" /><path d="M 120 240 A 40 40 0 0 0 160 200" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -1284,7 +1308,7 @@
 <circle cx="160" cy="200" r="3.5" />
 </g>
 </g>
-<g transform="translate(2160 1280)">
+<g transform="translate(0 1600)">
 <desc>glyph: u U+0075</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 200 L 80 160" /><path d="M 80 200 A 40 40 0 0 0 120 240" /><path d="M 120 240 A 40 40 0 0 0 160 200" /><path d="M 160 200 L 160 160" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -1309,7 +1333,7 @@
 <circle cx="160" cy="160" r="3.5" />
 </g>
 </g>
-<g transform="translate(0 1600)">
+<g transform="translate(240 1600)">
 <desc>glyph: v U+0076</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 160 L 120 240" /><path d="M 120 240 L 160 160" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -1332,7 +1356,7 @@
 <circle cx="160" cy="160" r="3.5" />
 </g>
 </g>
-<g transform="translate(240 1600)">
+<g transform="translate(480 1600)">
 <desc>glyph: w U+0077</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="320" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 200 L 80 160" /><path d="M 80 200 A 40 40 0 0 0 120 240" /><path d="M 120 240 A 40 40 0 0 0 160 200" /><path d="M 160 200 L 160 160" /><path d="M 160 200 A 40 40 0 0 0 200 240" /><path d="M 200 240 A 40 40 0 0 0 240 200" /><path d="M 240 200 L 240 160" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -1364,7 +1388,7 @@
 <circle cx="240" cy="160" r="3.5" />
 </g>
 </g>
-<g transform="translate(560 1600)">
+<g transform="translate(800 1600)">
 <desc>glyph: x U+0078</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 160 A 40 40 0 0 1 120 200" /><path d="M 80 240 A 40 40 0 0 0 120 200" /><path d="M 120 200 A 40 40 0 0 0 160 240" /><path d="M 120 200 A 40 40 0 0 1 160 160" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -1389,7 +1413,7 @@
 <circle cx="160" cy="160" r="3.5" />
 </g>
 </g>
-<g transform="translate(800 1600)">
+<g transform="translate(1040 1600)">
 <desc>glyph: y U+0079</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 200 L 80 160" /><path d="M 80 200 A 40 40 0 0 0 120 240" /><path d="M 120 240 A 40 40 0 0 0 160 200" /><path d="M 160 200 L 160 160" /><path d="M 160 200 L 160 320" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -1415,7 +1439,7 @@
 <circle cx="160" cy="320" r="3.5" />
 </g>
 </g>
-<g transform="translate(1040 1600)">
+<g transform="translate(1280 1600)">
 <desc>glyph: Π U+03A0</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 160 L 80 200" /><path d="M 160 200 L 160 240" /><path d="M 80 200 L 80 240" /><path d="M 160 160 L 160 200" /><path d="M 80 80 L 120 80" /><path d="M 120 80 L 160 80" /><path d="M 80 120 L 80 160" /><path d="M 80 80 L 80 120" /><path d="M 160 80 L 160 120" /><path d="M 160 120 L 160 160" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -1446,7 +1470,7 @@
 <circle cx="160" cy="120" r="3.5" />
 </g>
 </g>
-<g transform="translate(1280 1600)">
+<g transform="translate(1520 1600)">
 <desc>glyph: π U+03C0</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 160 L 80 200" /><path d="M 160 200 L 160 240" /><path d="M 80 200 L 80 240" /><path d="M 160 160 L 160 200" /><path d="M 80 160 L 120 160" /><path d="M 120 160 L 160 160" /><path d="M 40 160 L 80 160" /><path d="M 160 160 L 200 160" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -1475,7 +1499,7 @@
 <circle cx="200" cy="160" r="3.5" />
 </g>
 </g>
-<g transform="translate(1520 1600)">
+<g transform="translate(1760 1600)">
 <desc>glyph: ” U+201D</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 120 80 A 40 40 0 0 0 160 40" /><path d="M 200 80 A 40 40 0 0 0 240 40" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">
@@ -1499,7 +1523,7 @@
 <circle cx="240" cy="40" r="3.5" />
 </g>
 </g>
-<g transform="translate(1760 1600)">
+<g transform="translate(2000 1600)">
 <desc>glyph: „ U+201E</desc>
 <defs><mask id="trackMask"><rect x="0" y="0" width="240" height="320" fill="#000" /><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" stroke-linejoin="round"><path d="M 120 320 A 40 40 0 0 0 160 280" /><path d="M 200 320 A 40 40 0 0 0 240 280" /></g></mask><filter id="tieJitter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="2" seed="9" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" /></filter></defs><rect x="0" y="0" width="100%" height="100%" fill="#fff" />
 <g fill="none" stroke="#bdbdbd" stroke-width="1" opacity="0.35" stroke-linecap="butt">

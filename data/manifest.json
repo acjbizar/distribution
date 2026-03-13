@@ -1,6 +1,6 @@
 {
   "manifestVersion": 1,
-  "generatedAt": "2026-03-13T17:48:06.409319+00:00",
+  "generatedAt": "2026-03-13T18:01:33.150230+00:00",
   "name": "distribution",
   "metadata": {
     "family": "Distribution",
@@ -8,38 +8,34 @@
     "fullName": "Distribution Master400",
     "postScriptName": "Distribution-Master400",
     "unitsPerEm": 1000,
-    "glyphCount": 60
+    "glyphCount": 61
   },
   "files": [
     {
       "ext": "woff2",
       "file": "distribution.woff2",
       "recommendedFile": "distribution.woff2",
-      "bytes": 78540,
-      "sha256": "6bd1119cc7399988c1051a9f3c6f78171d8f8d859bd5bb5a88ae173808bcd38c"
+      "bytes": 79496,
+      "sha256": "988a020cf754053156c6c565d5cfe5d0afd55429d7ffa47d632a2efedc381ea7"
     },
     {
       "ext": "woff",
       "file": "distribution.woff",
       "recommendedFile": "distribution.woff",
-      "bytes": 95440,
-      "sha256": "7035bf3683b305b647ecffbe85ef69c2a621e63112fad40d4c8d0031069c8d9d"
+      "bytes": 96596,
+      "sha256": "89c07f9a94fb71f70c169d5cca66d225945a82263f06b05b10c763e59559837c"
     },
     {
       "ext": "ttf",
       "file": "distribution.ttf",
       "recommendedFile": "distribution.ttf",
-      "bytes": 215844,
-      "sha256": "a21ae1bf194815ab16ea8372ca8870550e30bf930e847f0886f52ffe56d132ed"
+      "bytes": 219628,
+      "sha256": "494492861ba3d9e75f715ab93abf2d287fc5b73b18d1237ba090c38981899fc0"
     }
   ],
   "unicodeRanges": [
     [
       32,
-      32
-    ],
-    [
-      34,
       34
     ],
     [
@@ -112,8 +108,8 @@
     ]
   ],
   "counts": {
-    "codepointsTotal": 60,
-    "codepointsBMP": 60,
+    "codepointsTotal": 61,
+    "codepointsBMP": 61,
     "codepointsAstral": 0
   },
   "features": {
