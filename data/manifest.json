@@ -1,6 +1,6 @@
 {
   "manifestVersion": 1,
-  "generatedAt": "2026-03-13T16:30:52.196265+00:00",
+  "generatedAt": "2026-03-13T17:37:32.746464+00:00",
   "name": "distribution",
   "metadata": {
     "family": "Distribution",
@@ -15,22 +15,22 @@
       "ext": "woff2",
       "file": "distribution.woff2",
       "recommendedFile": "distribution.woff2",
-      "bytes": 79872,
-      "sha256": "6855fd560bb2cc7c4b7ff6c76ab5e20de6f0948d7841e10886df32c8e3b72084"
+      "bytes": 74852,
+      "sha256": "e2a6b08b7c213117d1eedbeecc9101be479cb06e26acb0678c64bd304dedad6e"
     },
     {
       "ext": "woff",
       "file": "distribution.woff",
       "recommendedFile": "distribution.woff",
-      "bytes": 100160,
-      "sha256": "0e1e871af47c98bf08a40b40b67a4f36735999a82f8926c00af95a6cd2ee24f0"
+      "bytes": 93092,
+      "sha256": "709a0fe11aa094cc74c4cc5a671a723eb0ce622e468d6c10360fb747c27853ba"
     },
     {
       "ext": "ttf",
       "file": "distribution.ttf",
       "recommendedFile": "distribution.ttf",
-      "bytes": 211720,
-      "sha256": "9de0e8ac916a8c026b40c21c70e069ba5ebcd850c21a41565b7a8595f55f7063"
+      "bytes": 211676,
+      "sha256": "dd76a0d4ae8671b704f86d7f069655c1a5fd9d430e47f17571bab9e003912ca6"
     }
   ],
   "unicodeRanges": [
