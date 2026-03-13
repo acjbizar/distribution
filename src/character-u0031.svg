@@ -20,4 +20,9 @@
 <path d="M 160 240 L 160 120" />
 <path d="M 160 120 A 40 40 0 0 0 120 80" />
 </g>
+<g fill="#1e6bff" stroke="none">
+<circle cx="160" cy="240" r="3.5" />
+<circle cx="160" cy="120" r="3.5" />
+<circle cx="120" cy="80" r="3.5" />
+</g>
 </svg>
