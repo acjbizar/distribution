@@ -192,6 +192,190 @@
     return `arc:${shape.variant}:${[a, b].sort().join('|')}`;
   }
 
+  function upsertManifestGlyph(map, char, extra = {}) {
+    if (!char || Array.from(char).length !== 1) return;
+
+    const hex = getCodepointHex(char);
+    const key = `U+${hex}`;
+    const existing = map.get(key) || {
+      char,
+      hex: key,
+      label: `${char} ${key}`,
+      fileCandidates: [],
+    };
+
+    existing.char = char;
+    existing.hex = key;
+    existing.label = `${char} ${key}`;
+
+    if (extra.filename) {
+      existing.filename = extra.filename;
+    }
+
+    if (extra.fileCandidates && extra.fileCandidates.length) {
+      const merged = new Set([...(existing.fileCandidates || []), ...extra.fileCandidates]);
+      existing.fileCandidates = Array.from(merged);
+    }
+
+    map.set(key, existing);
+  }
+
+  function inferGlyphFileCandidates(item) {
+    const fallbackFilename = `character-u${item.hex.slice(2).toLowerCase()}.svg`;
+    const filename = item.filename || fallbackFilename;
+
+    const candidates = [
+      ...(item.fileCandidates || []),
+      `../src/${filename}`,
+      `./src/${filename}`,
+      `src/${filename}`,
+    ];
+
+    return Array.from(new Set(candidates));
+  }
+
+  function inferArcVariantFromSweep(p1, p2, sweep) {
+    const v0 = arcSweepForVariant(p1, p2, 0);
+    const v1 = arcSweepForVariant(p1, p2, 1);
+
+    if (v0 === sweep && v1 !== sweep) return 0;
+    if (v1 === sweep && v0 !== sweep) return 1;
+    return 0;
+  }
+
+  function parsePathDataToShapes(d) {
+    const tokens = (d.match(/[MLA]|-?\d*\.?\d+/g) || []).slice();
+    const shapes = [];
+    let i = 0;
+    let current = null;
+
+    while (i < tokens.length) {
+      const cmd = tokens[i++];
+
+      if (cmd === 'M') {
+        current = {
+          x: Number(tokens[i++]),
+          y: Number(tokens[i++]),
+        };
+        continue;
+      }
+
+      if (cmd === 'L' && current) {
+        const next = {
+          x: Number(tokens[i++]),
+          y: Number(tokens[i++]),
+        };
+        shapes.push({
+          type: 'line',
+          p1: { ...current },
+          p2: { ...next },
+        });
+        current = next;
+        continue;
+      }
+
+      if (cmd === 'A' && current) {
+        const rx = Number(tokens[i++]);
+        const ry = Number(tokens[i++]);
+        const xAxisRotation = Number(tokens[i++]);
+        const largeArcFlag = Number(tokens[i++]);
+        const sweepFlag = Number(tokens[i++]);
+        const next = {
+          x: Number(tokens[i++]),
+          y: Number(tokens[i++]),
+        };
+
+        if (rx === 40 && ry === 40 && xAxisRotation === 0 && largeArcFlag === 0) {
+          shapes.push({
+            type: 'arc',
+            p1: { ...current },
+            p2: { ...next },
+            variant: inferArcVariantFromSweep(current, next, sweepFlag),
+          });
+        }
+
+        current = next;
+        continue;
+      }
+
+      break;
+    }
+
+    return shapes;
+  }
+
+  function parseGlyphSvgText(svgText) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svgText, 'image/svg+xml');
+
+    if (doc.querySelector('parsererror')) {
+      throw new Error('Could not parse SVG');
+    }
+
+    const shapes = [];
+
+    doc.querySelectorAll('path').forEach(path => {
+      const d = path.getAttribute('d');
+      if (!d) return;
+      shapes.push(...parsePathDataToShapes(d));
+    });
+
+    doc.querySelectorAll('circle').forEach(circle => {
+      const r = Number(circle.getAttribute('r'));
+      if (Math.abs(r - 1) > 0.001) return;
+
+      const cx = Number(circle.getAttribute('cx'));
+      const cy = Number(circle.getAttribute('cy'));
+
+      shapes.push({
+        type: 'dot',
+        p: { x: cx, y: cy },
+      });
+    });
+
+    const unique = new Map();
+    for (const shape of shapes) {
+      unique.set(serializeShapeKey(shape), shape);
+    }
+
+    return Array.from(unique.values());
+  }
+
+  async function loadGlyphForManifestItem(item) {
+    state.char = item.char;
+    el.charInput.value = item.char;
+
+    if (state.autoWidth) {
+      state.guideCols = suggestGuideCols(item.char);
+      el.guideColsSelect.value = String(state.guideCols);
+    }
+
+    const fileCandidates = inferGlyphFileCandidates(item);
+
+    for (const path of fileCandidates) {
+      try {
+        const response = await fetch(path, { cache: 'no-store' });
+        if (!response.ok) continue;
+
+        const svgText = await response.text();
+        const shapes = parseGlyphSvgText(svgText);
+
+        state.shapes = shapes;
+        state.hoverCandidate = null;
+        setStatus(`Loaded glyph from ${path}`);
+        renderEditor();
+        return;
+      } catch (error) {
+        // try next candidate
+      }
+    }
+
+    state.shapes = [];
+    state.hoverCandidate = null;
+    setStatus('Could not load glyph SVG; switched character only');
+    renderEditor();
+  }
+
   function serializeShapes() {
     const pathLines = [];
     const dotLines = [];
@@ -376,13 +560,36 @@
   }
 
   function getBestCandidate(pointer) {
+    const dotCandidates = getDotCandidates();
+
+    let bestDot = null;
+    let bestDotDistance = Infinity;
+
+    for (const candidate of dotCandidates) {
+      const distance = candidateDistance(pointer, candidate);
+      if (distance <= 10 && distance < bestDotDistance) {
+        bestDotDistance = distance;
+        bestDot = candidate;
+      }
+    }
+
+    if (bestDot) {
+      return bestDot;
+    }
+
+    const otherCandidates = [
+      ...getLineCandidates(),
+      ...getArcCandidates(),
+    ];
+
     let best = null;
     let bestScore = Infinity;
 
-    for (const candidate of getAllCandidates()) {
+    for (const candidate of otherCandidates) {
       const distance = candidateDistance(pointer, candidate);
       const threshold = candidateThreshold(candidate);
       const score = distance / threshold;
+
       if (distance <= threshold && score < bestScore) {
         bestScore = score;
         best = candidate;
@@ -531,16 +738,23 @@
     `).join('');
 
     el.manifestGlyphGrid.querySelectorAll('[data-manifest-char]').forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', async () => {
         const char = btn.getAttribute('data-manifest-char');
-        state.char = char;
-        el.charInput.value = char;
-        if (state.autoWidth) {
-          state.guideCols = suggestGuideCols(char);
-          el.guideColsSelect.value = String(state.guideCols);
+        const item = state.manifest.glyphs.find(entry => entry.char === char);
+
+        if (!item) {
+          state.char = char;
+          el.charInput.value = char;
+          if (state.autoWidth) {
+            state.guideCols = suggestGuideCols(char);
+            el.guideColsSelect.value = String(state.guideCols);
+          }
+          setStatus('Character selected');
+          renderEditor();
+          return;
         }
-        setStatus('Character selected from manifest');
-        renderEditor();
+
+        await loadGlyphForManifestItem(item);
       });
     });
   }
@@ -660,45 +874,39 @@
 
     if (typeof value === 'string') {
       const fileMatches = value.match(/character-u([0-9a-f]{4,6})\.svg/ig) || [];
+
       for (const match of fileMatches) {
         const hex = match.match(/u([0-9a-f]{4,6})/i)?.[1];
-        if (hex) {
-          const cp = parseInt(hex, 16);
-          if (Number.isFinite(cp)) {
-            const char = String.fromCodePoint(cp);
-            map.set(char, {
-              char,
-              hex: `U+${hex.toUpperCase().padStart(4, '0')}`,
-              label: `${char} U+${hex.toUpperCase().padStart(4, '0')}`,
-            });
-          }
-        }
+        if (!hex) continue;
+
+        const cp = parseInt(hex, 16);
+        if (!Number.isFinite(cp)) continue;
+
+        const char = String.fromCodePoint(cp);
+        upsertManifestGlyph(map, char, {
+          filename: `character-u${hex.toLowerCase()}.svg`,
+          fileCandidates: [value],
+        });
       }
 
       const soloHex = value.match(/^U\+?([0-9A-F]{4,6})$/i);
       if (soloHex) {
         const hex = soloHex[1].toUpperCase();
         const char = String.fromCodePoint(parseInt(hex, 16));
-        map.set(char, {
-          char,
-          hex: `U+${hex.padStart(4, '0')}`,
-          label: `${char} U+${hex.padStart(4, '0')}`,
-        });
+        upsertManifestGlyph(map, char);
       }
 
       if (Array.from(value).length === 1 && !/^[\x00-\x1F]$/.test(value)) {
-        const char = value;
-        const hex = getCodepointHex(char);
-        map.set(char, { char, hex: `U+${hex}`, label: `${char} U+${hex}` });
+        upsertManifestGlyph(map, value);
       }
+
       return map;
     }
 
     if (typeof value === 'number' && Number.isInteger(value) && value >= 32 && value <= 0x10ffff) {
       try {
         const char = String.fromCodePoint(value);
-        const hex = value.toString(16).toUpperCase().padStart(4, '0');
-        map.set(char, { char, hex: `U+${hex}`, label: `${char} U+${hex}` });
+        upsertManifestGlyph(map, char);
       } catch (error) {
         // ignore invalid codepoints
       }
@@ -713,23 +921,31 @@
     if (typeof value === 'object') {
       const maybeChar = typeof value.char === 'string' && Array.from(value.char).length === 1 ? value.char : null;
       const maybeCodepoint = typeof value.codepoint === 'number' ? value.codepoint : null;
-      const maybeFilename = typeof value.filename === 'string'
-        ? value.filename
-        : (typeof value.file === 'string' ? value.file : null);
+      const maybeFilename =
+          typeof value.filename === 'string' ? value.filename :
+              typeof value.file === 'string' ? value.file :
+                  typeof value.path === 'string' ? value.path :
+                      null;
 
       if (maybeChar) {
-        const hex = getCodepointHex(maybeChar);
-        map.set(maybeChar, { char: maybeChar, hex: `U+${hex}`, label: `${maybeChar} U+${hex}` });
+        upsertManifestGlyph(map, maybeChar, {
+          filename: maybeFilename || undefined,
+          fileCandidates: maybeFilename ? [maybeFilename] : [],
+        });
       }
+
       if (maybeCodepoint != null) {
         try {
           const char = String.fromCodePoint(maybeCodepoint);
-          const hex = maybeCodepoint.toString(16).toUpperCase().padStart(4, '0');
-          map.set(char, { char, hex: `U+${hex}`, label: `${char} U+${hex}` });
+          upsertManifestGlyph(map, char, {
+            filename: maybeFilename || undefined,
+            fileCandidates: maybeFilename ? [maybeFilename] : [],
+          });
         } catch (error) {
           // ignore invalid codepoints
         }
       }
+
       if (maybeFilename) {
         extractGlyphsFromManifest(maybeFilename, map);
       }
@@ -750,7 +966,11 @@
         const glyphMap = extractGlyphsFromManifest(data);
         state.manifest.loaded = true;
         state.manifest.path = path;
-        state.manifest.glyphs = Array.from(glyphMap.values()).sort((a, b) => a.hex.localeCompare(b.hex));
+        state.manifest.glyphs = Array.from(glyphMap.values()).sort((a, b) => {
+          const na = parseInt(a.hex.slice(2), 16);
+          const nb = parseInt(b.hex.slice(2), 16);
+          return na - nb;
+        });
         el.manifestStatus.textContent = `${state.manifest.glyphs.length} glyphs loaded`;
         el.manifestStatus.classList.add('ok');
         el.manifestHint.innerHTML = `Loaded manifest from <code>${escapeXml(path)}</code>. Click a defined character to jump to it.`;
