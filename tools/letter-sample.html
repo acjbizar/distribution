@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="system">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -13,7 +13,6 @@
                     url("../dist/fonts/distribution.woff") format("woff"),
                     url("../dist/fonts/distribution.ttf") format("truetype");
             font-display: swap;
-            /* We still control wght via font-variation-settings, but this helps some engines */
             font-weight: 100 900;
             font-style: normal;
         }
@@ -25,23 +24,106 @@
             --ls: 0px;
             --pad: 18px;
             --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+            --bg: #0e0f12;
+            --fg: #e9ecf1;
+            --muted: rgba(233, 236, 241, 0.82);
+            --border: rgba(255,255,255,0.08);
+            --border-strong: rgba(255,255,255,0.10);
+            --panel: rgba(255,255,255,0.02);
+            --panel-2: rgba(255,255,255,0.03);
+            --control-bg: rgba(0,0,0,0.25);
+            --input-bg: rgba(0,0,0,0.35);
+            --accent: #9aa7ff;
+            --shadow: rgba(0,0,0,0.25);
+            color-scheme: dark;
+        }
+
+        [data-theme="dark"] {
+            --bg: #0e0f12;
+            --fg: #e9ecf1;
+            --muted: rgba(233, 236, 241, 0.82);
+            --border: rgba(255,255,255,0.08);
+            --border-strong: rgba(255,255,255,0.10);
+            --panel: rgba(255,255,255,0.02);
+            --panel-2: rgba(255,255,255,0.03);
+            --control-bg: rgba(0,0,0,0.25);
+            --input-bg: rgba(0,0,0,0.35);
+            --accent: #9aa7ff;
+            --shadow: rgba(0,0,0,0.25);
+            color-scheme: dark;
+        }
+
+        [data-theme="light"] {
+            --bg: #f4f6fb;
+            --fg: #161922;
+            --muted: rgba(22, 25, 34, 0.78);
+            --border: rgba(0,0,0,0.10);
+            --border-strong: rgba(0,0,0,0.12);
+            --panel: rgba(255,255,255,0.78);
+            --panel-2: rgba(255,255,255,0.9);
+            --control-bg: rgba(255,255,255,0.7);
+            --input-bg: rgba(255,255,255,0.9);
+            --accent: #5564ff;
+            --shadow: rgba(0,0,0,0.06);
+            color-scheme: light;
+        }
+
+        @media (prefers-color-scheme: light) {
+            [data-theme="system"] {
+                --bg: #f4f6fb;
+                --fg: #161922;
+                --muted: rgba(22, 25, 34, 0.78);
+                --border: rgba(0,0,0,0.10);
+                --border-strong: rgba(0,0,0,0.12);
+                --panel: rgba(255,255,255,0.78);
+                --panel-2: rgba(255,255,255,0.9);
+                --control-bg: rgba(255,255,255,0.7);
+                --input-bg: rgba(255,255,255,0.9);
+                --accent: #5564ff;
+                --shadow: rgba(0,0,0,0.06);
+                color-scheme: light;
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            [data-theme="system"] {
+                --bg: #0e0f12;
+                --fg: #e9ecf1;
+                --muted: rgba(233, 236, 241, 0.82);
+                --border: rgba(255,255,255,0.08);
+                --border-strong: rgba(255,255,255,0.10);
+                --panel: rgba(255,255,255,0.02);
+                --panel-2: rgba(255,255,255,0.03);
+                --control-bg: rgba(0,0,0,0.25);
+                --input-bg: rgba(0,0,0,0.35);
+                --accent: #9aa7ff;
+                --shadow: rgba(0,0,0,0.25);
+                color-scheme: dark;
+            }
         }
 
         * { box-sizing: border-box; }
+
+        html, body {
+            min-height: 100%;
+        }
+
         body {
             margin: 0;
             font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-            background: #0e0f12;
-            color: #e9ecf1;
+            background: var(--bg);
+            color: var(--fg);
         }
 
         header {
             padding: 16px 18px;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid var(--border);
+            background: var(--panel-2);
             position: sticky;
             top: 0;
             backdrop-filter: blur(10px);
+            z-index: 20;
         }
 
         header .row {
@@ -62,7 +144,7 @@
         .status {
             font-family: var(--mono);
             font-size: 12px;
-            opacity: 0.8;
+            color: var(--muted);
         }
 
         main {
@@ -77,12 +159,15 @@
 
         .panel {
             padding: var(--pad);
-            border-right: 1px solid rgba(255,255,255,0.08);
-            background: rgba(255,255,255,0.02);
+            border-right: 1px solid var(--border);
+            background: var(--panel);
         }
 
         @media (max-width: 980px) {
-            .panel { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+            .panel {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
         }
 
         .panel h2 {
@@ -95,9 +180,10 @@
         .control {
             margin-bottom: 12px;
             padding: 12px;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid var(--border);
             border-radius: 12px;
-            background: rgba(0,0,0,0.25);
+            background: var(--control-bg);
+            box-shadow: 0 4px 18px var(--shadow);
         }
 
         label {
@@ -105,13 +191,33 @@
             justify-content: space-between;
             gap: 12px;
             font-size: 12px;
-            opacity: 0.9;
+            opacity: 0.95;
             margin-bottom: 8px;
         }
 
         input[type="range"] {
             width: 100%;
-            accent-color: #9aa7ff;
+            accent-color: var(--accent);
+        }
+
+        input[type="checkbox"] {
+            accent-color: var(--accent);
+        }
+
+        select,
+        button,
+        textarea {
+            font: inherit;
+        }
+
+        select {
+            width: 100%;
+            border: 1px solid var(--border-strong);
+            background: var(--input-bg);
+            color: var(--fg);
+            padding: 10px 12px;
+            border-radius: 10px;
+            outline: none;
         }
 
         .value {
@@ -127,16 +233,19 @@
         }
 
         button {
-            border: 1px solid rgba(255,255,255,0.10);
-            background: rgba(255,255,255,0.06);
-            color: #e9ecf1;
+            border: 1px solid var(--border-strong);
+            background: var(--panel-2);
+            color: var(--fg);
             padding: 10px 12px;
             border-radius: 12px;
             cursor: pointer;
             font-weight: 650;
             font-size: 12px;
         }
-        button:hover { background: rgba(255,255,255,0.10); }
+
+        button:hover {
+            filter: brightness(1.06);
+        }
 
         .content {
             padding: var(--pad);
@@ -144,10 +253,10 @@
 
         .demoText {
             width: 100%;
-            min-height: 220px;
-            border: 1px solid rgba(255,255,255,0.10);
-            background: rgba(0,0,0,0.35);
-            color: #e9ecf1;
+            min-height: 420px;
+            border: 1px solid var(--border-strong);
+            background: var(--input-bg);
+            color: var(--fg);
             border-radius: 14px;
             padding: 14px;
             resize: vertical;
@@ -156,8 +265,6 @@
             font-size: var(--size);
             line-height: var(--lh);
             letter-spacing: var(--ls);
-
-            /* Use the axis explicitly */
             font-variation-settings: "wght" var(--wght);
 
             outline: none;
@@ -170,32 +277,33 @@
             gap: 10px 16px;
             font-family: var(--mono);
             font-size: 12px;
-            opacity: 0.85;
+            color: var(--muted);
         }
 
         .hr {
             margin: 18px 0;
             height: 1px;
-            background: rgba(255,255,255,0.08);
+            background: var(--border);
         }
 
         .glyphGridWrap {
             margin-top: 14px;
-            border: 1px solid rgba(255,255,255,0.10);
-            background: rgba(0,0,0,0.30);
+            border: 1px solid var(--border-strong);
+            background: var(--input-bg);
             border-radius: 14px;
             overflow: hidden;
+            box-shadow: 0 4px 18px var(--shadow);
         }
 
         .gridHeader {
             padding: 10px 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 10px;
             font-size: 12px;
-            opacity: 0.9;
+            color: var(--muted);
         }
 
         .glyphGrid {
@@ -204,8 +312,8 @@
         }
 
         .cell {
-            border-right: 1px solid rgba(255,255,255,0.06);
-            border-bottom: 1px solid rgba(255,255,255,0.06);
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
             padding: 10px 8px 8px 8px;
             display: grid;
             gap: 6px;
@@ -221,23 +329,45 @@
             line-height: 1;
         }
 
+        .cell .g.placeholder {
+            font-family: var(--mono);
+            font-size: 18px;
+            color: var(--muted);
+        }
+
         .cell .cp {
             font-family: var(--mono);
             font-size: 10px;
-            opacity: 0.75;
+            color: var(--muted);
         }
 
         .hidden { display: none !important; }
 
         .hint {
             font-size: 12px;
-            opacity: 0.85;
+            color: var(--muted);
             line-height: 1.45;
         }
+
         .hint code {
             font-family: var(--mono);
             font-size: 11px;
             opacity: 0.95;
+        }
+
+        .checkrow {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 2px;
+        }
+
+        .checkrow label {
+            margin: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: flex-start;
         }
     </style>
 </head>
@@ -246,13 +376,25 @@
 <header>
     <div class="row">
         <h1>Distribution – Variable Font Demo</h1>
-        <div class="status" id="status">Loading font…</div>
+        <div class="status" id="status">Loading font… · Loading manifest…</div>
     </div>
 </header>
 
 <main>
     <aside class="panel">
         <h2>Controls</h2>
+
+        <div class="control">
+            <label for="theme">
+                <span>Theme</span>
+                <span class="value" id="themeVal">device</span>
+            </label>
+            <select id="theme">
+                <option value="system">Device</option>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+            </select>
+        </div>
 
         <div class="control">
             <label>
@@ -291,11 +433,19 @@
                 <span>Show all glyphs</span>
                 <span class="value" id="glyphCount">—</span>
             </label>
-            <input id="showGlyphs" type="checkbox" />
+
+            <div class="checkrow">
+                <label for="showGlyphs">
+                    <input id="showGlyphs" type="checkbox" checked />
+                    <span>Visible</span>
+                </label>
+            </div>
+
             <div class="hint" style="margin-top:10px;">
-                Loads from <code>../dist/fonts/distribution.woff2</code> (fallback <code>.ttf</code>).
-                If you open this file directly in the browser, some browsers block local font loading.
-                Prefer serving your project (even a simple local webserver).
+                Loads font from <code>../dist/fonts/distribution.woff2</code> and glyph ranges from
+                <code>../data/manifest.json</code>.
+                If you open this file directly in the browser, some browsers block local font/data loading.
+                Prefer serving your project over HTTP.
             </div>
 
             <div class="btnrow">
@@ -319,13 +469,14 @@ AcGHKMNWX
             <div>size: <span id="metaSize">96px</span></div>
             <div>line-height: <span id="metaLh">1.10</span></div>
             <div>letter-spacing: <span id="metaLs">0px</span></div>
+            <div>theme: <span id="metaTheme">device</span></div>
         </div>
 
         <div class="hr"></div>
 
-        <div class="glyphGridWrap hidden" id="glyphWrap">
+        <div class="glyphGridWrap" id="glyphWrap">
             <div class="gridHeader">
-                <div>Glyphs in demo set</div>
+                <div>Glyphs from manifest</div>
                 <div class="status" style="opacity:.75;">(wght affects this grid too)</div>
             </div>
             <div class="glyphGrid" id="glyphGrid"></div>
@@ -342,42 +493,228 @@ AcGHKMNWX
     const size = $("size");
     const lh = $("lh");
     const ls = $("ls");
+    const theme = $("theme");
 
     const wghtVal = $("wghtVal");
     const sizeVal = $("sizeVal");
     const lhVal = $("lhVal");
     const lsVal = $("lsVal");
+    const themeVal = $("themeVal");
 
     const metaWght = $("metaWght");
     const metaSize = $("metaSize");
     const metaLh = $("metaLh");
     const metaLs = $("metaLs");
+    const metaTheme = $("metaTheme");
 
+    const demoText = $("demoText");
     const showGlyphs = $("showGlyphs");
     const glyphWrap = $("glyphWrap");
     const glyphGrid = $("glyphGrid");
     const glyphCount = $("glyphCount");
     const status = $("status");
 
-    // Your requested/demo set (same as your generator rows)
-    const SHEET_ROWS = [
-        "AbCdEfghIJ",
-        "kLmnopqrStUvwxyZ.„”?",
-        "0123456789",
-        "AcGHKMNWX",
-    ];
-    const REQUESTED = SHEET_ROWS.join("");
+    const DEFAULT_DEMO_TEXT = demoText.value.trim();
+    const MANIFEST_PATH = "../data/manifest.json";
 
-    function uniq(str) {
+    let glyphs = [];
+
+    const statusState = {
+        font: "Loading font…",
+        manifest: "Loading manifest…"
+    };
+
+    function setStatus() {
+        status.textContent = `${statusState.font} · ${statusState.manifest}`;
+    }
+
+    function uniqChars(input) {
         const seen = new Set();
         const out = [];
-        for (const ch of str) {
-            if (!seen.has(ch)) { seen.add(ch); out.push(ch); }
+        for (const ch of input) {
+            if (!seen.has(ch)) {
+                seen.add(ch);
+                out.push(ch);
+            }
         }
         return out;
     }
 
-    const glyphs = uniq(REQUESTED);
+    function parseScalar(value) {
+        if (typeof value === "number" && Number.isFinite(value)) return value;
+
+        if (typeof value !== "string") return null;
+        const raw = value.trim();
+        if (!raw) return null;
+
+        const cleaned = raw
+            .replace(/^U\+/i, "")
+            .replace(/^0x/i, "");
+
+        const base = /[A-Fa-f]/.test(cleaned) || /^U\+/i.test(raw) || /^0x/i.test(raw) ? 16 : 10;
+        const num = Number.parseInt(cleaned, base);
+        return Number.isFinite(num) ? num : null;
+    }
+
+    function expandRangeToken(token) {
+        const t = String(token).trim();
+        if (!t) return [];
+
+        const rangeMatch = t.match(/^U\+?([0-9A-Fa-f]+)\s*-\s*U\+?([0-9A-Fa-f]+)$/i)
+            || t.match(/^([0-9A-Fa-f]+)\s*-\s*([0-9A-Fa-f]+)$/i);
+
+        if (rangeMatch) {
+            const start = parseInt(rangeMatch[1], 16);
+            const end = parseInt(rangeMatch[2], 16);
+            if (!Number.isFinite(start) || !Number.isFinite(end)) return [];
+            const out = [];
+            const lo = Math.min(start, end);
+            const hi = Math.max(start, end);
+            for (let cp = lo; cp <= hi; cp++) out.push(cp);
+            return out;
+        }
+
+        const single = parseScalar(t);
+        return single == null ? [] : [single];
+    }
+
+    function expandUnicodeEntry(entry) {
+        if (entry == null) return [];
+
+        if (typeof entry === "string") {
+            return entry
+                .split(/\s*,\s*/)
+                .flatMap(expandRangeToken);
+        }
+
+        if (typeof entry === "number") {
+            return [entry];
+        }
+
+        if (Array.isArray(entry)) {
+            if (entry.length === 2 &&
+                (typeof entry[0] === "number" || typeof entry[0] === "string") &&
+                (typeof entry[1] === "number" || typeof entry[1] === "string")) {
+                const start = parseScalar(entry[0]);
+                const end = parseScalar(entry[1]);
+                if (start == null || end == null) return [];
+                const out = [];
+                const lo = Math.min(start, end);
+                const hi = Math.max(start, end);
+                for (let cp = lo; cp <= hi; cp++) out.push(cp);
+                return out;
+            }
+            return entry.flatMap(expandUnicodeEntry);
+        }
+
+        if (typeof entry === "object") {
+            const start = parseScalar(entry.start ?? entry.from ?? entry.min ?? entry.first);
+            const end = parseScalar(entry.end ?? entry.to ?? entry.max ?? entry.last);
+
+            if (start != null && end != null) {
+                const out = [];
+                const lo = Math.min(start, end);
+                const hi = Math.max(start, end);
+                for (let cp = lo; cp <= hi; cp++) out.push(cp);
+                return out;
+            }
+
+            if (start != null) return [start];
+        }
+
+        return [];
+    }
+
+    function isRenderableCodePoint(cp) {
+        if (!Number.isInteger(cp)) return false;
+        if (cp < 0 || cp > 0x10FFFF) return false;
+        if (cp >= 0xD800 && cp <= 0xDFFF) return false;
+        if (cp < 0x20 && cp !== 0x09 && cp !== 0x0A && cp !== 0x0D) return false;
+        if (cp >= 0x7F && cp <= 0x9F) return false;
+        return true;
+    }
+
+    function extractUnicodeRanges(manifest) {
+        const candidates = [
+            manifest?.unicodeRanges,
+            manifest?.meta?.unicodeRanges,
+            manifest?.font?.unicodeRanges,
+            manifest?.fonts?.distribution?.unicodeRanges,
+            manifest?.distribution?.unicodeRanges
+        ];
+
+        for (const candidate of candidates) {
+            if (Array.isArray(candidate)) return candidate;
+            if (typeof candidate === "string" && candidate.trim()) return [candidate];
+        }
+
+        return null;
+    }
+
+    function codePointLabel(cp) {
+        const width = cp > 0xFFFF ? 6 : 4;
+        return "U+" + cp.toString(16).toUpperCase().padStart(width, "0");
+    }
+
+    function visibleGlyph(ch) {
+        if (ch === " ") return { text: "␠", placeholder: true };
+        if (ch === "\t") return { text: "⇥", placeholder: true };
+        if (ch === "\n") return { text: "↵", placeholder: true };
+        if (ch === "\r") return { text: "↩", placeholder: true };
+        return { text: ch, placeholder: false };
+    }
+
+    function buildGrid() {
+        glyphGrid.innerHTML = "";
+
+        for (const ch of glyphs) {
+            const cp = ch.codePointAt(0);
+            const cell = document.createElement("div");
+            cell.className = "cell";
+            cell.title = `${visibleGlyph(ch).text} (${codePointLabel(cp)})`;
+
+            const g = document.createElement("div");
+            g.className = "g";
+            const view = visibleGlyph(ch);
+            g.textContent = view.text;
+            if (view.placeholder) g.classList.add("placeholder");
+
+            const lab = document.createElement("div");
+            lab.className = "cp";
+            lab.textContent = codePointLabel(cp);
+
+            cell.appendChild(g);
+            cell.appendChild(lab);
+            glyphGrid.appendChild(cell);
+        }
+
+        glyphCount.textContent = String(glyphs.length);
+    }
+
+    function maybePrimeDemoTextFromManifest() {
+        const current = demoText.value.trim();
+        if (current && current !== DEFAULT_DEMO_TEXT) return;
+        if (!glyphs.length) return;
+
+        const maxChars = Math.min(glyphs.length, 96);
+        const rowLength = 16;
+        const lines = [];
+
+        for (let i = 0; i < maxChars; i += rowLength) {
+            lines.push(glyphs.slice(i, i + rowLength).join(""));
+        }
+
+        demoText.value = lines.join("\n");
+    }
+
+    function applyTheme(themeValue) {
+        root.setAttribute("data-theme", themeValue);
+        themeVal.textContent = themeValue === "system" ? "device" : themeValue;
+        metaTheme.textContent = themeValue === "system" ? "device" : themeValue;
+        try {
+            localStorage.setItem("distribution-demo-theme", themeValue);
+        } catch (e) {}
+    }
 
     function apply() {
         const w = Number(wght.value);
@@ -401,29 +738,45 @@ AcGHKMNWX
         metaLs.textContent = lsv + "px";
     }
 
-    function buildGrid() {
-        glyphGrid.innerHTML = "";
-        for (const ch of glyphs) {
-            const cp = ch.codePointAt(0);
-            const cell = document.createElement("div");
-            cell.className = "cell";
+    async function loadManifestGlyphs() {
+        try {
+            const res = await fetch(MANIFEST_PATH, { cache: "no-store" });
+            if (!res.ok) {
+                throw new Error(`HTTP ${res.status}`);
+            }
 
-            const g = document.createElement("div");
-            g.className = "g";
-            g.textContent = ch;
+            const manifest = await res.json();
+            const ranges = extractUnicodeRanges(manifest);
 
-            const lab = document.createElement("div");
-            lab.className = "cp";
-            lab.textContent = "U+" + cp.toString(16).toUpperCase().padStart(4, "0");
+            if (!ranges || !ranges.length) {
+                throw new Error("unicodeRanges missing or empty");
+            }
 
-            cell.appendChild(g);
-            cell.appendChild(lab);
-            glyphGrid.appendChild(cell);
+            const cps = [];
+            for (const entry of ranges) {
+                cps.push(...expandUnicodeEntry(entry));
+            }
+
+            const uniqueCodePoints = [...new Set(cps)].filter(isRenderableCodePoint);
+            glyphs = uniqueCodePoints.map(cp => String.fromCodePoint(cp));
+
+            if (!glyphs.length) {
+                throw new Error("No usable code points found");
+            }
+
+            buildGrid();
+            maybePrimeDemoTextFromManifest();
+            statusState.manifest = `Manifest loaded (${glyphs.length} glyphs)`;
+        } catch (err) {
+            console.warn("Could not load glyph data from manifest:", err);
+            glyphs = uniqChars(DEFAULT_DEMO_TEXT);
+            buildGrid();
+            statusState.manifest = `Manifest unavailable; using fallback set (${glyphs.length})`;
         }
-        glyphCount.textContent = String(glyphs.length);
+
+        setStatus();
     }
 
-    // Presets
     $("preset1").addEventListener("click", () => {
         wght.value = 320;
         size.value = 72;
@@ -448,30 +801,40 @@ AcGHKMNWX
         apply();
     });
 
-    // Toggle grid
     showGlyphs.addEventListener("change", () => {
         glyphWrap.classList.toggle("hidden", !showGlyphs.checked);
     });
 
-    // Hook up sliders
+    theme.addEventListener("change", () => {
+        applyTheme(theme.value);
+    });
+
     [wght, size, lh, ls].forEach((el) => el.addEventListener("input", apply));
 
-    // Initial
-    buildGrid();
-    apply();
+    (function initTheme() {
+        let stored = "system";
+        try {
+            stored = localStorage.getItem("distribution-demo-theme") || "system";
+        } catch (e) {}
+        if (!["system", "light", "dark"].includes(stored)) stored = "system";
+        theme.value = stored;
+        applyTheme(stored);
+    })();
 
-    // Font loading status
-    // This checks whether the browser can resolve the face.
+    apply();
+    glyphWrap.classList.toggle("hidden", !showGlyphs.checked);
+    setStatus();
+    loadManifestGlyphs();
+
     (async function () {
         try {
-            // Trigger load of a representative text at one size
             await document.fonts.load('16px "Distribution"', "AbCdEfghIJ0123");
-            // Wait until font set is ready
             await document.fonts.ready;
-            status.textContent = "Font loaded: Distribution (variable)";
+            statusState.font = 'Font loaded: Distribution';
         } catch (e) {
-            status.textContent = "Font load failed (check paths / serve over http)";
+            statusState.font = "Font load failed";
         }
+        setStatus();
     })();
 </script>
 </body>
