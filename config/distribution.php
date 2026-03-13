@@ -6,13 +6,13 @@ declare(strict_types=1);
 
 return [
     'Distribution' => [
-        'glyphCount' => 56,
-        'chars' => 'ABCDEGHIJKLMNPRSUWXZabcdefghikmnopqrtuvwxy0123456789.?”„',
+        'glyphCount' => 58,
+        'chars' => 'ABCDEGHIJKLMNPRSUWXZabcdefghikmnopqrtuvwxy0123456789.?”„Ππ',
         'uppercase' => 'ABCDEGHIJKLMNPRSUWXZ',
         'lowercase' => 'abcdefghikmnopqrtuvwxy',
         'digits' => '0123456789',
         'punct' => '.?”„',
-        'other' => '',
+        'other' => 'Ππ',
         'codepoints' => [
             46,
             48,
@@ -68,6 +68,8 @@ return [
             119,
             120,
             121,
+            928,
+            960,
             8221,
             8222,
         ],
@@ -127,6 +129,14 @@ return [
             [
                 116,
                 121,
+            ],
+            [
+                928,
+                928,
+            ],
+            [
+                960,
+                960,
             ],
             [
                 8221,
@@ -192,6 +202,8 @@ return [
             'w' => '0077',
             'x' => '0078',
             'y' => '0079',
+            'Π' => '03a0',
+            'π' => '03c0',
             '”' => '201d',
             '„' => '201e',
         ],
@@ -573,6 +585,20 @@ return [
                 'hex' => '0079',
                 'symfonyTemplate' => '_character-u0079.svg.twig',
                 'cakeElement' => 'character-u0079',
+            ],
+            'u03a0' => [
+                'codepoint' => 928,
+                'char' => 'Π',
+                'hex' => '03a0',
+                'symfonyTemplate' => '_character-u03a0.svg.twig',
+                'cakeElement' => 'character-u03a0',
+            ],
+            'u03c0' => [
+                'codepoint' => 960,
+                'char' => 'π',
+                'hex' => '03c0',
+                'symfonyTemplate' => '_character-u03c0.svg.twig',
+                'cakeElement' => 'character-u03c0',
             ],
             'u201d' => [
                 'codepoint' => 8221,
