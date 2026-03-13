@@ -81,7 +81,7 @@ body{
   border-bottom:1px solid var(--border);
   background:color-mix(in srgb, var(--panel) 92%, transparent);
   backdrop-filter:blur(14px);
-  position:sticky;
+  position:relative;
   top:0;
   z-index:20;
 }
@@ -112,7 +112,7 @@ body{
   grid-template-columns:repeat(3, minmax(0, 1fr));
   gap:18px;
   padding:18px;
-  align-items:stretch;
+  align-items:flex-start;
 }
 
 @media (max-width: 1120px){
@@ -126,6 +126,8 @@ body{
   box-shadow:var(--shadow);
   min-height:0;
   overflow:hidden;
+  position:sticky;
+  top:0;
 }
 
 .panel-head{
