@@ -17,4 +17,7 @@
 <g fill="#333" stroke="#333" stroke-width="9" stroke-linecap="butt">
 <circle cx="80" cy="240" r="1" />
 </g>
+<g fill="#1e6bff" stroke="none" stroke-linecap="butt">
+<circle cx="80" cy="240" r="3.5" />
+</g>
 </svg>

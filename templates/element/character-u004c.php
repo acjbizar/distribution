@@ -52,6 +52,12 @@ if (!$hasAria) {
 <path d="M 80 200 A 40 40 0 0 0 120 240" />
 <path d="M 120 240 L 160 240" />
 </g>
+<g fill="#1e6bff" stroke="none">
+<circle cx="80" cy="80" r="3.5" />
+<circle cx="80" cy="200" r="3.5" />
+<circle cx="120" cy="240" r="3.5" />
+<circle cx="160" cy="240" r="3.5" />
+</g>
 </svg>
 
 <?php if ($title !== ''): ?>

@@ -29,6 +29,7 @@ def main() -> None:
     tools = root / "tools"
 
     scripts = [
+        ("generate-data.py", []),
         ("generate-characters.py", ["--debug"]),
         ("generate-sheet.py", ["--border", "--labels"]),
         ("generate-templates.py", []),
@@ -37,6 +38,7 @@ def main() -> None:
         ("generate-images.py", []),
         ("generate-fonts.py", []),
         ("generate-markdown.py", []),
+        ("generate-manifest.py", []),
     ]
 
     # Use the same Python interpreter that runs this script.

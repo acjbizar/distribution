@@ -15,4 +15,9 @@
 <g fill="none" stroke="#1f6fe5" stroke-width="12" stroke-linecap="butt" stroke-linejoin="round"><path d="M 80 240 L 80 160" /></g><g mask="url(#glyphStrokeMask)" fill="none" stroke-linecap="butt" stroke-linejoin="round"><g stroke="#bfe8ff" stroke-width="2.6" opacity="0.75" stroke-dasharray="6 24" stroke-dashoffset="3" filter="url(#offsetA)" stroke-linecap="butt" stroke-linejoin="round"><g filter="url(#scribbleStrong)"><g filter="url(#foamSoft)"><path d="M 80 240 L 80 160" /></g></g></g><g stroke="#bfe8ff" stroke-width="2.1" opacity="0.60" stroke-dasharray="5 30" stroke-dashoffset="17" filter="url(#offsetB)" stroke-linecap="butt" stroke-linejoin="round"><g filter="url(#scribbleStrong)"><g filter="url(#foamSoft)"><path d="M 80 240 L 80 160" /></g></g></g><g stroke="#bfe8ff" stroke-width="1.7" opacity="0.40" stroke-dasharray="3 36" stroke-dashoffset="9" filter="url(#offsetC)" stroke-linecap="butt" stroke-linejoin="round"><g filter="url(#scribbleStrong)"><path d="M 80 240 L 80 160" /></g></g></g><g fill="#1f6fe5" stroke="#1f6fe5" stroke-width="9" stroke-linecap="butt">
 <circle cx="80" cy="80" r="1" />
 </g>
+<g fill="#1e6bff" stroke="none" stroke-linecap="butt">
+<circle cx="80" cy="240" r="3.5" />
+<circle cx="80" cy="160" r="3.5" />
+<circle cx="80" cy="80" r="3.5" />
+</g>
 </svg>

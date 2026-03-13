@@ -49,6 +49,11 @@ if (!$hasAria) {
 <g fill="#000" stroke="#000" stroke-width="9">
 <circle cx="80" cy="80" r="1" />
 </g>
+<g fill="#1e6bff" stroke="none">
+<circle cx="80" cy="240" r="3.5" />
+<circle cx="80" cy="160" r="3.5" />
+<circle cx="80" cy="80" r="3.5" />
+</g>
 </svg>
 
 <?php if ($title !== ''): ?>
