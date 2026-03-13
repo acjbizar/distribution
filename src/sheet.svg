@@ -738,6 +738,7 @@
 <path d="M 120 160 A 40 40 0 0 1 160 200" />
 <path d="M 120 160 A 40 40 0 0 0 160 120" />
 <path d="M 160 200 L 160 240" />
+<path d="M 160 80 L 160 120" />
 </g>
 <g fill="#1e6bff" stroke="none">
 <circle cx="80" cy="80" r="3.5" />
@@ -747,6 +748,7 @@
 <circle cx="160" cy="200" r="3.5" />
 <circle cx="160" cy="120" r="3.5" />
 <circle cx="160" cy="240" r="3.5" />
+<circle cx="160" cy="80" r="3.5" />
 </g>
 </g>
 <g transform="translate(480 684)">
