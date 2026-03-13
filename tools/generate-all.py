@@ -39,6 +39,7 @@ def main() -> None:
         ("generate-fonts.py", []),
         ("generate-markdown.py", []),
         ("generate-manifest.py", []),
+        ("generate-instagram-sheet.py", []),
     ]
 
     # Use the same Python interpreter that runs this script.
