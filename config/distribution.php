@@ -6,15 +6,16 @@ declare(strict_types=1);
 
 return [
     'Distribution' => [
-        'glyphCount' => 62,
-        'chars' => 'ABCDEGHIJKLMNOPRSTUVWXZabcdefghikmnopqrtuvwxy0123456789!.?”„Ππ',
+        'glyphCount' => 64,
+        'chars' => 'ABCDEGHIJKLMNOPRSTUVWXZabcdefghikmnopqrtuvwxyz0123456789!\'.?”„Ππ',
         'uppercase' => 'ABCDEGHIJKLMNOPRSTUVWXZ',
-        'lowercase' => 'abcdefghikmnopqrtuvwxy',
+        'lowercase' => 'abcdefghikmnopqrtuvwxyz',
         'digits' => '0123456789',
-        'punct' => '!.?”„',
+        'punct' => '!\'.?”„',
         'other' => 'Ππ',
         'codepoints' => [
             33,
+            39,
             46,
             48,
             49,
@@ -72,6 +73,7 @@ return [
             119,
             120,
             121,
+            122,
             928,
             960,
             8221,
@@ -81,6 +83,10 @@ return [
             [
                 33,
                 33,
+            ],
+            [
+                39,
+                39,
             ],
             [
                 46,
@@ -124,7 +130,7 @@ return [
             ],
             [
                 116,
-                121,
+                122,
             ],
             [
                 928,
@@ -145,6 +151,7 @@ return [
         'hasPunct' => true,
         'charToHex' => [
             '!' => '0021',
+            '\'' => '0027',
             '.' => '002e',
             '0' => '0030',
             '1' => '0031',
@@ -202,6 +209,7 @@ return [
             'w' => '0077',
             'x' => '0078',
             'y' => '0079',
+            'z' => '007a',
             'Π' => '03a0',
             'π' => '03c0',
             '”' => '201d',
@@ -214,6 +222,13 @@ return [
                 'hex' => '0021',
                 'symfonyTemplate' => '_character-u0021.svg.twig',
                 'cakeElement' => 'character-u0021',
+            ],
+            'u0027' => [
+                'codepoint' => 39,
+                'char' => '\'',
+                'hex' => '0027',
+                'symfonyTemplate' => '_character-u0027.svg.twig',
+                'cakeElement' => 'character-u0027',
             ],
             'u002e' => [
                 'codepoint' => 46,
@@ -613,6 +628,13 @@ return [
                 'hex' => '0079',
                 'symfonyTemplate' => '_character-u0079.svg.twig',
                 'cakeElement' => 'character-u0079',
+            ],
+            'u007a' => [
+                'codepoint' => 122,
+                'char' => 'z',
+                'hex' => '007a',
+                'symfonyTemplate' => '_character-u007a.svg.twig',
+                'cakeElement' => 'character-u007a',
             ],
             'u03a0' => [
                 'codepoint' => 928,

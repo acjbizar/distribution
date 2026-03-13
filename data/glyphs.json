@@ -53,6 +53,29 @@
       ]
     },
     {
+      "char": "'",
+      "codepoint": 39,
+      "unicode": "U+0027",
+      "hex": "0027",
+      "filename": "character-u0027.svg",
+      "width": 160,
+      "height": 320,
+      "guide_cols": 2,
+      "shapes": [
+        {
+          "type": "line",
+          "p1": {
+            "x": 80,
+            "y": 40
+          },
+          "p2": {
+            "x": 80,
+            "y": 80
+          }
+        }
+      ]
+    },
+    {
       "char": ".",
       "codepoint": 46,
       "unicode": "U+002E",
@@ -4115,6 +4138,51 @@
       ]
     },
     {
+      "char": "z",
+      "codepoint": 122,
+      "unicode": "U+007A",
+      "hex": "007A",
+      "filename": "character-u007a.svg",
+      "width": 240,
+      "height": 320,
+      "guide_cols": 3,
+      "shapes": [
+        {
+          "type": "line",
+          "p1": {
+            "x": 80,
+            "y": 160
+          },
+          "p2": {
+            "x": 160,
+            "y": 160
+          }
+        },
+        {
+          "type": "line",
+          "p1": {
+            "x": 160,
+            "y": 160
+          },
+          "p2": {
+            "x": 80,
+            "y": 240
+          }
+        },
+        {
+          "type": "line",
+          "p1": {
+            "x": 80,
+            "y": 240
+          },
+          "p2": {
+            "x": 160,
+            "y": 240
+          }
+        }
+      ]
+    },
+    {
       "char": "Π",
       "codepoint": 928,
       "unicode": "U+03A0",
@@ -4458,6 +4526,29 @@
           "p": {
             "x": 80,
             "y": 240
+          }
+        }
+      ]
+    },
+    "U+0027": {
+      "char": "'",
+      "codepoint": 39,
+      "unicode": "U+0027",
+      "hex": "0027",
+      "filename": "character-u0027.svg",
+      "width": 160,
+      "height": 320,
+      "guide_cols": 2,
+      "shapes": [
+        {
+          "type": "line",
+          "p1": {
+            "x": 80,
+            "y": 40
+          },
+          "p2": {
+            "x": 80,
+            "y": 80
           }
         }
       ]
@@ -8524,6 +8615,51 @@
         }
       ]
     },
+    "U+007A": {
+      "char": "z",
+      "codepoint": 122,
+      "unicode": "U+007A",
+      "hex": "007A",
+      "filename": "character-u007a.svg",
+      "width": 240,
+      "height": 320,
+      "guide_cols": 3,
+      "shapes": [
+        {
+          "type": "line",
+          "p1": {
+            "x": 80,
+            "y": 160
+          },
+          "p2": {
+            "x": 160,
+            "y": 160
+          }
+        },
+        {
+          "type": "line",
+          "p1": {
+            "x": 160,
+            "y": 160
+          },
+          "p2": {
+            "x": 80,
+            "y": 240
+          }
+        },
+        {
+          "type": "line",
+          "p1": {
+            "x": 80,
+            "y": 240
+          },
+          "p2": {
+            "x": 160,
+            "y": 240
+          }
+        }
+      ]
+    },
     "U+03A0": {
       "char": "Π",
       "codepoint": 928,
@@ -8868,6 +9004,29 @@
           "p": {
             "x": 80,
             "y": 240
+          }
+        }
+      ]
+    },
+    "'": {
+      "char": "'",
+      "codepoint": 39,
+      "unicode": "U+0027",
+      "hex": "0027",
+      "filename": "character-u0027.svg",
+      "width": 160,
+      "height": 320,
+      "guide_cols": 2,
+      "shapes": [
+        {
+          "type": "line",
+          "p1": {
+            "x": 80,
+            "y": 40
+          },
+          "p2": {
+            "x": 80,
+            "y": 80
           }
         }
       ]
@@ -12930,6 +13089,51 @@
           "p2": {
             "x": 160,
             "y": 320
+          }
+        }
+      ]
+    },
+    "z": {
+      "char": "z",
+      "codepoint": 122,
+      "unicode": "U+007A",
+      "hex": "007A",
+      "filename": "character-u007a.svg",
+      "width": 240,
+      "height": 320,
+      "guide_cols": 3,
+      "shapes": [
+        {
+          "type": "line",
+          "p1": {
+            "x": 80,
+            "y": 160
+          },
+          "p2": {
+            "x": 160,
+            "y": 160
+          }
+        },
+        {
+          "type": "line",
+          "p1": {
+            "x": 160,
+            "y": 160
+          },
+          "p2": {
+            "x": 80,
+            "y": 240
+          }
+        },
+        {
+          "type": "line",
+          "p1": {
+            "x": 80,
+            "y": 240
+          },
+          "p2": {
+            "x": 160,
+            "y": 240
           }
         }
       ]
