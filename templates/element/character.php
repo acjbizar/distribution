@@ -38,7 +38,7 @@ if ($hex === '') {
     return;
 }
 
-$path = ROOT . DS . 'src' . DS . 'character-u' . $hex . '.svg';
+$path = dirname(__DIR__, 2) . DS . 'src' . DS . 'character-u' . $hex . '.svg';
 
 if (!is_file($path)) {
     return;
