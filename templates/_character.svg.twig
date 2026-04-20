@@ -1,0 +1,79 @@
+{#
+Variables:
+  char        Optional character
+  hex         Optional lowercase/uppercase hex codepoint without "u", e.g. "0041"
+  char_to_hex Optional map, e.g. { 'A': '0041' }
+  attrs       Optional raw SVG attributes, without leading space
+  title       Optional <title>
+  aria_label  Optional aria-label
+  role        Optional role; defaults to "img" when title/aria_label is given
+#}
+
+{% set char = char|default('') %}
+{% set hex = hex|default('')|lower %}
+{% set attrs = attrs|default('')|trim %}
+{% set title = title|default('') %}
+{% set aria_label = aria_label|default('') %}
+{% set role = role|default('') %}
+
+{# Twig cannot natively derive Unicode codepoint hex from any character very well,
+   so allow a precomputed map. #}
+{% if not hex and char and char_to_hex is defined %}
+  {% set hex = attribute(char_to_hex, char)|default('') %}
+{% endif %}
+
+{% if hex %}
+    {% set svg_template = '@glyphs/character-u' ~ hex ~ '.svg' %}
+    {% set svg = source(svg_template, true) %}
+
+    {% if svg %}
+      {# Strip XML prolog if present, since this will be embedded in HTML #}
+      {% set svg = svg
+        |replace({
+        '<?xml version="1.0" encoding="UTF-8"?>': '',
+        '<?xml version="1.0" encoding="utf-8"?>': '',
+        "<?xml version='1.0' encoding='UTF-8'?>": '',
+        "<?xml version='1.0' encoding='utf-8'?>": ''
+      })
+        |trim
+      %}
+
+      {% set attrs_probe = ' ' ~ attrs %}
+
+      {% if (aria_label or title) and not role and ' role=' not in attrs_probe %}
+        {% set role = 'img' %}
+      {% endif %}
+
+      {% if role and ' role=' not in attrs_probe %}
+        {% set attrs = attrs ~ (attrs ? ' ' : '') ~ 'role="' ~ role|e('html_attr') ~ '"' %}
+        {% set attrs_probe = ' ' ~ attrs %}
+      {% endif %}
+
+      {% if ' aria-label=' not in attrs_probe %}
+        {% if aria_label %}
+          {% set attrs = attrs ~ (attrs ? ' ' : '') ~ 'aria-label="' ~ aria_label|e('html_attr') ~ '"' %}
+        {% elseif title %}
+          {% set attrs = attrs ~ (attrs ? ' ' : '') ~ 'aria-label="' ~ title|e('html_attr') ~ '"' %}
+        {% endif %}
+      {% endif %}
+
+      {% set svg_attrs = attrs ? ' ' ~ attrs : '' %}
+      {% set title_markup = title ? '<title>' ~ title|e ~ '</title>' : '' %}
+
+      {# Inject attrs into opening <svg ...> #}
+      {% set parts = svg|split('<svg', 2) %}
+      {% if parts|length == 2 %}
+        {% set svg = parts[0] ~ '<svg' ~ svg_attrs ~ parts[1] %}
+      {% endif %}
+
+      {# Inject <title> immediately after opening tag #}
+      {% if title_markup %}
+        {% set parts = svg|split('>', 2) %}
+        {% if parts|length == 2 %}
+          {% set svg = parts[0] ~ '>' ~ title_markup ~ parts[1] %}
+        {% endif %}
+      {% endif %}
+
+      {{ svg|raw }}
+    {% endif %}
+{% endif %}

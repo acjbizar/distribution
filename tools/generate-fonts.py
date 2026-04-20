@@ -936,9 +936,9 @@ def build_master_ttf(
 # -----------------------------
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--build-dir", default="build/fonts")
-    ap.add_argument("--src-dir", default="src")
-    ap.add_argument("--out-dir", default="dist/fonts")
+    ap.add_argument("--build-dir", default="../build/fonts")
+    ap.add_argument("--src-dir", default="../src")
+    ap.add_argument("--out-dir", default="../dist/fonts")
     ap.add_argument("--family", default="Distribution")
     ap.add_argument("--basename", default="distribution")
     ap.add_argument("--upm", type=int, default=DEFAULT_UPM)

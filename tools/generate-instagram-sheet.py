@@ -6,12 +6,12 @@ tools/generate-instagram-sheet.py
 Generate 1080×1080 PNG “sheets” showing glyphs in a grid.
 
 Outputs:
-- dist/images/instagram/sheet.png                 (SVG designs from src/)
-- dist/images/instagram/sheet-wgth100.png         (from build/fonts/{basename}-master-100.ttf)
-- dist/images/instagram/sheet-wgth900.png         (from build/fonts/{basename}-master-900.ttf)
-- dist/images/instagram/sheet-snelweg.png         (SVG designs from src/snelweg/)
-- dist/images/instagram/sheet-spoorweg.png        (SVG designs from src/spoorweg/)
-- dist/images/instagram/sheet-waterweg.png        (SVG designs from src/waterweg/)
+- ../dist/images/instagram/sheet.png                 (SVG designs from src/)
+- ../dist/images/instagram/sheet-wgth100.png         (from build/fonts/{basename}-master-100.ttf)
+- ../dist/images/instagram/sheet-wgth900.png         (from build/fonts/{basename}-master-900.ttf)
+- ../dist/images/instagram/sheet-snelweg.png         (SVG designs from src/snelweg/)
+- ../dist/images/instagram/sheet-spoorweg.png        (SVG designs from src/spoorweg/)
+- ../dist/images/instagram/sheet-waterweg.png        (SVG designs from src/waterweg/)
 
 Key change:
 - Font-based sheets use ONE shared font size per sheet
@@ -246,10 +246,10 @@ def build_sheet_from_font_fixed_size(
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--src-dir", default="src")
-    ap.add_argument("--build-dir", default="build/fonts")
+    ap.add_argument("--src-dir", default="../src")
+    ap.add_argument("--build-dir", default="../build/fonts")
     ap.add_argument("--basename", default="distribution")
-    ap.add_argument("--out-dir", default="dist/images/instagram")
+    ap.add_argument("--out-dir", default="../dist/images/instagram")
     ap.add_argument("--size", type=int, default=1080)
     ap.add_argument("--padding", type=int, default=36)
     ap.add_argument("--gap", type=int, default=18)

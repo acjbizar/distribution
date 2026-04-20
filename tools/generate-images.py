@@ -33,8 +33,8 @@ def main() -> None:
     ap = argparse.ArgumentParser(
         description="Render SVG glyphs (character-uXXXX.svg) to PNGs (character-uXXXX.png)."
     )
-    ap.add_argument("--svg-dir", default="src", help="Input SVG directory (default: src)")
-    ap.add_argument("--out-dir", default="dist/images", help="Output PNG directory (default: dist/images)")
+    ap.add_argument("--svg-dir", default="../src", help="Input SVG directory (default: ../src)")
+    ap.add_argument("--out-dir", default="../dist/images", help="Output PNG directory (default: ../dist/images)")
     ap.add_argument(
         "--scale",
         type=float,

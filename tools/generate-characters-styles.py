@@ -558,8 +558,8 @@ def render_svg(root: ET.Element) -> str:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--in-dir", default="src", help="Input directory with character-uXXXX.svg files (default: src)")
-    ap.add_argument("--out-root", default="src", help="Root output directory (default: src)")
+    ap.add_argument("--in-dir", default="../src", help="Input directory with character-uXXXX.svg files (default: src)")
+    ap.add_argument("--out-root", default="../src", help="Root output directory (default: src)")
     args = ap.parse_args()
 
     in_dir = Path(args.in_dir)

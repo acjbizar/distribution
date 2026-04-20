@@ -46,10 +46,10 @@ def main() -> None:
     ap = argparse.ArgumentParser(
         description="Generate templates/_letter-sample.md.twig from available src/character-u*.svg files."
     )
-    ap.add_argument("--svg-dir", default="src", help="Directory containing character-u*.svg (default: src)")
+    ap.add_argument("--svg-dir", default="../src", help="Directory containing character-u*.svg (default: src)")
     ap.add_argument(
         "--out",
-        default="templates/_letter-sample.md.twig",
+        default="../templates/_letter-sample.md.twig",
         help="Output twig markdown path (default: templates/_letter-sample.md.twig)",
     )
     ap.add_argument("--newline", action="store_true", help="Insert a newline after each image (default: no)")

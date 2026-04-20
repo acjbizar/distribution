@@ -91,8 +91,8 @@ def main() -> None:
     ap = argparse.ArgumentParser(
         description="Generate src/sheet.svg by composing src/character-u{codepoint}.svg files found on disk."
     )
-    ap.add_argument("--svg-dir", default="src", help="Directory containing character-u*.svg (default: src)")
-    ap.add_argument("--out", default="src/sheet.svg", help="Output sheet svg path (default: src/sheet.svg)")
+    ap.add_argument("--svg-dir", default="../src", help="Directory containing character-u*.svg (default: src)")
+    ap.add_argument("--out", default="../src/sheet.svg", help="Output sheet svg path (default: src/sheet.svg)")
     ap.add_argument("--cols", type=int, default=10, help="Number of columns in sheet (default: 10)")
     ap.add_argument("--gap-x", type=int, default=0, help="Horizontal gap between glyphs (default: 0)")
     ap.add_argument("--gap-y", type=int, default=0, help="Vertical gap between glyph rows (default: 0)")

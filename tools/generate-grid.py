@@ -13,7 +13,7 @@ but crops the output to an exact rectangle measuring:
 It still renders extra circles around the crop so the overlap "petals"
 inside the crop are fully formed.
 
-Output: src/grid.svg
+Output: ../src/grid.svg
 """
 
 from __future__ import annotations
@@ -139,7 +139,7 @@ def main() -> None:
     PAD_COLS = 2
     PAD_ROWS = 3
 
-    out_path = Path("src/grid.svg")
+    out_path = Path("../src/grid.svg")
     grid = HexCircleGrid(R=R)
 
     svg = build_svg(

@@ -136,7 +136,7 @@ def svg_glyph_doc(
     out: List[str] = []
     out.append('<?xml version="1.0" encoding="UTF-8"?>')
     out.append(
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {view_w} {view_h}" width="{view_w}" height="{view_h}">'
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {view_w} {view_h}">'
     )
     out.append(f'<desc>glyph: {glyph_name} U+{codepoint:04X}</desc>')
     out.append('<rect x="0" y="0" width="100%" height="100%" fill="#fff"/>')
@@ -200,8 +200,8 @@ def svg_glyph_doc(
 # -----------------------------
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--data-file", default="data/glyphs.py", help="Path to glyph data file (default: data/glyphs.py)")
-    ap.add_argument("--out-dir", default="src", help="Output directory for normal SVGs (default: src)")
+    ap.add_argument("--data-file", default="../data/glyphs.py", help="Path to glyph data file (default: ../data/glyphs.py)")
+    ap.add_argument("--out-dir", default="../src", help="Output directory for normal SVGs (default: src)")
     ap.add_argument("--only", default="", help="Only render these characters")
     args = ap.parse_args()
 

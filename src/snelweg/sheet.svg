@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2480 2240">
-<desc>Glyph sheet composed from src/snelweg/character-u{codepoint}.svg</desc>
+<desc>Glyph sheet composed from ../src/snelweg/character-u{codepoint}.svg</desc>
 <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
 <g transform="translate(0 0)">
 <desc>glyph: ! U+0021</desc>

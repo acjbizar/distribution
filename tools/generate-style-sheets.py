@@ -219,8 +219,8 @@ def main() -> None:
     ap = argparse.ArgumentParser(
         description="Generate sheet.svg for multiple styles (snelweg, waterweg, spoorweg)."
     )
-    ap.add_argument("--src-root", default="src", help="Root folder containing style directories (default: src)")
-    ap.add_argument("--out-root", default="src", help="Root folder to write sheets into (default: src)")
+    ap.add_argument("--src-root", default="../src", help="Root folder containing style directories (default: src)")
+    ap.add_argument("--out-root", default="../src", help="Root folder to write sheets into (default: src)")
     ap.add_argument(
         "--styles",
         default="snelweg,waterweg,spoorweg",

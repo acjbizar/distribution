@@ -71,7 +71,7 @@ def main() -> None:
     ap.add_argument("--opacity", type=float, default=0.35, help="Stroke opacity 0..1 (default: 0.35)")
 
     ap.add_argument("--aa", type=int, default=4, help="Supersampling factor for antialiasing (default: 4)")
-    ap.add_argument("--out-dir", default="dist/images", help="Output directory (default: dist/images)")
+    ap.add_argument("--out-dir", default="../dist/images", help="Output directory (default: ../dist/images)")
     args = ap.parse_args()
 
     if args.w <= 0 or args.h <= 0:

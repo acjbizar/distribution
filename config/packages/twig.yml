@@ -1,0 +1,4 @@
+# config/packages/twig.yaml
+twig:
+  paths:
+    '%kernel.project_dir%/src': glyphs
